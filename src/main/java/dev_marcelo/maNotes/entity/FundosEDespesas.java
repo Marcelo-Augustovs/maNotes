@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "clientes_tem_fundos")
@@ -13,10 +14,10 @@ import java.time.LocalDateTime;
 public class FundosEDespesas {
     @ManyToOne
     Cliente cliente;
-    @Column
-    Despesa despesas;
-    @Column
-    Fundos fundos;
+    @Column(name = "despesas")
+    List<Despesa> despesas;
+    @Column(name = "fundos")
+    List<Fundos> fundos;
 
 
     @CreatedDate
