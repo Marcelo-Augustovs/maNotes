@@ -5,4 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DespesaRepository extends JpaRepository<Despesa,String> {
 
+    Despesa findByNomeDaConta(String nomeDaConta);
+
+    Despesa findByValorDaConta(String valorDaConta);
 }
