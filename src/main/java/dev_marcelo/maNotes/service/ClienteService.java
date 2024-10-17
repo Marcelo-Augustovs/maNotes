@@ -15,6 +15,12 @@ public class ClienteService {
     public Cliente salvar(Cliente cliente){
         return clienteRepository.save(cliente);
     }
+    @Transactional
+    public Cliente mudarNickname(String antigoNickname,String novoNickname){
+       Cliente cliente = clienteRepository.findById(antigoNickname).orElseThrow();
+       cliente.setNickname(novoNickname);
+       return clienteRepository.save(cliente);
+    }
 
 
 }

@@ -14,8 +14,15 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     @Transactional
-    public Usuario updateSenha(Usuario usuario){
-         return usuario;
+    public Usuario save(Usuario usuario){
+        return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public void updateSenha(String nomeDoUsuario,String senha){
+       Usuario usuario = usuarioRepository.findById(nomeDoUsuario).orElseThrow();
+       usuario.setSenha(senha);
+       usuarioRepository.save(usuario);
     }
 
 
