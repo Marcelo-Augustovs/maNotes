@@ -1,19 +1,22 @@
 package dev_marcelo.maNotes.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "despesa")
-public class Despesa {
+public class Despesa implements Serializable {
     @Id
+    @Column(name = "id")
+    private Float id;
     @Column(name = "nomeDaConta")
-    String nomeDaConta;
+    private String nomeDaConta;
     @Column(name = "valorDaConta")
-    float valorDaConta;
-    enum statusDaConta {
+    private float valorDaConta;
+    @Enumerated(EnumType.STRING)
+    private StatusDaConta statusDaConta;
+    enum StatusDaConta {
         PENDENTE, PAGO
     }
 

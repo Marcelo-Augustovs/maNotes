@@ -4,17 +4,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "cliente")
 @Getter @Setter
-public class Cliente {
-    @Id
+public class Cliente implements Serializable {
+
     @Column(name = "nickname")
     String nickname;
-    @OneToMany
-    @Column(name = "anotacoes")
-    Anotacoes anotacoes;
     @OneToOne
-    @Column(name = "fundosEDespesas")
-    FundosEDespesas fundosEDespesas;
+    @JoinColumn(name = "usuario",nullable = false)
+    Usuario usuario;
 }

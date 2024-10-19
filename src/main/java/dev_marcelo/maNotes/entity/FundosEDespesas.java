@@ -6,18 +6,22 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "clientes_tem_fundos")
 @EntityListeners(AuditingEntityListener.class)
-public class FundosEDespesas {
+public class FundosEDespesas  {
+    @Id
+    @Column(name = "id")
+    private Float id;
     @ManyToOne
+    @JoinColumn(name = "id_cliente")
     Cliente cliente;
-    @Column(name = "despesas")
-    List<Despesa> despesas;
-    @Column(name = "fundos")
-    List<Fundos> fundos;
+    @ManyToOne
+    @JoinColumn(name = "id_despesa")
+    Despesa despesas;
+    @JoinColumn(name = "id_fundos")
+    Fundos fundos;
 
 
     @CreatedDate
