@@ -19,8 +19,8 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void updateSenha(String nomeDoUsuario,String senha){
-       Usuario usuario = usuarioRepository.findById(nomeDoUsuario).orElseThrow();
+    public void updateSenha(Float idUsuario,String senha){
+       Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow();
        usuario.setSenha(senha);
        usuarioRepository.save(usuario);
     }
