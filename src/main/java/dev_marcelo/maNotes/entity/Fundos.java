@@ -1,19 +1,22 @@
 package dev_marcelo.maNotes.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 
 @Entity
 @Table(name = "fundos")
+@Getter @Setter @NoArgsConstructor
 public class Fundos implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Float id;
-    @Column(name = "fundosArecadado")
+    @Column(name = "fundos_arecadado")
     private String origemDoFundo;
-    @Column(name = "valorRecebido")
+    @Column(name = "valor_recebido")
     private float valorRecebido;
 }

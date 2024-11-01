@@ -1,6 +1,9 @@
 package dev_marcelo.maNotes.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -8,20 +11,22 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "clientes_tem_fundos")
+@Table(name = "fundos_despesas")
 @EntityListeners(AuditingEntityListener.class)
+@Getter @Setter @NoArgsConstructor
 public class FundosEDespesas  {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Float id;
     @ManyToOne
-    @JoinColumn(name = "id_cliente")
-    Cliente cliente;
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
     @ManyToOne
     @JoinColumn(name = "id_despesa")
-    Despesa despesas;
+    private Despesa despesas;
     @JoinColumn(name = "id_fundos")
-    Fundos fundos;
+    private Fundos fundos;
 
 
     @CreatedDate
