@@ -19,10 +19,23 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void updateSenha(Float idUsuario,String senha){
-       Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow();
-       usuario.setSenha(senha);
-       usuarioRepository.save(usuario);
+    public Usuario updateSenha(Float idUsuario,String senhaAntiga, String novaSenha){
+       Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(
+               () -> new RuntimeException(String.format("Usuario id=%s não encontrado",idUsuario))
+       );
+       if(usuario.getSenha().equals(senhaAntiga)) {
+           usuario.setSenha(novaSenha);
+           usuarioRepository.save(usuario);
+       } else {
+           throw new RuntimeException("a Senha anterior esta incorreta");
+       }
+       return usuario;
+    }
+    @Transactional
+    public Usuario mudarNickname(Float id,String novoNickname){
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow();
+        usuario.setNickname(novoNickname);
+        return usuarioRepository.save(usuario);
     }
 
 

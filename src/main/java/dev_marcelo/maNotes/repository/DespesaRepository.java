@@ -7,5 +7,5 @@ public interface DespesaRepository extends JpaRepository<Despesa,Float> {
 
     Despesa findByNomeDaConta(String nomeDaConta);
 
-    Despesa findByValorDaConta(String valorDaConta);
+    Despesa findByValorDaConta(Float valorDaConta);
 }

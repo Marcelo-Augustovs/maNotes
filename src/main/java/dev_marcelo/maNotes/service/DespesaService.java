@@ -22,7 +22,7 @@ public class DespesaService {
         return despesaRepository.findByNomeDaConta(nomeDaConta);
     }
     @Transactional
-    public Despesa findByValorDaConta(String valorDaConta){
+    public Despesa findByValorDaConta(Float valorDaConta){
         return despesaRepository.findByValorDaConta(valorDaConta);
     }
     @Transactional
