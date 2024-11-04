@@ -7,6 +7,7 @@ import dev_marcelo.maNotes.entity.Anotacoes;
 import dev_marcelo.maNotes.service.AnotacoesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AnotacoesController {
     private final AnotacoesService anotacoesService;
 
-    public ResponseEntity<AnotacoesResponseDto> create(AnotacoesCreateDto dto){
+    public ResponseEntity<AnotacoesResponseDto> create(@RequestBody AnotacoesCreateDto dto){
         Anotacoes anotacoes = AnotacoesMapper.toAnotacoes(dto);
         anotacoesService.save(anotacoes);
         return ResponseEntity.status(201).body(AnotacoesMapper.toDto(anotacoes));
