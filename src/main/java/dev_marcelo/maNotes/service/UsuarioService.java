@@ -25,7 +25,6 @@ public class UsuarioService {
        );
        if(usuario.getSenha().equals(senhaAntiga)) {
            usuario.setSenha(novaSenha);
-           usuarioRepository.save(usuario);
        } else {
            throw new RuntimeException("a Senha anterior esta incorreta");
        }
