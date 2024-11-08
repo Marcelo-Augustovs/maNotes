@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AnotacoesService {
@@ -18,7 +20,7 @@ public class AnotacoesService {
     }
 
     @Transactional
-    public Anotacoes update(Float id, String novoTexto){
+    public Anotacoes updateText(Float id, String novoTexto){
         Anotacoes notes = anotacoesRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Anotação não encontrada")
         );
