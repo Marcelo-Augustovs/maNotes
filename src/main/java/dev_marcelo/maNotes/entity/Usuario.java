@@ -20,7 +20,7 @@ public class Usuario implements Serializable {
     private String senha;
     @Column(name = "nickname")
     private String nickname;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "role",nullable = false,length = 25)
     private Role role = Role.USER;
 
