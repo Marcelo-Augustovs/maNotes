@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane fx:id="MaNotesInterfaceGrafica" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.interface_grafica.MaNotesController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Login">
+            <items>
+              <MenuItem mnemonicParsing="false" text="nova anotação" />
+                  <MenuItem mnemonicParsing="false" text="Ver anotações" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Arquivos">
+            <items>
+              <MenuItem mnemonicParsing="false" text="adicionar fundos" />
+                  <MenuItem mnemonicParsing="false" text="adicionar despesa" />
+                  <MenuItem mnemonicParsing="false" text="balanço" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Calendario">
+            <items>
+              <MenuItem mnemonicParsing="false" text="marcar evento" />
+                  <MenuItem mnemonicParsing="false" text="verificar eventos" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Notes">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView prefHeight="300.0" prefWidth="600.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Anotações" />
+                            <TableColumn prefWidth="75.0" text="Lembretes" />
+                          </columns>
+                        </TableView>
+                        <Button layoutX="24.0" layoutY="300.0" mnemonicParsing="false" text="Adicionar anotação" />
+                        <Button layoutX="143.0" layoutY="300.0" mnemonicParsing="false" text="Remover anotação" />
+                        <Button layoutX="259.0" layoutY="300.0" mnemonicParsing="false" text="Criar Lembrete" />
+                        <Button layoutX="351.0" layoutY="300.0" mnemonicParsing="false" text="Excluir Lembrete" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Financias">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView prefHeight="276.0" prefWidth="600.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Fundos" />
+                            <TableColumn prefWidth="75.0" text="Despesas" />
+                              <TableColumn prefWidth="75.0" text="Balanço" />
+                          </columns>
+                        </TableView>
+                        <Button layoutX="14.0" layoutY="284.0" mnemonicParsing="false" text="Adicionar Fundos" />
+                        <Button layoutX="123.0" layoutY="284.0" mnemonicParsing="false" text="Adicionar Despesas" />
+                        <Button layoutX="242.0" layoutY="284.0" mnemonicParsing="false" text="Quitar Despesas" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+   <left>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MANotes" BorderPane.alignment="CENTER" />
+   </left>
+   <bottom>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Version: 1.0" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>
