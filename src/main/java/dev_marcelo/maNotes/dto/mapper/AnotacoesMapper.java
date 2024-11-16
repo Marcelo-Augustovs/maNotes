@@ -6,6 +6,9 @@ import dev_marcelo.maNotes.entity.Anotacoes;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @NoArgsConstructor
 public class AnotacoesMapper {
 
@@ -17,4 +20,7 @@ public class AnotacoesMapper {
         return new ModelMapper().map(anotacoes, AnotacoesResponseDto.class);
     }
 
+    public static List<AnotacoesResponseDto> toListDto(List<Anotacoes> listaDeAnotacao) {
+        return listaDeAnotacao.stream().map(notes -> toDto(notes)).collect(Collectors.toList());
+    }
 }

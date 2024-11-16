@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,6 +29,12 @@ public class AnotacoesController {
     public ResponseEntity<AnotacoesResponseDto> updateText(@PathVariable Float id, @RequestBody Map<String,String> novoTexto){
         Anotacoes notes = anotacoesService.updateText(id,novoTexto.get("anotacao"));
         return ResponseEntity.status(200).body(AnotacoesMapper.toDto(notes));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AnotacoesResponseDto>> findAllAnotacoes(){
+        List<Anotacoes> listaDeAnotacao = anotacoesService.findAllAnotacoes();
+        return ResponseEntity.ok().body(AnotacoesMapper.toListDto(listaDeAnotacao));
     }
 
 }
