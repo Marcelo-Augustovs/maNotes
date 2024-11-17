@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -34,6 +36,13 @@ public class AnotacoesService {
                 () -> new RuntimeException("Anotação não encontrada")
         );
         anotacoesRepository.deleteById(notes.getId());
+        return notes;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Anotacoes> findAllAnotacoes() {
+        List<Anotacoes> notes = new ArrayList<>();
+        notes = anotacoesRepository.findAll();
         return notes;
     }
 }
