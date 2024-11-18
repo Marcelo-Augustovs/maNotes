@@ -20,15 +20,16 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Login">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Nova anotação" />
-                        <MenuItem mnemonicParsing="false" text="Ver anotações" />
+                        <MenuItem mnemonicParsing="false" text="Cadastrar Usuario" />
+                        <MenuItem mnemonicParsing="false" text="Entrar" />
+                  <MenuItem mnemonicParsing="false" text="Logout" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Arquivos">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Adicionar fundos" />
-                        <MenuItem mnemonicParsing="false" text="Adicionar despesa" />
-                        <MenuItem mnemonicParsing="false" text="Balanço" />
+                        <MenuItem mnemonicParsing="false" text="Criar Relatorio" />
+                        <MenuItem mnemonicParsing="false" text="Criar save" />
+                        <MenuItem mnemonicParsing="false" text="Abrir MaNotes.save" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Calendário">
@@ -41,25 +42,27 @@
         </MenuBar>
     </top>
     <center>
-        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <TabPane fx:id="meioDoApp" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
             <tabs>
                 <Tab text="Notes">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane fx:id="menuPrincipal" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <TableView fx:id="anotacaoTable" prefHeight="300.0" prefWidth="549.0">
+                                <TableView fx:id="anotacaoTable" layoutX="4.0" prefHeight="279.0" prefWidth="536.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn fx:id="colunaId" prefWidth="75.0" text="ID" />
-                                        <TableColumn fx:id="colunaAnotacao" prefWidth="75.0" text="Anotações" />
-                                        <TableColumn fx:id="colunaDataModificacao" prefWidth="75.0" text="Data Modificação" />
+                                        <TableColumn fx:id="colunaId" prefWidth="38.0" text="ID" />
+                                        <TableColumn fx:id="colunaAnotacao" prefWidth="337.0" text="Anotações" />
+                                        <TableColumn fx:id="colunaDataModificacao" prefWidth="160.0" text="Data Modificação" />
                                     </columns>
                                 </TableView>
 
+                                <Button fx:id="btnNotes" onAction="#mostrarCampoDeTexto" text="Adicionar anotação" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
 
-                                <Button fx:id="btnNotes" layoutX="24.0" layoutY="300.0" mnemonicParsing="false" onAction="#mostrarCampoDeTexto" text="Adicionar anotação" />
-                                <Button layoutX="143.0" layoutY="300.0" mnemonicParsing="false" text="Remover anotação" />
-                                <Button layoutX="259.0" layoutY="300.0" mnemonicParsing="false" text="Criar Lembrete" />
-                                <Button layoutX="351.0" layoutY="300.0" mnemonicParsing="false" text="Excluir Lembrete" />
+                                <Button layoutX="132.0" layoutY="294.0" text="Remover anotação" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="132.0" />
+
+                                <Button layoutX="254.0" layoutY="294.0" text="Criar Lembrete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="254.0" />
+
+                                <Button layoutX="356.0" layoutY="294.0" text="Excluir Lembrete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="356.0" />
                         <Pane fx:id="painelAdicionarTexto" layoutX="336.0" layoutY="30.0" prefHeight="180.0" prefWidth="200.0" visible="false">
                            <children>
                               <TextField fx:id="campoAnotacao" layoutX="6.0" layoutY="14.0" prefHeight="129.0" prefWidth="188.0" />

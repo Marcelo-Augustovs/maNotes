@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -44,6 +45,12 @@ public class MaNotesController {
     private Text menuBottom;
 
     @FXML
+    private AnchorPane menuPrincipal;
+
+    @FXML
+    private TabPane meioDoApp;
+
+    @FXML
     private Pane painelAdicionarTexto;
 
     @FXML
@@ -51,8 +58,6 @@ public class MaNotesController {
 
     @FXML
     private Button btnNotes;
-
-
 
     @FXML
     public void initialize() {
@@ -67,8 +72,33 @@ public class MaNotesController {
         colunaId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colunaAnotacao.setCellValueFactory(new PropertyValueFactory<>("anotacao"));
         colunaDataModificacao.setCellValueFactory(new PropertyValueFactory<>("dataModificacao"));
-    }
 
+        AnchorPane.setTopAnchor(meioDoApp, 0.0);
+        AnchorPane.setBottomAnchor(meioDoApp, 0.0);
+        AnchorPane.setLeftAnchor(meioDoApp, 0.0);
+        AnchorPane.setRightAnchor(meioDoApp, 0.0);
+
+        colunaAnotacao.setCellFactory(tc -> new TableCell<AnotacoesResponseDto, String>() {
+            private final Text text = new Text();
+
+            {
+                text.wrappingWidthProperty().bind(colunaAnotacao.widthProperty());
+                setGraphic(text);
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    text.setText(null);
+                } else {
+                    text.setText(item); // Define o texto atual
+                }
+            }
+        });
+    }
 
     public void mostrarCampoDeTexto(javafx.event.ActionEvent event) {
         try {
