@@ -8,7 +8,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "usuario_anotacoes")
@@ -28,6 +29,18 @@ public class Anotacoes implements Serializable {
 
     @LastModifiedDate
     @Column(name = "data_modificacao")
-    private LocalDateTime dataModificacao;
+    private LocalDate dataModificacao;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Anotacoes anotacoes = (Anotacoes) o;
+        return Objects.equals(id, anotacoes.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

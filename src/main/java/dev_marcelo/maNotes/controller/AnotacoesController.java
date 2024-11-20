@@ -37,4 +37,10 @@ public class AnotacoesController {
         return ResponseEntity.ok().body(AnotacoesMapper.toListDto(listaDeAnotacao));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<AnotacoesResponseDto> findAnotacoes(@PathVariable Float id){
+        Anotacoes anotacao = anotacoesService.findAnotacao(id);
+        return ResponseEntity.ok().body(AnotacoesMapper.toDto(anotacao));
+    }
+
 }

@@ -45,4 +45,10 @@ public class AnotacoesService {
         notes = anotacoesRepository.findAll();
         return notes;
     }
+    @Transactional(readOnly = true)
+    public Anotacoes findAnotacao(Float id) {
+        return anotacoesRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Anotação não encontrada")
+        );
+    }
 }
