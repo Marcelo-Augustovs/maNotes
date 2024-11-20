@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
@@ -63,11 +63,11 @@
                                 <Button layoutX="254.0" layoutY="294.0" text="Criar Lembrete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="254.0" />
 
                                 <Button layoutX="356.0" layoutY="294.0" text="Excluir Lembrete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="356.0" />
-                        <Pane fx:id="painelAdicionarTexto" layoutX="336.0" layoutY="30.0" prefHeight="180.0" prefWidth="200.0" visible="false">
+                        <Pane fx:id="painelAdicionarTexto" layoutX="9.0" layoutY="30.0" prefHeight="236.0" prefWidth="519.0" visible="false">
                            <children>
-                              <TextField fx:id="campoAnotacao" layoutX="6.0" layoutY="14.0" prefHeight="129.0" prefWidth="188.0" />
-                                       <Button fx:id="btnConfirmar" layoutX="117.0" layoutY="153.0" onAction="#confirmarAdicao" text="Confirmar" />
-                                       <Button fx:id="btnCancelar" layoutX="14.0" layoutY="153.0" onAction="#cancelarAdicao" text="Cancelar" />
+                                       <Button fx:id="btnConfirmar" layoutX="331.0" layoutY="202.0" onAction="#confirmarAdicao" prefHeight="26.0" prefWidth="94.0" text="Confirmar" />
+                                       <Button fx:id="btnCancelar" layoutX="83.0" layoutY="201.0" onAction="#cancelarAdicao" prefHeight="24.0" prefWidth="103.0" text="Cancelar" />
+                              <TextArea fx:id="campoAnotacao" layoutX="2.0" layoutY="15.0" prefHeight="182.0" prefWidth="508.0" />
                            </children>
                         </Pane>
                             </children>

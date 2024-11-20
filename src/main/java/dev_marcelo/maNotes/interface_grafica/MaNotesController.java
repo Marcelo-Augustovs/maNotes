@@ -54,7 +54,7 @@ public class MaNotesController {
     private Pane painelAdicionarTexto;
 
     @FXML
-    private TextField campoAnotacao;
+    private TextArea campoAnotacao;
 
     @FXML
     private Button btnNotes;
@@ -119,7 +119,7 @@ public class MaNotesController {
 
     public void confirmarAdicao(ActionEvent event) {
         try {
-            String mensagem = campoAnotacao.getText();
+            String mensagem = campoAnotacao.getText().replace("\n","\\n");
             if (mensagem == null || mensagem.trim().isEmpty()) {
                 mensagem = "Anotação vazia";
             }
