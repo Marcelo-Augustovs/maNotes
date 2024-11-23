@@ -43,4 +43,10 @@ public class AnotacoesController {
         return ResponseEntity.ok().body(AnotacoesMapper.toDto(anotacao));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAnotacao(@PathVariable Float id){
+        Anotacoes anotacao = anotacoesService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
