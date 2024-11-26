@@ -37,5 +37,8 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-
+    @Transactional(readOnly = true)
+    public Usuario buscarPorUsername(String username) {
+        return usuarioRepository.findByLogin(username);
+    }
 }

@@ -24,7 +24,7 @@ public class Usuario implements Serializable {
     @Column(name = "role",nullable = false,length = 25)
     private Role role = Role.USER;
 
-    enum Role{
+   public enum Role{
         USER
     }
 }
