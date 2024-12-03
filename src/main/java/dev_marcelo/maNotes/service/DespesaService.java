@@ -17,18 +17,34 @@ public class DespesaService {
     public Despesa salvar(Despesa despesa){
         return  despesaRepository.save(despesa);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public Despesa findByNomeDaConta(String nomeDaConta){
         return despesaRepository.findByNomeDaConta(nomeDaConta);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public Despesa findByValorDaConta(Float valorDaConta){
         return despesaRepository.findByValorDaConta(valorDaConta);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Despesa> getAllDespesas(){
         return despesaRepository.findAll();
     }
 
 
+    @Transactional(readOnly = true)
+    public Despesa findAcountById(Float id) {
+        return despesaRepository.findById(id)
+                .orElseThrow( () -> new RuntimeException("despensa não encontrada"));
+    }
+
+    @Transactional
+    public void pagarContar(String nomeDaConta) {
+       Despesa despesa = despesaRepository.findByNomeDaConta(nomeDaConta);
+       despesa.setStatusDaConta(Despesa.StatusDaConta.PAGO);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Despesa> findAllDespesas(){
+       return despesaRepository.findAll();
+    }
 }

@@ -20,8 +20,8 @@ public class Despesa implements Serializable {
     @Column(name = "valor_conta")
     private float valorDaConta;
     @Enumerated(EnumType.STRING)
-    private StatusDaConta statusDaConta;
-    enum StatusDaConta {
+    private StatusDaConta statusDaConta = StatusDaConta.PENDENTE;
+    public enum StatusDaConta {
         PENDENTE, PAGO
     }
 
