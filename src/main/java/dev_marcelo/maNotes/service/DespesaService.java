@@ -47,4 +47,9 @@ public class DespesaService {
     public List<Despesa> findAllDespesas(){
        return despesaRepository.findAll();
     }
+
+    @Transactional
+    public void delete(Despesa despesa) {
+        despesaRepository.delete(despesa);
+    }
 }

@@ -1,5 +1,6 @@
 package dev_marcelo.maNotes.controller;
 
+import dev_marcelo.maNotes.dto.DespesaDto;
 import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.service.DespesaService;
 import lombok.RequiredArgsConstructor;
@@ -46,10 +47,16 @@ public class DespesaController {
     }
 
     @PatchMapping()
-    public ResponseEntity<Void> updateStatusConta(@RequestBody String nomeDaConta){
-        despesaService.findByNomeDaConta(nomeDaConta);
-        despesaService.pagarContar(nomeDaConta);
+    public ResponseEntity<Void> updateStatusConta(@RequestBody DespesaDto dto){
+        despesaService.findByNomeDaConta(dto.getNomeDaConta());
+        despesaService.pagarContar(dto.getNomeDaConta());
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> updateStatusConta(@PathVariable Float id){
+        despesaService.delete(despesaService.findAcountById(id));
+        return ResponseEntity.noContent().build();
     }
 
 }
