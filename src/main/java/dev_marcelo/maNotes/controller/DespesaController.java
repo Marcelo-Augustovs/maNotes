@@ -1,6 +1,7 @@
 package dev_marcelo.maNotes.controller;
 
 import dev_marcelo.maNotes.dto.DespesaDto;
+import dev_marcelo.maNotes.dto.mapper.DespesaMapper;
 import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.service.DespesaService;
 import lombok.RequiredArgsConstructor;
@@ -17,21 +18,15 @@ public class DespesaController {
     private final DespesaService despesaService;
 
     @PostMapping
-    public ResponseEntity<Despesa> create(@RequestBody Despesa despesa){
-        despesaService.salvar(despesa);
+    public ResponseEntity<Despesa> create(@RequestBody DespesaDto dto){
+        Despesa despesa = despesaService.salvar(DespesaMapper.toDespesa(dto));
         return ResponseEntity.status(201).body(despesa);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Despesa> update(@PathVariable Float id,@RequestBody Despesa despesa){
-        Despesa forUpdate = despesaService.findAcountById(id);
-        if(!despesa.getNomeDaConta().equals(null) || !despesa.getNomeDaConta().equals("")){
-            forUpdate.setNomeDaConta(despesa.getNomeDaConta());
-        }
-        if(despesa.getValorDaConta() >= 0){
-            forUpdate.setValorDaConta(despesa.getValorDaConta());
-        }
-        return ResponseEntity.ok(despesa);
+    public ResponseEntity<DespesaDto> update(@PathVariable Float id,@RequestBody DespesaDto despesa){
+        Despesa forUpdate = despesaService.updateDespesa(id,despesa);
+        return ResponseEntity.status(200).body(DespesaMapper.toDto(forUpdate));
     }
 
     @GetMapping("/{id}")

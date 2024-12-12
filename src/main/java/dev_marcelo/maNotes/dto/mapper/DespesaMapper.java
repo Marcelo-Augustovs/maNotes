@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 @NoArgsConstructor
-public class DepesaMapper {
+public class DespesaMapper {
 
     public static Despesa toDespesa(DespesaDto dto){
         return new ModelMapper().map(dto,Despesa.class);
