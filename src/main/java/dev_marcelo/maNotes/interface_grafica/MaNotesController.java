@@ -20,9 +20,14 @@ import java.util.List;
 @Controller
 public class MaNotesController {
     private static final AnotacaoApiClient apiClient = new AnotacaoApiClient();
+    private static final FinanciasApiClient financiasApiClient = new FinanciasApiClient();
+
 
     @FXML
     private TableView<AnotacoesResponseDto> anotacaoTable;
+
+    @FXML
+    private TableView<?> financiasTable;
 
     @FXML
     private TableColumn<AnotacoesResponseDto, Float> colunaId;
@@ -54,7 +59,19 @@ public class MaNotesController {
     private Pane painelAdicionarTexto;
 
     @FXML
+    private Pane painelAdicionarFinancias;
+
+    @FXML
     private TextArea campoAnotacao;
+
+    @FXML
+    private TextArea txtValor;
+
+    @FXML
+    private Button btnFundos;
+
+    @FXML
+    private Button btnDespesas;
 
     @FXML
     private Button btnNotes;
@@ -117,6 +134,23 @@ public class MaNotesController {
         }
     }
 
+    public void mostrarCampoDeFinancias(javafx.event.ActionEvent event) {
+        try {
+            painelAdicionarFinancias.setVisible(true);
+            painelAdicionarFinancias.setManaged(true);
+
+            // Certifique-se de que o botão para adicionar está desativado
+            btnFundos.setDisable(true);
+
+            // Opcional: limpar o campo para nova anotação
+            txtValor.clear();
+
+        } catch (Exception e) {
+            System.err.println("Erro ao exibir campo de texto: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     public void confirmarAdicao(ActionEvent event) {
         try {
             String mensagem = campoAnotacao.getText().replace("\n","\\n");
@@ -142,10 +176,43 @@ public class MaNotesController {
         }
     }
 
+    public void adicionarFundos(ActionEvent event) {
+        try {
+            String origemDoFundo = txtValor.getText();
+            String valor = txtValor.getText();
+            if (origemDoFundo == null || origemDoFundo.trim().isEmpty()) {
+                origemDoFundo = "Origem Desconhecida";
+            }
+
+            financiasApiClient.criarFundos(origemDoFundo,valor);
+
+            // Atualizando os dados
+            List<?> listaDeAnotacoes = apiClient.buscarAnotacoes();
+            ObservableList<?> dados = FXCollections.observableArrayList(listaDeAnotacoes);
+            financiasTable.setItems(dados);
+
+
+            txtValor.clear();
+            painelAdicionarFinancias.setVisible(false);
+            painelAdicionarFinancias.setManaged(false);
+            btnFundos.setDisable(false);
+        } catch (Exception e) {
+            System.err.println("Erro ao confirmar adição: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     public void cancelarAdicao(ActionEvent event) {
         painelAdicionarTexto.setVisible(false);
         painelAdicionarTexto.setManaged(false);
         campoAnotacao.clear();
         btnNotes.setDisable(false);
+    }
+
+    public void cancelarFuncao(ActionEvent event) {
+        painelAdicionarFinancias.setVisible(false);
+        painelAdicionarFinancias.setManaged(false);
+        txtValor.clear();
+        btnFundos.setDisable(false);
     }
 }
