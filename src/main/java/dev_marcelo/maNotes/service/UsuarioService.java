@@ -4,6 +4,8 @@ package dev_marcelo.maNotes.service;
 import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,11 +14,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Usuario save(Usuario usuario){
-        return usuarioRepository.save(usuario);
+        try {
+            usuario.setRole(Usuario.Role.USER);
+            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+            return usuarioRepository.save(usuario);
+        }catch (DataIntegrityViolationException ex){
+            throw new RuntimeException(String.format("Username %s Ja foi cadastrado",usuario.getLogin()));
+        }
     }
+
+
 
     @Transactional
     public Usuario updateSenha(Float idUsuario,String senhaAntiga, String novaSenha){

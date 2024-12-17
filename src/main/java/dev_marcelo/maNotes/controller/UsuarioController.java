@@ -1,9 +1,10 @@
 package dev_marcelo.maNotes.controller;
 
+import dev_marcelo.maNotes.dto.UsuarioLoginDto;
 import dev_marcelo.maNotes.dto.UsuarioSenhaDto;
+import dev_marcelo.maNotes.dto.mapper.UsuarioMapper;
 import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.service.UsuarioService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,10 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> create(@Valid @RequestBody Usuario usuario){
-        Usuario user = usuarioService.save(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    public ResponseEntity<Usuario> create(@RequestBody UsuarioLoginDto dto){
+        Usuario usuario = UsuarioMapper.toUsuario(dto);
+        usuarioService.save(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
     }
 
     @PatchMapping("/{id}")
