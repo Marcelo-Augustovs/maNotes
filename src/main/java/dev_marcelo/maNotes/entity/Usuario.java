@@ -16,13 +16,13 @@ public class Usuario implements Serializable {
     private Float id;
     @Column(name = "login",nullable = false,length = 100,unique = true)
     private String login;
-    @Column(name = "senha",nullable = false, length = 50)
+    @Column(name = "senha",nullable = false, length = 60)
     private String senha;
     @Column(name = "nickname")
     private String nickname;
     @Enumerated(EnumType.STRING)
-    @Column(name = "role",nullable = false,length = 25)
-    private Role role = Role.USER;
+    @Column(name = "role",length = 25)
+    private Role role;
 
    public enum Role{
         USER
