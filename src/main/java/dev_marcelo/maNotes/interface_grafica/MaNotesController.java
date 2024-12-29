@@ -187,7 +187,7 @@ public class MaNotesController {
             financiasApiClient.criarFundos(origemDoFundo,valor);
 
             // Atualizando os dados
-        /*    List<?> listaDeAnotacoes = apiClient.buscarAnotacoes();
+            /*List<?> listaDeAnotacoes = apiClient.buscarAnotacoes();
             ObservableList<?> dados = FXCollections.observableArrayList(listaDeAnotacoes);
             financiasTable.setItems(dados);*/
 
