@@ -1,6 +1,8 @@
 package dev_marcelo.maNotes.controller;
 
+import dev_marcelo.maNotes.config.TokenService;
 import dev_marcelo.maNotes.dto.AuthenticationDto;
+import dev_marcelo.maNotes.dto.LoginResponseDto;
 import dev_marcelo.maNotes.dto.RegisterDto;
 import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.repository.UsuarioRepository;
@@ -23,6 +25,9 @@ public class AuthenticationController {
     @Autowired
     private UsuarioRepository repository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDto data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(),data.password());
@@ -30,7 +35,9 @@ public class AuthenticationController {
         var auth = this.authenticationManager.authenticate(usernamePassword);
         System.out.println("Auth:"+ auth);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken( (Usuario) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDto(token));
     }
 
     @PostMapping("/register")
