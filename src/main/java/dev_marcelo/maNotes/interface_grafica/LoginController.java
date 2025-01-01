@@ -20,6 +20,8 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
+    private final LoginApiClient loginApiClient = new LoginApiClient();
+
     @FXML
     private void handleLogin() {
         String username = usernameField.getText();
@@ -31,19 +33,18 @@ public class LoginController {
         }
 
         try {
-            // Substitua por uma chamada ao seu cliente HTTP para autenticação
-            String jwtToken = AuthService.authenticate(username, password);
+            // Chamada ao cliente HTTP para autenticação
+            String jwtToken = loginApiClient.logar(username, password);
 
-            if (jwtToken != null) {
-                // Salve o token e abra a tela principal
-                App.setJwtToken(jwtToken);
-                App.showMainScreen(); // Método para abrir a tela principal
+            if (jwtToken != null && !jwtToken.isEmpty()) {
+                // Salva o token e abre a tela principal
+                AppManager.setJwtToken(jwtToken);
+                AppManager.showMainScreen(); // Método para abrir a tela principal
             } else {
                 errorMessage.setText("Credenciais inválidas.");
             }
         } catch (Exception e) {
-            errorMessage.setText("Erro ao conectar-se ao servidor.");
+            errorMessage.setText("Erro ao conectar-se ao servidor: " + e.getMessage());
         }
     }
-}
 }

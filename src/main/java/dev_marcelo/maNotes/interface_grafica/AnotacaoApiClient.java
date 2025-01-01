@@ -15,6 +15,7 @@ public class AnotacaoApiClient {
     private static final String BASE_URL = "http://localhost:8080/api/v1/anotacoes";
 
     public String criarAnotacao(String anotacao) throws Exception {
+        String token = AppManager.getJwtToken();
         HttpClient client = HttpClient.newHttpClient();
         String jsonBody = String.format("{\"anotacao\": \"%s\"}", anotacao);
 

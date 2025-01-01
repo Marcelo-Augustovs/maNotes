@@ -1,5 +1,6 @@
 package dev_marcelo.maNotes;
 
+import dev_marcelo.maNotes.interface_grafica.AppManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -19,17 +20,16 @@ public class MaNotesApplication extends Application {
 	}
 
 	@Override
-	public void start(Stage stage) throws Exception {
-		// Carrega a interface FXML usando o contexto do Spring
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MaNotes.fxml"));
-		fxmlLoader.setControllerFactory(springContext::getBean); // Injeta dependências Spring nos controladores
+	public void start(Stage primaryStage) throws Exception {
+		AppManager.setPrimaryStage(primaryStage);
 
-		Scene scene = new Scene(fxmlLoader.load());
-		stage.setTitle("MaNotes Application");
-		stage.setScene(scene);
-		stage.show();
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml")); // Caminho para o FXML da tela de login
+		Scene scene = new Scene(loader.load());
+
+		primaryStage.setScene(scene);
+		primaryStage.setTitle("Login - MaNotes");
+		primaryStage.show();
 	}
-
 	@Override
 	public void stop() throws Exception {
 		// Fecha o contexto Spring ao encerrar o aplicativo
