@@ -22,6 +22,7 @@ public class AnotacaoApiClient {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL))
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token) // Adiciona o cabeçalho Authorization
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
 
