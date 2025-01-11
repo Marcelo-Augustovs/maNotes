@@ -1,5 +1,6 @@
 package dev_marcelo.maNotes.interface_grafica;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,6 +9,8 @@ import javafx.scene.control.TextField;
 
 public class LoginController {
 
+    @FXML
+    public Button registerButton;
     @FXML
     private TextField usernameField;
 
@@ -45,6 +48,24 @@ public class LoginController {
             }
         } catch (Exception e) {
             errorMessage.setText("Erro ao conectar-se ao servidor: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void handleRegister() {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            errorMessage.setText("Por favor, preencha todos os campos.");
+            return;
+        }
+
+        try {
+            // Chamada ao cliente HTTP para autenticação
+            String jwtToken = loginApiClient.registrar(username, password);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

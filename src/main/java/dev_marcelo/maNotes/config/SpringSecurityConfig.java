@@ -30,7 +30,8 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/v1/auth/register").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/v1/anotacoes").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

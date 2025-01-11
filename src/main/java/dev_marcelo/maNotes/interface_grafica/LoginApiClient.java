@@ -39,12 +39,12 @@ public class LoginApiClient {
 
     public String registrar(String login, String password) throws Exception {
         String Register_URL = BASE_URL + "/register";
-        Usuario.Role role = Usuario.Role.USER;
+        String role = "USER";
 
         HttpClient client = HttpClient.newHttpClient();
-        String jsonBody = String.format("{\"login\": \"%s\"," +
-                "\"password\": \"%s\"}" +
-                "\"role\": \"%s\"}", login,password,role);
+        // Corrige a formatação do JSON
+        String jsonBody = String.format("{\"login\": \"%s\", \"password\": \"%s\", \"role\": \"%s\"}", login, password, role);
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(Register_URL))
                 .header("Content-Type", "application/json")
