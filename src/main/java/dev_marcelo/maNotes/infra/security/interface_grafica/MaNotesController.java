@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.interface_grafica;
+package dev_marcelo.maNotes.infra.security.interface_grafica;
 
 import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
 import javafx.collections.FXCollections;

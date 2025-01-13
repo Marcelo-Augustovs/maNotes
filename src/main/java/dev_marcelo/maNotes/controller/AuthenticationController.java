@@ -1,6 +1,6 @@
 package dev_marcelo.maNotes.controller;
 
-import dev_marcelo.maNotes.config.TokenService;
+import dev_marcelo.maNotes.infra.security.TokenService;
 import dev_marcelo.maNotes.dto.AuthenticationDto;
 import dev_marcelo.maNotes.dto.LoginResponseDto;
 import dev_marcelo.maNotes.dto.RegisterDto;

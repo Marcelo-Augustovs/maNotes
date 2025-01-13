@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.config;
+package dev_marcelo.maNotes.infra.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

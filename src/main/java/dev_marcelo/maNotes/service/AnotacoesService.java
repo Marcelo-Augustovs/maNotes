@@ -1,6 +1,7 @@
 package dev_marcelo.maNotes.service;
 
 import dev_marcelo.maNotes.entity.Anotacoes;
+import dev_marcelo.maNotes.infra.security.exceptions.AnotacaoNotFoundException;
 import dev_marcelo.maNotes.repository.AnotacoesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class AnotacoesService {
     @Transactional
     public Anotacoes updateText(Float id, String novoTexto){
         Anotacoes notes = anotacoesRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Anotação não encontrada")
+                () -> new AnotacaoNotFoundException("Anotação não encontrada")
         );
         notes.setAnotacao(novoTexto);
         return notes;
@@ -33,7 +34,7 @@ public class AnotacoesService {
     @Transactional
     public Anotacoes delete(Float id){
         Anotacoes notes = anotacoesRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Anotação não encontrada")
+                () -> new AnotacaoNotFoundException("Anotação não encontrada")
         );
         anotacoesRepository.deleteById(notes.getId());
         return notes;
@@ -48,7 +49,7 @@ public class AnotacoesService {
     @Transactional(readOnly = true)
     public Anotacoes findAnotacao(Float id) {
         return anotacoesRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Anotação não encontrada")
+                () -> new AnotacaoNotFoundException("Anotação não encontrada")
         );
     }
 }

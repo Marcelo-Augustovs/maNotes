@@ -1,6 +1,7 @@
 package dev_marcelo.maNotes.service;
 
 import dev_marcelo.maNotes.entity.Fundos;
+import dev_marcelo.maNotes.infra.security.exceptions.FundosNotFoundException;
 import dev_marcelo.maNotes.repository.FundosRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class FundosService {
     @Transactional(readOnly = true)
     public Fundos findById(Float id){
         return fundosRepository.findById(id)
-                .orElseThrow( () -> new RuntimeException(String.format("fundo id:%s não encontrado",id)));
+                .orElseThrow( () -> new FundosNotFoundException(String.format("fundo id:%s não encontrado",id)));
     }
 
     @Transactional(readOnly = true)

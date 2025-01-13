@@ -1,6 +1,5 @@
-package dev_marcelo.maNotes.interface_grafica;
+package dev_marcelo.maNotes.infra.security.interface_grafica;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

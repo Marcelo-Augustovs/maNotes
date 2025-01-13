@@ -2,6 +2,7 @@ package dev_marcelo.maNotes.service;
 
 import dev_marcelo.maNotes.dto.DespesaDto;
 import dev_marcelo.maNotes.entity.Despesa;
+import dev_marcelo.maNotes.infra.security.exceptions.DespesaNotFoundException;
 import dev_marcelo.maNotes.repository.DespesaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class DespesaService {
     @Transactional(readOnly = true)
     public Despesa findAcountById(Float id) {
         return despesaRepository.findById(id)
-                .orElseThrow( () -> new RuntimeException("despensa não encontrada"));
+                .orElseThrow( () -> new DespesaNotFoundException("despensa não encontrada"));
     }
 
     @Transactional

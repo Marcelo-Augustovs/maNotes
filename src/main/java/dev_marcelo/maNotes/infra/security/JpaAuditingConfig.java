@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.config;
+package dev_marcelo.maNotes.infra.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @EnableJpaAuditing
 @Configuration
-public class SpringJpaAuditingConfig implements AuditorAware<String> {
+public class JpaAuditingConfig implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
