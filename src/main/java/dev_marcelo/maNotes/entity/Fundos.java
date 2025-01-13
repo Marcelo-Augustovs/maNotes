@@ -19,4 +19,8 @@ public class Fundos implements Serializable {
     private String origemDoFundo;
     @Column(name = "valor_recebido")
     private float valorRecebido;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario",nullable = false)
+    private Usuario usuario;
 }

@@ -19,13 +19,15 @@ public class FundosEDespesas  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Float id;
+    @Column
+    private String mes;
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "id_usuario",nullable = false)
     private Usuario usuario;
     @ManyToOne
-    @JoinColumn(name = "id_despesa")
+    @JoinColumn(name = "id_despesa",nullable = false)
     private Despesa despesas;
-    @JoinColumn(name = "id_fundos")
+    @JoinColumn(name = "id_fundos",nullable = false)
     private Fundos fundos;
 
 

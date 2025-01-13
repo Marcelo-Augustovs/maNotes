@@ -19,6 +19,11 @@ public class Despesa implements Serializable {
     private String nomeDaConta;
     @Column(name = "valor_conta")
     private float valorDaConta;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
+
     @Enumerated(EnumType.STRING)
     private StatusDaConta statusDaConta = StatusDaConta.PENDENTE;
     public enum StatusDaConta {
