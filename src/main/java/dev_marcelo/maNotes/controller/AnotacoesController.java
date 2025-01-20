@@ -26,7 +26,7 @@ public class AnotacoesController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AnotacoesResponseDto> updateText(@PathVariable Float id, @RequestBody Map<String,String> novoTexto){
+    public ResponseEntity<AnotacoesResponseDto> updateText(@PathVariable Long id, @RequestBody Map<String,String> novoTexto){
         Anotacoes notes = anotacoesService.updateText(id,novoTexto.get("anotacao"));
         return ResponseEntity.status(200).body(AnotacoesMapper.toDto(notes));
     }
@@ -38,13 +38,13 @@ public class AnotacoesController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AnotacoesResponseDto> findAnotacoes(@PathVariable Float id){
+    public ResponseEntity<AnotacoesResponseDto> findAnotacoes(@PathVariable Long id){
         Anotacoes anotacao = anotacoesService.findAnotacao(id);
         return ResponseEntity.ok().body(AnotacoesMapper.toDto(anotacao));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAnotacao(@PathVariable Float id){
+    public ResponseEntity<Void> deleteAnotacao(@PathVariable Long id){
         Anotacoes anotacao = anotacoesService.delete(id);
         return ResponseEntity.noContent().build();
     }

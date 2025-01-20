@@ -34,7 +34,7 @@ public class DespesaService {
 
 
     @Transactional(readOnly = true)
-    public Despesa findAcountById(Float id) {
+    public Despesa findAcountById(Long id) {
         return despesaRepository.findById(id)
                 .orElseThrow( () -> new DespesaNotFoundException("despensa não encontrada"));
     }
@@ -56,7 +56,7 @@ public class DespesaService {
     }
 
     @Transactional
-    public Despesa updateDespesa(Float id, DespesaDto dto) {
+    public Despesa updateDespesa(Long id, DespesaDto dto) {
       Despesa despesa = despesaRepository.findById(id).orElseThrow(
               () -> new RuntimeException("despesa não encontrada")
       );

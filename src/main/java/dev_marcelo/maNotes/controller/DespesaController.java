@@ -24,13 +24,13 @@ public class DespesaController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<DespesaDto> update(@PathVariable Float id,@RequestBody DespesaDto despesa){
+    public ResponseEntity<DespesaDto> update(@PathVariable Long id,@RequestBody DespesaDto despesa){
         Despesa forUpdate = despesaService.updateDespesa(id,despesa);
         return ResponseEntity.status(200).body(DespesaMapper.toDto(forUpdate));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Despesa> findById(@PathVariable Float id){
+    public ResponseEntity<Despesa> findById(@PathVariable Long id){
         Despesa despesa = despesaService.findAcountById(id);
         return ResponseEntity.ok(despesa);
     }
@@ -49,7 +49,7 @@ public class DespesaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> updateStatusConta(@PathVariable Float id){
+    public ResponseEntity<Void> updateStatusConta(@PathVariable Long id){
         despesaService.delete(despesaService.findAcountById(id));
         return ResponseEntity.noContent().build();
     }

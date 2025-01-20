@@ -23,13 +23,13 @@ public class FundosController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Fundos> updateValores(@PathVariable Float id, @RequestBody FundosValoresDto dto){
+    public ResponseEntity<Fundos> updateValores(@PathVariable Long id, @RequestBody FundosValoresDto dto){
         Fundos fundos = fundosService.updateValor(id,dto.getOrigemDoFundo(),dto.getValorRecebido());
         return ResponseEntity.ok().body(fundos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Fundos> findFundos(@PathVariable Float id){
+    public ResponseEntity<Fundos> findFundos(@PathVariable Long id){
         return ResponseEntity.ok().body(fundosService.findById(id));
     }
 
@@ -39,7 +39,7 @@ public class FundosController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFundos(@PathVariable Float id){
+    public ResponseEntity<Void> deleteFundos(@PathVariable Long id){
         fundosService.delete(id);
         return ResponseEntity.noContent().build();
     }

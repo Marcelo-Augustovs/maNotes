@@ -23,7 +23,7 @@ public class AnotacoesService {
     }
 
     @Transactional
-    public Anotacoes updateText(Float id, String novoTexto){
+    public Anotacoes updateText(Long id, String novoTexto){
         Anotacoes notes = anotacoesRepository.findById(id).orElseThrow(
                 () -> new AnotacaoNotFoundException("Anotação não encontrada")
         );
@@ -32,7 +32,7 @@ public class AnotacoesService {
     }
 
     @Transactional
-    public Anotacoes delete(Float id){
+    public Anotacoes delete(Long id){
         Anotacoes notes = anotacoesRepository.findById(id).orElseThrow(
                 () -> new AnotacaoNotFoundException("Anotação não encontrada")
         );
@@ -47,7 +47,7 @@ public class AnotacoesService {
         return notes;
     }
     @Transactional(readOnly = true)
-    public Anotacoes findAnotacao(Float id) {
+    public Anotacoes findAnotacao(Long id) {
         return anotacoesRepository.findById(id).orElseThrow(
                 () -> new AnotacaoNotFoundException("Anotação não encontrada")
         );

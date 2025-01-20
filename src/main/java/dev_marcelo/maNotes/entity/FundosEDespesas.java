@@ -18,7 +18,7 @@ public class FundosEDespesas  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Float id;
+    private Long id;
     @Column
     private String mes;
     @ManyToOne

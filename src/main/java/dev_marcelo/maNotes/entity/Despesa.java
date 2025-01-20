@@ -14,14 +14,14 @@ public class Despesa implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Float id;
+    private Long id;
     @Column(name = "nome_conta")
     private String nomeDaConta;
     @Column(name = "valor_conta")
     private float valorDaConta;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "id_usuario",referencedColumnName = "id")
     private Usuario usuario;
 
     @Enumerated(EnumType.STRING)

@@ -21,12 +21,12 @@ public class Anotacoes implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Float id;
+    private Long id;
     @Column(name = "anotacao")
     private String anotacao;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario",nullable = false)
+    @JoinColumn(name = "id_usuario",referencedColumnName = "id")
     private Usuario usuario;
 
     @LastModifiedDate

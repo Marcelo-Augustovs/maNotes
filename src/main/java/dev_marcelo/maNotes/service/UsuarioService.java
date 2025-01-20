@@ -30,7 +30,7 @@ public class UsuarioService {
 
 
     @Transactional
-    public Usuario updateSenha(Float idUsuario,String senhaAntiga, String novaSenha){
+    public Usuario updateSenha(Long idUsuario,String senhaAntiga, String novaSenha){
        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(
                () -> new RuntimeException(String.format("Usuario id=%s não encontrado",idUsuario))
        );
@@ -42,7 +42,7 @@ public class UsuarioService {
        return usuario;
     }
     @Transactional
-    public Usuario mudarNickname(Float id,String novoNickname){
+    public Usuario mudarNickname(Long id,String novoNickname){
         Usuario usuario = usuarioRepository.findById(id).orElseThrow();
         usuario.setNickname(novoNickname);
         return usuarioRepository.save(usuario);

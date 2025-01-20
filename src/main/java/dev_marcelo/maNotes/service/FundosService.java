@@ -20,7 +20,7 @@ public class FundosService {
     }
 
     @Transactional
-    public Fundos updateValor(Float id,String origemDoFundo,Float valorRecebido){
+    public Fundos updateValor(Long id,String origemDoFundo,Float valorRecebido){
         Fundos fundosAtualizados = fundosRepository.findById(id)
                 .orElseThrow(
                 () -> new RuntimeException("Fundo não encontrado"));
@@ -30,7 +30,7 @@ public class FundosService {
     }
 
     @Transactional(readOnly = true)
-    public Fundos findById(Float id){
+    public Fundos findById(Long id){
         return fundosRepository.findById(id)
                 .orElseThrow( () -> new FundosNotFoundException(String.format("fundo id:%s não encontrado",id)));
     }
@@ -41,7 +41,7 @@ public class FundosService {
     }
 
     @Transactional
-    public void delete(Float id){
+    public void delete(Long id){
         Fundos fundos = fundosRepository.findById(id).orElseThrow(
                 () -> new RuntimeException(String.format("fundo id:%s não encontrado",id))
         );

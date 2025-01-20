@@ -14,13 +14,13 @@ public class Fundos implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Float id;
+    private Long id;
     @Column(name = "fundos_arecadado")
     private String origemDoFundo;
     @Column(name = "valor_recebido")
     private float valorRecebido;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario",nullable = false)
+    @JoinColumn(name = "id_usuario",referencedColumnName = "id")
     private Usuario usuario;
 }

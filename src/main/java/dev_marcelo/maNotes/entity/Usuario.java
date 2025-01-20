@@ -17,7 +17,7 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Float id;
+    private Long id;
     @Column(name = "login",nullable = false,length = 100,unique = true)
     private String login;
     @Column(name = "senha",nullable = false, length = 60)
