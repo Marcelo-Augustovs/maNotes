@@ -22,8 +22,6 @@ public class Usuario implements UserDetails {
     private String login;
     @Column(name = "senha",nullable = false, length = 60)
     private String senha;
-    @Column(name = "nickname")
-    private String nickname;
     @Enumerated(EnumType.STRING)
     @Column(name = "role",length = 25)
     private Role role;
@@ -39,7 +37,7 @@ public class Usuario implements UserDetails {
     // UserDetails - metodos obrigatorios de implementacao.
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == Role.USER) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        if(this.role == Role.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
