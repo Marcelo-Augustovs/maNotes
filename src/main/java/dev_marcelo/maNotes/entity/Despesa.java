@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "despesa")
@@ -23,6 +26,14 @@ public class Despesa implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_usuario",referencedColumnName = "id")
     private Usuario usuario;
+
+    @LastModifiedDate
+    @Column(name = "data_modificacao")
+    private LocalDate dataModificacao;
+
+    @Column(name = "criado_por")
+    @LastModifiedBy
+    private String criadoPor;
 
     @Enumerated(EnumType.STRING)
     private StatusDaConta statusDaConta = StatusDaConta.PENDENTE;
