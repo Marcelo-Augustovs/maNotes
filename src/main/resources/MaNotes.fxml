@@ -80,9 +80,12 @@
                             <children>
                                 <TableView fx:id="financiasTable" prefHeight="276.0" prefWidth="600.0">
                                     <columns>
-                                        <TableColumn prefWidth="75.0" text="Fundos" />
-                                        <TableColumn prefWidth="75.0" text="Despesas" />
-                                        <TableColumn prefWidth="75.0" text="Balanço" />
+                                        <TableColumn prefWidth="49.0" text="Mês" />
+                                        <TableColumn prefWidth="109.0" text="Nome do Fundo" />
+                              <TableColumn prefWidth="101.0" text="Valor do Fundo " />
+                                        <TableColumn prefWidth="132.0" text="Nome da Despesa" />
+                                        <TableColumn prefWidth="107.0" text="Valor da Despesa" />
+                              <TableColumn prefWidth="52.0" text="Status" />
                                     </columns>
                                 </TableView>
                                 <Button fx:id="btnFundos" layoutX="14.0" layoutY="284.0" mnemonicParsing="false" onAction="#mostrarCampoDeFinancias" text="Adicionar Fundos" />
@@ -95,6 +98,7 @@
                               <TextArea fx:id="txtValor" layoutX="165.0" layoutY="28.0" prefHeight="104.0" prefWidth="188.0" />
                            </children>
                         </Pane>
+                        <Button layoutX="344.0" layoutY="284.0" mnemonicParsing="false" text="Calcular Total" />
                             </children>
                         </AnchorPane>
                     </content>

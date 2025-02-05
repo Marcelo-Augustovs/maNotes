@@ -1,6 +1,7 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
 import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
+import dev_marcelo.maNotes.dto.FundosEDespesasDto;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,7 +28,7 @@ public class MaNotesController {
     private TableView<AnotacoesResponseDto> anotacaoTable;
 
     @FXML
-    private TableView<?> financiasTable;
+    private TableView<FundosEDespesasDto> financiasTable;
 
     @FXML
     private TableColumn<AnotacoesResponseDto, Float> colunaId;
@@ -187,9 +188,9 @@ public class MaNotesController {
             financiasApiClient.criarFundos(origemDoFundo,valor);
 
             // Atualizando os dados
-            /*List<?> listaDeAnotacoes = apiClient.buscarAnotacoes();
-            ObservableList<?> dados = FXCollections.observableArrayList(listaDeAnotacoes);
-            financiasTable.setItems(dados);*/
+            List<FundosEDespesasDto> listaDeFinancias = financiasApiClient.buscarFundosEDespesas();
+            ObservableList<FundosEDespesasDto> dados = FXCollections.observableArrayList(listaDeFinancias);
+            financiasTable.setItems(dados);
 
 
             txtValor.clear();
