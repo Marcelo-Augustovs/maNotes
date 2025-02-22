@@ -3,7 +3,13 @@ package dev_marcelo.maNotes.controller;
 
 import dev_marcelo.maNotes.dto.FundosValoresDto;
 import dev_marcelo.maNotes.entity.Fundos;
+import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
 import dev_marcelo.maNotes.service.FundosService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +22,18 @@ import java.util.List;
 public class FundosController {
     private final FundosService fundosService;
 
+    @Operation(summary = "Criar um novo fundo",
+            description = "Recurso para criar uma nova entrada de renda(fundos). Requer um usuario cadastrado. "
+                    + "Requisição exige uso de bearer token",
+    security = @SecurityRequirement(name = "security"),
+    responses = {
+            @ApiResponse(responseCode = "201",description = "Recurso criado com sucesso",
+            content = @Content(mediaType = "application/json",schema = @Schema(implementation = Fundos.class))),
+            @ApiResponse(responseCode = "401",description = "É necessario esta logado para continuar com a operação",
+                    content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "422", description = "Usuario já cadastrado no sistema",
+                    content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
+    })
     @PostMapping
     public ResponseEntity<Fundos> create(@RequestBody Fundos fundos){
         fundosService.save(fundos);
