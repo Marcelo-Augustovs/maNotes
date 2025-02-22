@@ -74,35 +74,43 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Finanças">
+                <Tab text="Fundos">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane fx:id="menuFundos" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <TableView fx:id="financiasTable" prefHeight="276.0" prefWidth="600.0">
+                                <TableView fx:id="fundosTable" prefHeight="276.0" prefWidth="551.0">
                                     <columns>
-                                        <TableColumn prefWidth="49.0" text="Mês" />
                                         <TableColumn prefWidth="109.0" text="Nome do Fundo" />
                               <TableColumn prefWidth="101.0" text="Valor do Fundo " />
-                                        <TableColumn prefWidth="132.0" text="Nome da Despesa" />
-                                        <TableColumn prefWidth="107.0" text="Valor da Despesa" />
-                              <TableColumn prefWidth="52.0" text="Status" />
+                                        <TableColumn prefWidth="114.0" text="Data Recebimento" />
                                     </columns>
                                 </TableView>
-                                <Button fx:id="btnFundos" layoutX="14.0" layoutY="284.0" mnemonicParsing="false" onAction="#mostrarCampoDeFinancias" text="Adicionar Fundos" />
-                                <Button fx:id="btnDespesas" layoutX="123.0" layoutY="284.0" mnemonicParsing="false" text="Adicionar Despesas" />
-                                <Button layoutX="242.0" layoutY="284.0" mnemonicParsing="false" text="Quitar Despesas" />
-                        <Pane fx:id="painelAdicionarFinancias" prefHeight="236.0" prefWidth="519.0" visible="false">
-                           <children>
-                              <Button fx:id="btnConfirmarFinancia" layoutX="270.0" layoutY="136.0" onAction="#adicionarFundos" prefHeight="28.0" prefWidth="70.0" text="Confirmar" />
-                              <Button fx:id="btnCancelarFuncao" layoutX="139.0" layoutY="140.0" onAction="#cancelarFuncao" prefHeight="28.0" prefWidth="67.0" text="Cancelar" />
-                              <TextArea fx:id="txtValor" layoutX="165.0" layoutY="28.0" prefHeight="104.0" prefWidth="188.0" />
-                           </children>
-                        </Pane>
-                        <Button layoutX="344.0" layoutY="284.0" mnemonicParsing="false" text="Calcular Total" />
+                                <Button fx:id="btnFundos" layoutX="58.0" layoutY="284.0" mnemonicParsing="false" onAction="#mostrarCampoDeFundos" text="Adicionar Fundos" />
+                                <Button fx:id="btnDespesas" layoutX="195.0" layoutY="284.0" mnemonicParsing="false" text="Remover Fundos" />
+                                <Button layoutX="343.0" layoutY="284.0" mnemonicParsing="false" text="Editar Fundos" />
                             </children>
                         </AnchorPane>
                     </content>
                 </Tab>
+            <Tab text="Despesas">
+               <content>
+                  <AnchorPane fx:id="menuDespesas" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="financiasTable1" prefHeight="276.0" prefWidth="548.0">
+                           <columns>
+                              <TableColumn prefWidth="109.0" text="Nome da Conta" />
+                              <TableColumn prefWidth="49.0" text="Mês" />
+                              <TableColumn prefWidth="101.0" text="Valor da Conta" />
+                              <TableColumn prefWidth="132.0" text="Status da Conta" />
+                           </columns>
+                        </TableView>
+                        <Button fx:id="btnDespesa" layoutX="48.0" layoutY="284.0" mnemonicParsing="false" onAction="#mostrarCampoDeFundos" text="Adicionar Despesas" />
+                        <Button fx:id="btnDespesas1" layoutX="193.0" layoutY="284.0" mnemonicParsing="false" text="Remover Despesas" />
+                        <Button fx:id="btnQuitarDespesa" layoutX="327.0" layoutY="284.0" mnemonicParsing="false" text="Quitar Despesas" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
             </tabs>
         </TabPane>
     </center>

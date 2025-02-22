@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "api/v1/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/v1/anotacoes").permitAll()
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -1,7 +1,7 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
-import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
-import dev_marcelo.maNotes.dto.FundosEDespesasDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dev_marcelo.maNotes.entity.Fundos;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -14,16 +14,19 @@ import java.util.List;
 
 public class FinanciasApiClient {
 
-    private static final String BASE_URL = "http://localhost:8080/api/v1";
+    private static final String BASE_URL = "http://localhost:8080/api/v1/fundos";
 
     // falta colocar a quebra de linha em json
     public String criarFundos(String origemDoFundo,String valorRecebido) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
-        String jsonBody = String.format("{\"origemDoFundo\": \"%s\"," +
-                "\"valorRecebido\": \"%s\"}", origemDoFundo,valorRecebido);
+        String jsonBody = String.format("{\n" +
+                "  \"origemDoFundo\": \"%s\",\n" +
+                "  \"valorRecebido\": \"%s\"\n" +
+                "}", origemDoFundo, valorRecebido);
 
+        System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(BASE_URL + "/fundos"))
+                .uri(new URI(BASE_URL))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
@@ -33,7 +36,7 @@ public class FinanciasApiClient {
         if (response.statusCode() == 201) {
             return response.body(); // Retorna a resposta JSON
         } else {
-            throw new RuntimeException("Falha ao adicionar fundos: " + response.body());
+            throw new RuntimeException("Falha ao adicionar fundos: Código " + response.statusCode() + " - " + response.body());
         }
     }
 
@@ -57,15 +60,21 @@ public class FinanciasApiClient {
         }
     }
 
-    public List<FundosEDespesasDto> buscarFundosEDespesas() {
-        RestTemplate restTemplate = new RestTemplate();
+    public List<Fundos> buscarFundos() throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(BASE_URL))
+                .header("Accept", "application/json")
+                .GET()
+                .build();
 
-        FundosEDespesasDto[] responseArray = restTemplate.getForObject(BASE_URL + "/saldo", FundosEDespesasDto[].class);
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (responseArray != null) {
-            return Arrays.asList(responseArray);  // Converte o array para lista
+        if (response.statusCode() == 200) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return Arrays.asList(objectMapper.readValue(response.body(), Fundos[].class));
         } else {
-            return Collections.emptyList();  // Retorna uma lista vazia se não houver dados
+            throw new RuntimeException("Erro ao buscar fundos: " + response.body());
         }
     }
 }
