@@ -104,7 +104,7 @@
                               <TableColumn prefWidth="132.0" text="Status da Conta" />
                            </columns>
                         </TableView>
-                        <Button fx:id="btnDespesa" layoutX="48.0" layoutY="284.0" mnemonicParsing="false" onAction="#mostrarCampoDeFundos" text="Adicionar Despesas" />
+                        <Button fx:id="btnDespesa" layoutX="48.0" layoutY="284.0" mnemonicParsing="false" onAction="#mostrarCampoDeDespesa" text="Adicionar Despesas" />
                         <Button fx:id="btnDespesas1" layoutX="193.0" layoutY="284.0" mnemonicParsing="false" text="Remover Despesas" />
                         <Button fx:id="btnQuitarDespesa" layoutX="327.0" layoutY="284.0" mnemonicParsing="false" text="Quitar Despesas" />
                      </children>

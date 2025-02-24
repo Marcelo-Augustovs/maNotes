@@ -12,9 +12,6 @@ import javafx.scene.control.Button;
 public class ConfirmarFundosController {
 
     @FXML
-    private Button btnCancelar;
-
-    @FXML
     private Button btnConfirmar;
 
     @FXML
@@ -47,11 +44,5 @@ public class ConfirmarFundosController {
         }
     }
 
-    @FXML
-    private void cancelarAdicaoDeFundos() {
-        txtNomeFundo.clear();
-        txtValorRecebido.clear();
-        System.out.println("Operação cancelada!");
-    }
 }
 

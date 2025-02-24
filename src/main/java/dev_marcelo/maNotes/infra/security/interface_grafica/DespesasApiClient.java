@@ -1,6 +1,7 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.entity.Fundos;
 
 import java.net.URI;
@@ -10,16 +11,18 @@ import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.List;
 
-public class FinanciasApiClient {
+public class DespesasApiClient {
 
-    private static final String BASE_URL = "http://localhost:8080/api/v1/fundos";
+    private static final String BASE_URL = "http://localhost:8080/api/v1/despesa";
 
-    public String criarFundos(String origemDoFundo,String valorRecebido) throws Exception {
+
+
+    public String criarDespesa(String nomeDaConta,String valorDaConta) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         String jsonBody = String.format("{\n" +
-                "  \"origemDoFundo\": \"%s\",\n" +
-                "  \"valorRecebido\": \"%s\"\n" +
-                "}", origemDoFundo, valorRecebido);
+                "  \"nomeDaConta\": \"%s\",\n" +
+                "  \"valorDaConta\": \"%s\"\n" +
+                "}", nomeDaConta, valorDaConta);
 
         System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder()
@@ -38,7 +41,7 @@ public class FinanciasApiClient {
     }
 
 
-    public List<Fundos> buscarFundos() throws Exception {
+    public List<Despesa> buscarDespesas() throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL))
@@ -50,7 +53,7 @@ public class FinanciasApiClient {
 
         if (response.statusCode() == 200) {
             ObjectMapper objectMapper = new ObjectMapper();
-            return Arrays.asList(objectMapper.readValue(response.body(), Fundos[].class));
+            return Arrays.asList(objectMapper.readValue(response.body(), Despesa[].class));
         } else {
             throw new RuntimeException("Erro ao buscar fundos: " + response.body());
         }

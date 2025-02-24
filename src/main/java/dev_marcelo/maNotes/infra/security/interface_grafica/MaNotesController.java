@@ -101,7 +101,7 @@ public class MaNotesController {
     @FXML
     private void abrirConfirmarDespesa() {
         // Abre a janela de relatórios sem fechar a tela principal
-        AppManager.abrirJanelaAuxiliar("/confirmarDespesas.fxml", "Relatórios", 600, 450, false);
+        AppManager.abrirJanelaAuxiliar("/confirmarDespesa.fxml", "Relatórios", 600, 450, false);
     }
 
     @FXML
@@ -183,6 +183,15 @@ public class MaNotesController {
         }
     }
 
+    public void mostrarCampoDeDespesa(javafx.event.ActionEvent event) {
+        try {
+            abrirConfirmarDespesa();
+
+        } catch (Exception e) {
+            System.err.println("Erro ao exibir Confirmar Despesa: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
     public void confirmarAdicao(ActionEvent event) {
         try {
             String mensagem = campoAnotacao.getText().replace("\n","\\n");
