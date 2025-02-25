@@ -25,7 +25,7 @@ public class Fundos implements Serializable {
     @Column(name = "valor_recebido")
     private float valorRecebido;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario",referencedColumnName = "id")
     private Usuario usuario;
 
@@ -36,4 +36,13 @@ public class Fundos implements Serializable {
     @Column(name = "criado_por")
     @LastModifiedBy
     private String criadoPor;
+
+    @Override
+    public String toString() {
+        return "Fundos{" +
+                ", origemDoFundo='" + origemDoFundo + '\'' +
+                ", valorRecebido=" + valorRecebido +
+                ", dataModificacao=" + dataModificacao +
+                '}';
+    }
 }

@@ -1,6 +1,7 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
 import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
+import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.entity.Fundos;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +23,7 @@ import java.util.List;
 public class MaNotesController {
     private static final AnotacaoApiClient apiClient = new AnotacaoApiClient();
     private static final FinanciasApiClient financiasApiClient = new FinanciasApiClient();
+    private static final DespesasApiClient despesasApiClient = new DespesasApiClient();
 
 
     @FXML
@@ -29,6 +31,22 @@ public class MaNotesController {
 
     @FXML
     private TableView<Fundos> fundosTable;
+
+    @FXML
+    private TableView<Despesa> despesaTable;
+
+
+    @FXML
+    private TableColumn<Despesa,String> colunaDespesas;
+
+    @FXML
+    private TableColumn<Despesa,Float> colunaDespesasValor;
+
+    @FXML
+    private TableColumn<Despesa, LocalDateTime> colunaMes;
+
+    @FXML
+    private TableColumn<Despesa, String> colunaStatusDespesas;
 
     @FXML
     private TableColumn<Fundos,String> colunaFundos;
@@ -87,6 +105,12 @@ public class MaNotesController {
     private Button btnFundos;
 
     @FXML
+    private Button btnAtualizarFundos;
+
+    @FXML
+    private Button btnAtualizarDespesas;
+
+    @FXML
     private Button btnDespesas;
 
     @FXML
@@ -105,7 +129,7 @@ public class MaNotesController {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws Exception {
         List<AnotacoesResponseDto> listaDeAnotacoes = apiClient.buscarAnotacoes();
         // Converte a lista em ObservableList
         ObservableList<AnotacoesResponseDto> dados = FXCollections.observableArrayList(listaDeAnotacoes);
@@ -122,9 +146,7 @@ public class MaNotesController {
         AnchorPane.setLeftAnchor(meioDoApp, 0.0);
         AnchorPane.setRightAnchor(meioDoApp, 0.0);
 
-        /*// Fundos lista
         List<Fundos> listaDeFundos = financiasApiClient.buscarFundos();
-        // Converte a lista em ObservableList
         ObservableList<Fundos> dadosFundos = FXCollections.observableArrayList(listaDeFundos);
 
         fundosTable.setItems(dadosFundos);
@@ -132,7 +154,17 @@ public class MaNotesController {
         colunaFundos.setCellValueFactory(new PropertyValueFactory<>("origemDoFundo"));
         colunaFundosValores.setCellValueFactory(new PropertyValueFactory<>("valorRecebido"));
         colunaFundosDataModificacao.setCellValueFactory(new PropertyValueFactory<>("dataModificacao"));
-*/
+
+        List<Despesa> listaDeDespesas = despesasApiClient.buscarDespesas();
+        ObservableList<Despesa> dadosDespesas = FXCollections.observableArrayList(listaDeDespesas);
+
+        despesaTable.setItems(dadosDespesas);
+
+        colunaDespesas.setCellValueFactory(new PropertyValueFactory<>("nomeDaConta"));
+        colunaDespesasValor.setCellValueFactory(new PropertyValueFactory<>("valorDaConta"));
+        colunaMes.setCellValueFactory(new PropertyValueFactory<>("dataModificacao"));
+        colunaStatusDespesas.setCellValueFactory(new PropertyValueFactory<>("statusDaConta"));
+
         colunaAnotacao.setCellFactory(tc -> new TableCell<AnotacoesResponseDto, String>() {
             private final Text text = new Text();
 
@@ -229,5 +261,17 @@ public class MaNotesController {
         painelAdicionarFinancias.setManaged(false);
         txtValor.clear();
         btnFundos.setDisable(false);
+    }
+
+    public void atualizarTabelaFundos() throws Exception {
+        List<Fundos> listaDeFundos = financiasApiClient.buscarFundos();
+        ObservableList<Fundos> dadosFundos = FXCollections.observableArrayList(listaDeFundos);
+        fundosTable.setItems(dadosFundos);
+    }
+
+    public void atualizarTabelaDespesa() throws Exception {
+        List<Despesa> listaDeDespesa = despesasApiClient.buscarDespesas();
+        ObservableList<Despesa> dadosDespesa = FXCollections.observableArrayList(listaDeDespesa);
+        despesaTable.setItems(dadosDespesa);
     }
 }

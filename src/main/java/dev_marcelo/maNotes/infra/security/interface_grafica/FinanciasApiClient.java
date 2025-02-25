@@ -1,6 +1,7 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev_marcelo.maNotes.entity.Fundos;
 
 import java.net.URI;
@@ -39,20 +40,29 @@ public class FinanciasApiClient {
 
 
     public List<Fundos> buscarFundos() throws Exception {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(BASE_URL))
-                .header("Accept", "application/json")
-                .GET()
-                .build();
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(BASE_URL))
+                    .header("Accept", "application/json")
+                    .GET()
+                    .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return Arrays.asList(objectMapper.readValue(response.body(), Fundos[].class));
-        } else {
-            throw new RuntimeException("Erro ao buscar fundos: " + response.body());
+            if (response.statusCode() == 200) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.registerModule(new JavaTimeModule()); // Adiciona suporte a LocalDate
+
+                System.out.println("Resposta JSON: " + response.body());
+                return Arrays.asList(objectMapper.readValue(response.body(), Fundos[].class));
+            } else {
+                throw new RuntimeException("Erro ao buscar fundos: " + response.body());
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao conectar à API: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
         }
     }
 }

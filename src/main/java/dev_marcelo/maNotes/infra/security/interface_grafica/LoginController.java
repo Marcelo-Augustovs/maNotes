@@ -1,10 +1,13 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
+import dev_marcelo.maNotes.entity.Fundos;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+
+import java.util.List;
 
 public class LoginController {
 
@@ -33,6 +36,22 @@ public class LoginController {
             errorMessage.setText("Por favor, preencha todos os campos.");
             return;
         }
+        try {
+            System.out.println("Tentando conectar à API...");
+            FinanciasApiClient financiasApiClient = new FinanciasApiClient();
+            List<Fundos> fundos = financiasApiClient.buscarFundos(); // Aqui pode estar o erro
+            System.out.println("Resposta recebida: " + fundos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            errorMessage.setText("Erro ao conectar à API: " + e.getMessage()); // Exibir erro no JavaFX
+        }
+
+
+
+
+
+
+
 
         try {
             // Chamada ao cliente HTTP para autenticação

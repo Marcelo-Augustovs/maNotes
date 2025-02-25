@@ -22,7 +22,7 @@
                     <items>
                         <MenuItem mnemonicParsing="false" text="Cadastrar Usuario" />
                         <MenuItem mnemonicParsing="false" text="Entrar" />
-                  <MenuItem mnemonicParsing="false" text="Logout" />
+                        <MenuItem mnemonicParsing="false" text="Logout" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Arquivos">
@@ -46,78 +46,76 @@
             <tabs>
                 <Tab text="Notes">
                     <content>
-                        <AnchorPane fx:id="menuPrincipal" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane fx:id="menuPrincipal" prefHeight="400.0" prefWidth="600.0">
                             <children>
-                                <TableView fx:id="anotacaoTable" layoutX="4.0" prefHeight="279.0" prefWidth="536.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="anotacaoTable" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
                                     <columns>
                                         <TableColumn fx:id="colunaId" prefWidth="38.0" text="ID" />
                                         <TableColumn fx:id="colunaAnotacao" prefWidth="337.0" text="Anotações" />
                                         <TableColumn fx:id="colunaDataModificacao" prefWidth="160.0" text="Data Modificação" />
                                     </columns>
                                 </TableView>
-
                                 <Button fx:id="btnNotes" onAction="#mostrarCampoDeTexto" text="Adicionar anotação" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-
-                                <Button layoutX="132.0" layoutY="294.0" text="Remover anotação" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="132.0" />
-
-                                <Button layoutX="254.0" layoutY="294.0" text="Criar Lembrete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="254.0" />
-
-                                <Button layoutX="356.0" layoutY="294.0" text="Excluir Lembrete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="356.0" />
-                        <Pane fx:id="painelAdicionarTexto" layoutX="9.0" layoutY="30.0" prefHeight="236.0" prefWidth="519.0" visible="false">
-                           <children>
-                                       <Button fx:id="btnConfirmar" layoutX="331.0" layoutY="202.0" onAction="#confirmarAdicao" prefHeight="26.0" prefWidth="94.0" text="Confirmar" />
-                                       <Button fx:id="btnCancelar" layoutX="83.0" layoutY="201.0" onAction="#cancelarAdicao" prefHeight="24.0" prefWidth="103.0" text="Cancelar" />
-                              <TextArea fx:id="campoAnotacao" layoutX="2.0" layoutY="15.0" prefHeight="182.0" prefWidth="508.0" />
-                           </children>
-                        </Pane>
+                                <Button text="Remover anotação" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="132.0" />
+                                <Button text="Criar Lembrete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="254.0" />
+                                <Button text="Excluir Lembrete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="356.0" />
+                                <Pane fx:id="painelAdicionarTexto" prefHeight="236.0" prefWidth="519.0" visible="false" AnchorPane.leftAnchor="9.0" AnchorPane.topAnchor="30.0">
+                                    <children>
+                                        <Button fx:id="btnConfirmar" layoutX="331.0" layoutY="202.0" onAction="#confirmarAdicao" text="Confirmar" />
+                                        <Button fx:id="btnCancelar" layoutX="83.0" layoutY="201.0" onAction="#cancelarAdicao" text="Cancelar" />
+                                        <TextArea fx:id="campoAnotacao" layoutX="2.0" layoutY="15.0" prefHeight="182.0" prefWidth="508.0" />
+                                    </children>
+                                </Pane>
                             </children>
                         </AnchorPane>
                     </content>
                 </Tab>
                 <Tab text="Fundos">
                     <content>
-                        <AnchorPane fx:id="menuFundos" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane fx:id="menuFundos" prefHeight="400.0" prefWidth="600.0">
                             <children>
-                                <TableView fx:id="fundosTable" prefHeight="276.0" prefWidth="551.0">
+                                <TableView fx:id="fundosTable" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn prefWidth="109.0" text="Nome do Fundo" />
-                              <TableColumn prefWidth="101.0" text="Valor do Fundo " />
-                                        <TableColumn prefWidth="114.0" text="Data Recebimento" />
+                                        <TableColumn fx:id="colunaFundos" prefWidth="109.0" text="Nome do Fundo" />
+                                        <TableColumn fx:id="colunaFundosValores" prefWidth="101.0" text="Valor do Fundo " />
+                                        <TableColumn fx:id="colunaFundosDataModificacao" prefWidth="114.0" text="Data Recebimento" />
                                     </columns>
                                 </TableView>
-                                <Button fx:id="btnFundos" layoutX="58.0" layoutY="284.0" mnemonicParsing="false" onAction="#mostrarCampoDeFundos" text="Adicionar Fundos" />
-                                <Button fx:id="btnDespesas" layoutX="195.0" layoutY="284.0" mnemonicParsing="false" text="Remover Fundos" />
-                                <Button layoutX="343.0" layoutY="284.0" mnemonicParsing="false" text="Editar Fundos" />
+                                <Button fx:id="btnFundos" onAction="#mostrarCampoDeFundos" text="Adicionar Fundos" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+                                <Button fx:id="btnDespesas" text="Remover Fundos" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="132.0" />
+                                <Button text="Editar Fundos" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="254.0" />
+                                <Button fx:id="btnAtualizarFundos" onAction="#atualizarTabelaFundos" text="Atualizar Tabela" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="356.0" />
                             </children>
                         </AnchorPane>
                     </content>
                 </Tab>
-            <Tab text="Despesas">
-               <content>
-                  <AnchorPane fx:id="menuDespesas" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <TableView fx:id="financiasTable1" prefHeight="276.0" prefWidth="548.0">
-                           <columns>
-                              <TableColumn prefWidth="109.0" text="Nome da Conta" />
-                              <TableColumn prefWidth="49.0" text="Mês" />
-                              <TableColumn prefWidth="101.0" text="Valor da Conta" />
-                              <TableColumn prefWidth="132.0" text="Status da Conta" />
-                           </columns>
-                        </TableView>
-                        <Button fx:id="btnDespesa" layoutX="48.0" layoutY="284.0" mnemonicParsing="false" onAction="#mostrarCampoDeDespesa" text="Adicionar Despesas" />
-                        <Button fx:id="btnDespesas1" layoutX="193.0" layoutY="284.0" mnemonicParsing="false" text="Remover Despesas" />
-                        <Button fx:id="btnQuitarDespesa" layoutX="327.0" layoutY="284.0" mnemonicParsing="false" text="Quitar Despesas" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
+                <Tab text="Despesas">
+                    <content>
+                        <AnchorPane fx:id="menuDespesas" prefHeight="400.0" prefWidth="600.0">
+                            <children>
+                                <TableView fx:id="despesaTable" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="colunaDespesas" prefWidth="109.0" text="Nome da Conta" />
+                                        <TableColumn fx:id="colunaDespesasValor" prefWidth="108.0" text="Valor da Conta" />
+                                        <TableColumn fx:id="colunaMes" prefWidth="73.0" text="Mês" />
+                                        <TableColumn fx:id="colunaStatusDespesas" prefWidth="192.0" text="Status da Conta" />
+                                    </columns>
+                                </TableView>
+                                <Button fx:id="btnDespesa" onAction="#mostrarCampoDeDespesa" text="Adicionar Despesas" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+                                <Button fx:id="btnRemoverDespesas" text="Remover Despesas" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="132.0" />
+                                <Button fx:id="btnQuitarDespesa" text="Quitar Despesas" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="254.0" />
+                                <Button fx:id="btnAtualizarDespesas" onAction="#atualizarTabelaDespesa" text="Atualizar Tabela" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="356.0" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </center>
-    <left>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MANotes" BorderPane.alignment="CENTER" />
-    </left>
-    <bottom>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Version: 1.0" BorderPane.alignment="CENTER" />
-    </bottom>
+   <left>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MaNotes" BorderPane.alignment="CENTER" />
+   </left>
+   <bottom>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="versao 1.0" BorderPane.alignment="CENTER" />
+   </bottom>
 </BorderPane>

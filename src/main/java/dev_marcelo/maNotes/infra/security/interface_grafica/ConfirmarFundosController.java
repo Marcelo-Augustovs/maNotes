@@ -3,7 +3,6 @@ package dev_marcelo.maNotes.infra.security.interface_grafica;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,6 +20,7 @@ public class ConfirmarFundosController {
     private TextField txtValorRecebido;
 
     private FinanciasApiClient apiClient;
+
 
     public ConfirmarFundosController() {
         this.apiClient = new FinanciasApiClient();  // instância manual
