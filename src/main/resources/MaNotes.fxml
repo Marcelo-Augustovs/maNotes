@@ -35,7 +35,7 @@
                 <Menu mnemonicParsing="false" text="Calendário">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Marcar evento" />
-                        <MenuItem mnemonicParsing="false" text="Verificar eventos" />
+                        <MenuItem fx:id="menuCalendario" mnemonicParsing="false" onAction="#abrirCalendario" text="Verificar eventos" />
                     </items>
                 </Menu>
             </menus>

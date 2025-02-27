@@ -78,6 +78,9 @@ public class MaNotesController {
     private Text menuBottom;
 
     @FXML
+    private MenuItem menuCalendario;
+
+    @FXML
     private AnchorPane menuPrincipal;
 
     @FXML
@@ -128,6 +131,10 @@ public class MaNotesController {
         AppManager.abrirJanelaAuxiliar("/confirmarDespesa.fxml", "Relatórios", 600, 450, false);
     }
 
+    @FXML
+    private void abrirCalendario(){
+        AppManager.abrirJanelaAuxiliar("/Calendar.fxml","Calendario",600, 450, false);
+    }
     @FXML
     public void initialize() throws Exception {
         List<AnotacoesResponseDto> listaDeAnotacoes = apiClient.buscarAnotacoes();

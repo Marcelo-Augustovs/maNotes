@@ -28,13 +28,13 @@
    </HBox>
    <HBox alignment="CENTER" layoutX="14.0" layoutY="78.0" prefHeight="44.0" prefWidth="716.0" spacing="88.75">
       <children>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seg" textAlignment="CENTER" />
-         <Text layoutX="213.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ter" textAlignment="CENTER" />
-         <Text layoutX="222.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Qua" textAlignment="CENTER" />
-         <Text layoutX="232.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Qui" textAlignment="CENTER" />
-         <Text layoutX="241.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sex" textAlignment="CENTER" />
-         <Text layoutX="251.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sab" textAlignment="CENTER" />
-         <Text layoutX="266.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dom" textAlignment="CENTER" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dom" textAlignment="CENTER" />
+         <Text layoutX="213.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seg" textAlignment="CENTER" />
+         <Text layoutX="222.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ter" textAlignment="CENTER" />
+         <Text layoutX="232.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Qua" textAlignment="CENTER" />
+         <Text layoutX="241.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Qui" textAlignment="CENTER" />
+         <Text layoutX="251.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sex" textAlignment="CENTER" />
+         <Text layoutX="266.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sab" textAlignment="CENTER" />
       </children>
       <padding>
          <Insets right="9.0" />
