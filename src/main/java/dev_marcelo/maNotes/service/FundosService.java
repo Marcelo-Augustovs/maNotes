@@ -23,7 +23,7 @@ public class FundosService {
     public Fundos updateValor(Long id,String origemDoFundo,Float valorRecebido){
         Fundos fundosAtualizados = fundosRepository.findById(id)
                 .orElseThrow(
-                () -> new RuntimeException("Fundo não encontrado"));
+                () -> new FundosNotFoundException("Fundo não encontrado"));
         if(fundosAtualizados != null) fundosAtualizados.setOrigemDoFundo(origemDoFundo);
         fundosAtualizados.setValorRecebido(valorRecebido);
         return fundosAtualizados;

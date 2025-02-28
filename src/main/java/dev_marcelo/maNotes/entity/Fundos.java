@@ -25,7 +25,7 @@ public class Fundos implements Serializable {
     @Column(name = "valor_recebido")
     private float valorRecebido;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     @JoinColumn(name = "id_usuario",referencedColumnName = "id")
     private Usuario usuario;
 
