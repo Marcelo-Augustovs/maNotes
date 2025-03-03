@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LembreteService {
@@ -35,5 +37,10 @@ public class LembreteService {
         Lembrete lembretes = repository.findById(id)
                 .orElseThrow(() -> new LembretesNotFoundException("Evento nao encontrado"));
         repository.delete(lembretes);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Lembrete> findAll() {
+        return repository.findAll();
     }
 }

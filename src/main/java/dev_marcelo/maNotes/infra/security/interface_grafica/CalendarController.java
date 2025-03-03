@@ -35,6 +35,12 @@ public class CalendarController implements Initializable {
     @FXML
     private FlowPane calendar;
 
+    private CalendarApiClient apiClient;
+
+    public CalendarController(){
+        this.apiClient = new CalendarApiClient();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         mesAtual = ZonedDateTime.now();
@@ -119,9 +125,16 @@ public class CalendarController implements Initializable {
         dialog.setHeaderText("Digite o nome do evento para o dia " + dia);
         dialog.setContentText("Evento:");
 
+
+
         dialog.showAndWait().ifPresent(evento -> {
             if (!evento.trim().isEmpty()) {
                 String dataChave = mesAtual.getYear() + "-" + mesAtual.getMonthValue() + "-" + dia;
+                try {
+                    apiClient.criarLembrete(dialog.getResult(),dataChave);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 eventos.computeIfAbsent(dataChave, k -> new ArrayList<>())
                         .add(new CalendarActivity(ZonedDateTime.now(), evento, eventos.get(dataChave).size() + 1));
                 drawCalendar();
