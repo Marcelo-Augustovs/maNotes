@@ -1,11 +1,11 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
+import dev_marcelo.maNotes.entity.Lembrete;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.*;
@@ -63,6 +63,25 @@ public class CalendarController implements Initializable {
     }
 
     private void drawCalendar() {
+        try {
+            // Buscar os lembretes da API e preencher o mapa 'eventos'
+            List<Lembrete> lembretes = apiClient.buscarLembretes();
+
+            eventos.clear(); // Limpa eventos anteriores antes de recarregar
+
+            for (Lembrete lembrete : lembretes) {
+                String dataChave = lembrete.getDiaMarcado().toString(); // Garante formato YYYY-MM-DD
+                eventos.computeIfAbsent(dataChave, k -> new ArrayList<>()).add(new CalendarActivity(lembrete.getNomeDoEvento()));
+            }
+
+            // Debug: Verificar se os eventos foram carregados corretamente
+            System.out.println("Eventos carregados: " + eventos);
+
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar eventos do calendário: " + e.getMessage());
+        }
+
+        // Agora, continua o código original para desenhar o calendário
         calendar.getChildren().clear();
         ano.setText(String.valueOf(mesAtual.getYear()));
         mes.setText(String.valueOf(mesAtual.getMonth()));
@@ -96,8 +115,7 @@ public class CalendarController implements Initializable {
                 Text dayText = new Text(String.valueOf(dayCounter));
                 cell.getChildren().add(dayText);
 
-                int day = dayCounter;
-                String dataChave = mesAtual.getYear() + "-" + mesAtual.getMonthValue() + "-" + day;
+                String dataChave = String.format("%04d-%02d-%02d", mesAtual.getYear(), mesAtual.getMonthValue(), dayCounter);
                 List<CalendarActivity> activities = eventos.getOrDefault(dataChave, new ArrayList<>());
 
                 for (CalendarActivity activity : activities) {
@@ -106,6 +124,7 @@ public class CalendarController implements Initializable {
                     cell.getChildren().add(eventText);
                 }
 
+                int day = dayCounter;
                 cell.setOnMouseClicked(event -> abrirMenuDeOpcoes(day));
 
                 dayCounter++;
@@ -125,8 +144,6 @@ public class CalendarController implements Initializable {
         dialog.setHeaderText("Digite o nome do evento para o dia " + dia);
         dialog.setContentText("Evento:");
 
-
-
         dialog.showAndWait().ifPresent(evento -> {
             if (!evento.trim().isEmpty()) {
                 String dataChave = mesAtual.getYear() + "-" + mesAtual.getMonthValue() + "-" + dia;
@@ -143,15 +160,24 @@ public class CalendarController implements Initializable {
     }
 
     private void abrirMenuDeOpcoes(int day) {
-        String dataChave = mesAtual.getYear() + "-" + mesAtual.getMonthValue() + "-" + day;
+        String dataChave = String.format("%04d-%02d-%02d", mesAtual.getYear(), mesAtual.getMonthValue(), day);
+
+        // Adiciona sempre a opção de adicionar evento
         List<String> options = new ArrayList<>();
         options.add("Adicionar Evento");
 
-        if (eventos.containsKey(dataChave) && !eventos.get(dataChave).isEmpty()) {
+        // Obtém a lista de eventos do dia, se houver
+        List<CalendarActivity> activities = eventos.getOrDefault(dataChave, new ArrayList<>());
+
+        System.out.println("Eventos do dia " + dataChave + ": " + activities); // Debug
+
+        // Se houver eventos, adiciona opções de edição e remoção
+        if (!activities.isEmpty()) {
             options.add("Editar Evento");
             options.add("Remover Evento");
         }
 
+        // Exibe o menu com as opções disponíveis
         ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
         dialog.setTitle("Gerenciar Evento");
         dialog.setHeaderText("Escolha uma ação para o dia " + day);
@@ -170,15 +196,16 @@ public class CalendarController implements Initializable {
     }
 
     private void editarEvento(int dia) {
-        String dataChave = mesAtual.getYear() + "-" + mesAtual.getMonthValue() + "-" + dia;
+        String dataChave = String.format("%04d-%02d-%02d", mesAtual.getYear(), mesAtual.getMonthValue(), dia);
         List<CalendarActivity> activities = eventos.getOrDefault(dataChave, new ArrayList<>());
+
         if (activities.isEmpty()) return;
 
         List<String> eventNames = activities.stream()
                 .map(CalendarActivity::getClientName)
                 .collect(Collectors.toList());
 
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(eventNames.get(0), eventNames);
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, eventNames);
         dialog.setTitle("Editar Evento");
         dialog.setHeaderText("Escolha um evento para editar:");
         dialog.setContentText("Evento:");
@@ -191,10 +218,23 @@ public class CalendarController implements Initializable {
             editDialog.setContentText("Novo nome:");
 
             editDialog.showAndWait().ifPresent(newName -> {
-                activities.stream()
-                        .filter(e -> e.getClientName().equals(selectedEvent))
-                        .findFirst()
-                        .ifPresent(e -> e.setClientName(newName));
+                for (CalendarActivity e : activities) {
+                    if (e.getClientName().equals(selectedEvent)) {
+                        e.setClientName(newName);
+                        break;
+                    }
+                }
+
+                try {
+                    apiClient.editarLembrete(dialog.getResult(),editDialog.getResult());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+                // Atualiza o mapa explicitamente
+                eventos.put(dataChave, new ArrayList<>(activities));
+
+                // Atualiza o calendário
                 drawCalendar();
             });
         });

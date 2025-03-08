@@ -18,7 +18,6 @@ public class CalendarApiClient {
     private static final String BASE_URL = "http://localhost:8080/api/v1/calendario";
 
 
-
     public String criarLembrete(String nomeDoEvento, String diaMarcado) throws Exception {
         String[] partes = diaMarcado.split("-");
         String dataCorrigida = String.format("%04d-%02d-%02d",
@@ -78,6 +77,50 @@ public class CalendarApiClient {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    public String editarLembrete(String nomeDoEvento,String novoNomeDoEvento) throws Exception {
+        Long id = buscarIdPorNome(nomeDoEvento);
+        System.out.println("id recuperado:" + id);
+
+        if (id == null) {
+            throw new IllegalArgumentException("Evento não encontrado: " + nomeDoEvento);
+        }
+
+        String PATCH_URL = BASE_URL + "/" + id;
+
+        System.out.println("Url:" + PATCH_URL);
+
+        HttpClient client = HttpClient.newHttpClient();
+        String jsonBody = String.format("""
+    {
+      "nomeDoEvento": "%s"
+    }
+    """, novoNomeDoEvento);
+
+        System.out.println(jsonBody);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(PATCH_URL))
+                .header("Content-Type", "application/json")
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody)) // Usa PATCH corretamente
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            System.out.println("teste:"+jsonBody);
+            return response.body();
+        } else {
+            throw new RuntimeException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
+        }
+    }
+    private Long buscarIdPorNome(String nomeDoEvento) throws Exception {
+        List<Lembrete> lembretes = buscarLembretes(); // Usa a API para obter todos os lembretes
+        return lembretes.stream()
+                .filter(lembrete -> lembrete.getNomeDoEvento().equalsIgnoreCase(nomeDoEvento))
+                .map(Lembrete::getId)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado: " + nomeDoEvento));
     }
 }
 

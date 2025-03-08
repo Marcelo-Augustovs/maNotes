@@ -43,4 +43,9 @@ public class LembreteService {
     public List<Lembrete> findAll() {
         return repository.findAll();
     }
+
+    public Long getIdByName(String nomeDoEvento) {
+        Lembrete evento = repository.findByNomeDoEvento(nomeDoEvento);
+        return evento.getId();
+    }
 }
