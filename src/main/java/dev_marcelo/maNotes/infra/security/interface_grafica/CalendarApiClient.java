@@ -31,11 +31,11 @@ public class CalendarApiClient {
 
         HttpClient client = HttpClient.newHttpClient();
         String jsonBody = String.format("""
-    {
-      "nomeDoEvento": "%s",
-      "diaMarcado": "%s"
-    }
-    """, nomeDoEvento, dataFormatada);
+                {
+                  "nomeDoEvento": "%s",
+                  "diaMarcado": "%s"
+                }
+                """, nomeDoEvento, dataFormatada);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL))
@@ -79,8 +79,8 @@ public class CalendarApiClient {
         }
     }
 
-    public String editarLembrete(String nomeDoEvento,String novoNomeDoEvento) throws Exception {
-        Long id = buscarIdPorNome(nomeDoEvento);
+    public String editarLembrete(String nomeDoEvento, String novoNomeDoEvento, String diaMarcado) throws Exception {
+        Long id = buscarIdPorNomeEDia(nomeDoEvento, diaMarcado); // Busca o evento pelo nome e pelo dia
         System.out.println("id recuperado:" + id);
 
         if (id == null) {
@@ -88,15 +88,15 @@ public class CalendarApiClient {
         }
 
         String PATCH_URL = BASE_URL + "/" + id;
-
         System.out.println("Url:" + PATCH_URL);
 
         HttpClient client = HttpClient.newHttpClient();
         String jsonBody = String.format("""
-    {
-      "nomeDoEvento": "%s"
-    }
-    """, novoNomeDoEvento);
+                {
+                  "nomeDoEvento": "%s",
+                  "diaMarcado": "%s"
+                }
+                """, novoNomeDoEvento, diaMarcado);
 
         System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder()
@@ -108,19 +108,25 @@ public class CalendarApiClient {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
-            System.out.println("teste:"+jsonBody);
+            System.out.println("teste:" + jsonBody);
             return response.body();
         } else {
             throw new RuntimeException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
         }
     }
-    private Long buscarIdPorNome(String nomeDoEvento) throws Exception {
+
+    private Long buscarIdPorNomeEDia(String nomeDoEvento, String diaMarcado) throws Exception {
         List<Lembrete> lembretes = buscarLembretes(); // Usa a API para obter todos os lembretes
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // ou o formato correto da data
+        LocalDate dataFormatada = LocalDate.parse(diaMarcado, formatter);
+
         return lembretes.stream()
-                .filter(lembrete -> lembrete.getNomeDoEvento().equalsIgnoreCase(nomeDoEvento))
+                .filter(lembrete -> lembrete.getNomeDoEvento().trim().equalsIgnoreCase(nomeDoEvento.trim()) &&
+                        lembrete.getDiaMarcado().isEqual(dataFormatada)) // Agora ambos são LocalDate
                 .map(Lembrete::getId)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado: " + nomeDoEvento));
+                .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado: " + nomeDoEvento + " no dia " + diaMarcado));
     }
 }
 

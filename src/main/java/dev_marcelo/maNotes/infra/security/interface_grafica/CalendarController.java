@@ -226,7 +226,7 @@ public class CalendarController implements Initializable {
                 }
 
                 try {
-                    apiClient.editarLembrete(dialog.getResult(),editDialog.getResult());
+                    apiClient.editarLembrete(dialog.getResult(),editDialog.getResult(),dataChave);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
