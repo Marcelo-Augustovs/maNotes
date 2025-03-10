@@ -43,4 +43,13 @@ public class Despesa implements Serializable {
         PENDENTE, PAGO
     }
 
+    @Override
+    public String toString() {
+        return "Despesa{" +
+                "nomeDaConta='" + nomeDaConta + '\'' +
+                ", valorDaConta=" + valorDaConta +
+                ", dataModificacao=" + dataModificacao +
+                ", statusDaConta='" + statusDaConta + '\'' +
+                '}';
+    }
 }
