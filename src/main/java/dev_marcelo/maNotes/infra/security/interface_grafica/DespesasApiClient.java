@@ -5,7 +5,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.entity.Fundos;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -66,6 +68,35 @@ public class DespesasApiClient {
             System.err.println("Erro ao conectar à API: " + e.getMessage());
             e.printStackTrace();
             throw e;
+        }
+    }
+
+    public String editarDespesa(Long idDespesa, String nomeDaConta,String valorDaConta) throws URISyntaxException, IOException, InterruptedException {
+        String PATCH_URL = BASE_URL + "/" + idDespesa;
+        System.out.println("Url:" + PATCH_URL);
+
+        HttpClient client = HttpClient.newHttpClient();
+        String jsonBody = String.format("""
+                {
+                  "nomeDaConta": "%s",
+                  "valorDaConta": "%s"
+                }
+                """, nomeDaConta, valorDaConta);
+
+        System.out.println(jsonBody);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(PATCH_URL))
+                .header("Content-Type", "application/json")
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody)) // Usa PATCH corretamente
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            System.out.println("teste:" + jsonBody);
+            return response.body();
+        } else {
+            throw new RuntimeException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
         }
     }
 }
