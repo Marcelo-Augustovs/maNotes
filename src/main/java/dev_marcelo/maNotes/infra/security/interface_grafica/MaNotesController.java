@@ -7,16 +7,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -130,6 +136,16 @@ public class MaNotesController {
         // Abre a janela de relatórios sem fechar a tela principal
         AppManager.abrirJanelaAuxiliar("/confirmarDespesa.fxml", "Relatórios", 600, 450, false);
     }
+    @FXML
+    private void abrirEditarFundos() {
+        // Abre a janela de configurações sem fechar a tela principal
+        AppManager.abrirJanelaAuxiliar("/confirmarFundos.fxml", "Adicionar Fundos", 500, 400, false);
+    }
+    @FXML
+    private void abrirEditarDespesa() {
+        // Abre a janela de configurações sem fechar a tela principal
+        AppManager.abrirJanelaAuxiliar("/confirmarFundos.fxml", "Adicionar Fundos", 500, 400, false);
+    }
 
     @FXML
     private void abrirCalendario(){
@@ -137,63 +153,167 @@ public class MaNotesController {
     }
     @FXML
     public void initialize() throws Exception {
+        carregarDadosAnotacoes();
+        carregarDadosFundos();
+        carregarDadosDespesas();
+
+        configurarCliqueDuplo(fundosTable);
+        configurarCliqueDuplo(despesaTable);
+    }
+
+    private void carregarDadosAnotacoes() throws Exception {
         List<AnotacoesResponseDto> listaDeAnotacoes = apiClient.buscarAnotacoes();
-        // Converte a lista em ObservableList
         ObservableList<AnotacoesResponseDto> dados = FXCollections.observableArrayList(listaDeAnotacoes);
-        // Define os itens da TableView
         anotacaoTable.setItems(dados);
 
-        // Configura as colunas
         colunaId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colunaAnotacao.setCellValueFactory(new PropertyValueFactory<>("anotacao"));
         colunaDataModificacao.setCellValueFactory(new PropertyValueFactory<>("dataModificacao"));
+    }
 
-        AnchorPane.setTopAnchor(meioDoApp, 0.0);
-        AnchorPane.setBottomAnchor(meioDoApp, 0.0);
-        AnchorPane.setLeftAnchor(meioDoApp, 0.0);
-        AnchorPane.setRightAnchor(meioDoApp, 0.0);
-
+    private void carregarDadosFundos() throws Exception {
         List<Fundos> listaDeFundos = financiasApiClient.buscarFundos();
         ObservableList<Fundos> dadosFundos = FXCollections.observableArrayList(listaDeFundos);
-
         fundosTable.setItems(dadosFundos);
 
         colunaFundos.setCellValueFactory(new PropertyValueFactory<>("origemDoFundo"));
         colunaFundosValores.setCellValueFactory(new PropertyValueFactory<>("valorRecebido"));
         colunaFundosDataModificacao.setCellValueFactory(new PropertyValueFactory<>("dataModificacao"));
+    }
 
+    private void carregarDadosDespesas() throws Exception {
         List<Despesa> listaDeDespesas = despesasApiClient.buscarDespesas();
         ObservableList<Despesa> dadosDespesas = FXCollections.observableArrayList(listaDeDespesas);
-
         despesaTable.setItems(dadosDespesas);
 
         colunaDespesas.setCellValueFactory(new PropertyValueFactory<>("nomeDaConta"));
         colunaDespesasValor.setCellValueFactory(new PropertyValueFactory<>("valorDaConta"));
         colunaMes.setCellValueFactory(new PropertyValueFactory<>("dataModificacao"));
         colunaStatusDespesas.setCellValueFactory(new PropertyValueFactory<>("statusDaConta"));
-
-        colunaAnotacao.setCellFactory(tc -> new TableCell<AnotacoesResponseDto, String>() {
-            private final Text text = new Text();
-
-            {
-                text.wrappingWidthProperty().bind(colunaAnotacao.widthProperty());
-                setGraphic(text);
-                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-            }
-
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null) {
-                    text.setText(null);
-                } else {
-                    text.setText(item); // Define o texto atual
-                }
-            }
-        });
-        System.out.println("FXML carregado com sucesso!");
     }
+
+    private <T> void configurarCliqueDuplo(TableView<T> tableView) {
+        tableView.setRowFactory(tv -> {
+            TableRow<T> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty() && event.getClickCount() == 2) { // Clique duplo
+                    T objetoSelecionado = row.getItem();
+                    System.out.println("Selecionado: " + objetoSelecionado);
+                    editarObjeto(objetoSelecionado);
+                }
+            });
+            return row;
+        });
+    }
+
+    private <T> void editarObjeto(T objeto) {
+        System.out.println("Processando: " + objeto.toString());
+
+        if (objeto instanceof Fundos fundos) {
+            Long idFundo = fundos.getId();
+            String origemAtual = fundos.getOrigemDoFundo();
+            String valorAtual = String.valueOf(fundos.getValorRecebido());
+
+            Dialog<Pair<String, String>> dialog = new Dialog<>();
+            dialog.setTitle("Editar Fundo");
+            dialog.setHeaderText("Modifique os valores abaixo:");
+
+            // Botões do Dialog
+            ButtonType confirmarButton = new ButtonType("Salvar", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(confirmarButton, ButtonType.CANCEL);
+
+            // Campos de edição
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField origemField = new TextField(origemAtual);
+            TextField valorField = new TextField(valorAtual.toString());
+
+            grid.add(new Label("Origem:"), 0, 0);
+            grid.add(origemField, 1, 0);
+            grid.add(new Label("Valor Recebido:"), 0, 1);
+            grid.add(valorField, 1, 1);
+
+            dialog.getDialogPane().setContent(grid);
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == confirmarButton) {
+                    return new Pair<>(origemField.getText(), valorField.getText());
+                }
+                return null;
+            });
+
+            Optional<Pair<String, String>> resultado = dialog.showAndWait();
+            resultado.ifPresent(novosValores -> {
+                String novaOrigem = novosValores.getKey();
+                String novoValor = novosValores.getValue();
+
+                try {
+                    financiasApiClient.editarFundos(idFundo, novaOrigem, novoValor);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        if (objeto instanceof Despesa despesa) { // Editando Despesa
+            Long idDespesa = despesa.getId();
+            String nomeAtual = despesa.getNomeDaConta();
+            String valorAtual = String.valueOf(despesa.getValorDaConta());
+
+            Dialog<Pair<String, String>> dialog = new Dialog<>();
+            dialog.setTitle("Editar Despesa");
+            dialog.setHeaderText("Modifique os valores abaixo:");
+
+            ButtonType confirmarButton = new ButtonType("Salvar", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(confirmarButton, ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField nomeField = new TextField(nomeAtual);
+            TextField valorField = new TextField(valorAtual.toString());
+
+            grid.add(new Label("Nome da Conta:"), 0, 0);
+            grid.add(nomeField, 1, 0);
+            grid.add(new Label("Valor da Despesa:"), 0, 1);
+            grid.add(valorField, 1, 1);
+
+            dialog.getDialogPane().setContent(grid);
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == confirmarButton) {
+                    return new Pair<>(nomeField.getText(), valorField.getText());
+                }
+                return null;
+            });
+
+            Optional<Pair<String, String>> resultado = dialog.showAndWait();
+            resultado.ifPresent(novosValores -> {
+                String novoNome = novosValores.getKey();
+                String novoValor = novosValores.getValue();
+
+                try {
+                    despesasApiClient.editarDespesa(idDespesa, novoNome, novoValor);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+    }
+
 
     public void mostrarCampoDeTexto(javafx.event.ActionEvent event) {
         try {
@@ -261,13 +381,6 @@ public class MaNotesController {
         painelAdicionarTexto.setManaged(false);
         campoAnotacao.clear();
         btnNotes.setDisable(false);
-    }
-
-    public void cancelarFuncao(ActionEvent event) {
-        painelAdicionarFinancias.setVisible(false);
-        painelAdicionarFinancias.setManaged(false);
-        txtValor.clear();
-        btnFundos.setDisable(false);
     }
 
     public void atualizarTabelaFundos() throws Exception {
