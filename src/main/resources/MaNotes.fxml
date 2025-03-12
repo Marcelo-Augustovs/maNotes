@@ -82,9 +82,8 @@
                                     </columns>
                                 </TableView>
                                 <Button fx:id="btnFundos" onAction="#mostrarCampoDeFundos" text="Adicionar Fundos" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-                                <Button fx:id="btnDespesas" text="Remover Fundos" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="132.0" />
-                                <Button text="Editar Fundos" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="254.0" />
-                                <Button fx:id="btnAtualizarFundos" onAction="#atualizarTabelaFundos" text="Atualizar Tabela" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="356.0" />
+                                <Button fx:id="btnRemoverFundos" onAction="#removerFundos" text="Remover Fundos" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="132.0" />
+                                <Button fx:id="btnAtualizarFundos" layoutX="245.0" layoutY="294.0" onAction="#atualizarTabelaFundos" text="Atualizar Tabela" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="245.0" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -102,7 +101,7 @@
                                     </columns>
                                 </TableView>
                                 <Button fx:id="btnDespesa" onAction="#mostrarCampoDeDespesa" text="Adicionar Despesas" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-                                <Button fx:id="btnRemoverDespesas" text="Remover Despesas" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="132.0" />
+                                <Button fx:id="btnRemoverDespesas" onAction="#removerDespesa" text="Remover Despesas" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="132.0" />
                                 <Button fx:id="btnQuitarDespesa" text="Quitar Despesas" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="254.0" />
                                 <Button fx:id="btnAtualizarDespesas" onAction="#atualizarTabelaDespesa" text="Atualizar Tabela" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="356.0" />
                             </children>

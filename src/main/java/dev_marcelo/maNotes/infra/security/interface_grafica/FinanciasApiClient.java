@@ -96,4 +96,28 @@ public class FinanciasApiClient {
             throw new RuntimeException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
         }
     }
+
+    public void removerFundos(Long id) {
+        String DELETE_URL = BASE_URL + "/" + id;
+        System.out.println("Url:" + DELETE_URL);
+        System.out.println("removendo o objeto fundos");
+
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(DELETE_URL))
+                    .header("Accept", "application/json")
+                    .DELETE()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 204) {
+                System.out.println("funcionou deletado fundos");
+            } else {
+                throw new RuntimeException("Falha ao de " + response.statusCode() + " - " + response.body());
+            }
+        }catch (Exception e){
+
+        }
+    }
 }

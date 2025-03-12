@@ -3,7 +3,6 @@ package dev_marcelo.maNotes.infra.security.interface_grafica;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev_marcelo.maNotes.entity.Despesa;
-import dev_marcelo.maNotes.entity.Fundos;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,8 +18,7 @@ public class DespesasApiClient {
     private static final String BASE_URL = "http://localhost:8080/api/v1/despesa";
 
 
-
-    public String criarDespesa(String nomeDaConta,String valorDaConta) throws Exception {
+    public String criarDespesa(String nomeDaConta, String valorDaConta) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         String jsonBody = String.format("{\n" +
                 "  \"nomeDaConta\": \"%s\",\n" +
@@ -71,7 +69,7 @@ public class DespesasApiClient {
         }
     }
 
-    public String editarDespesa(Long idDespesa, String nomeDaConta,String valorDaConta) throws URISyntaxException, IOException, InterruptedException {
+    public String editarDespesa(Long idDespesa, String nomeDaConta, String valorDaConta) throws URISyntaxException, IOException, InterruptedException {
         String PATCH_URL = BASE_URL + "/" + idDespesa;
         System.out.println("Url:" + PATCH_URL);
 
@@ -97,6 +95,29 @@ public class DespesasApiClient {
             return response.body();
         } else {
             throw new RuntimeException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
+        }
+    }
+
+    public void removerDespesas(Long id) throws Exception {
+        String DELETE_URL = BASE_URL + "/" + id;
+        System.out.println("Url:" + DELETE_URL);
+        System.out.println("removendo o objeto");
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(DELETE_URL))
+                    .header("Accept", "application/json")
+                    .DELETE()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 204) {
+                System.out.println("funcionou deletado despesa");
+            } else {
+                throw new RuntimeException("Falha ao de " + response.statusCode() + " - " + response.body());
+            }
+        }catch (Exception e){
+
         }
     }
 }

@@ -30,7 +30,7 @@ public class MaNotesController {
     private static final AnotacaoApiClient apiClient = new AnotacaoApiClient();
     private static final FinanciasApiClient financiasApiClient = new FinanciasApiClient();
     private static final DespesasApiClient despesasApiClient = new DespesasApiClient();
-
+    private Object objetoSelecionado;
 
     @FXML
     private TableView<AnotacoesResponseDto> anotacaoTable;
@@ -112,15 +112,14 @@ public class MaNotesController {
 
     @FXML
     private Button btnFundos;
-
     @FXML
     private Button btnAtualizarFundos;
+    @FXML
+    private Button btnRemoverFundos;
 
     @FXML
     private Button btnAtualizarDespesas;
 
-    @FXML
-    private Button btnDespesas;
 
     @FXML
     private Button btnNotes;
@@ -130,35 +129,24 @@ public class MaNotesController {
         // Abre a janela de configurações sem fechar a tela principal
         AppManager.abrirJanelaAuxiliar("/confirmarFundos.fxml", "Adicionar Fundos", 500, 400, false);
     }
-
     @FXML
     private void abrirConfirmarDespesa() {
         // Abre a janela de relatórios sem fechar a tela principal
         AppManager.abrirJanelaAuxiliar("/confirmarDespesa.fxml", "Relatórios", 600, 450, false);
     }
     @FXML
-    private void abrirEditarFundos() {
-        // Abre a janela de configurações sem fechar a tela principal
-        AppManager.abrirJanelaAuxiliar("/confirmarFundos.fxml", "Adicionar Fundos", 500, 400, false);
-    }
-    @FXML
-    private void abrirEditarDespesa() {
-        // Abre a janela de configurações sem fechar a tela principal
-        AppManager.abrirJanelaAuxiliar("/confirmarFundos.fxml", "Adicionar Fundos", 500, 400, false);
-    }
-
-    @FXML
     private void abrirCalendario(){
         AppManager.abrirJanelaAuxiliar("/Calendar.fxml","Calendario",600, 450, false);
     }
+
     @FXML
     public void initialize() throws Exception {
         carregarDadosAnotacoes();
         carregarDadosFundos();
         carregarDadosDespesas();
 
-        configurarCliqueDuplo(fundosTable);
-        configurarCliqueDuplo(despesaTable);
+        configurarClique(fundosTable);
+        configurarClique(despesaTable);
     }
 
     private void carregarDadosAnotacoes() throws Exception {
@@ -170,7 +158,6 @@ public class MaNotesController {
         colunaAnotacao.setCellValueFactory(new PropertyValueFactory<>("anotacao"));
         colunaDataModificacao.setCellValueFactory(new PropertyValueFactory<>("dataModificacao"));
     }
-
     private void carregarDadosFundos() throws Exception {
         List<Fundos> listaDeFundos = financiasApiClient.buscarFundos();
         ObservableList<Fundos> dadosFundos = FXCollections.observableArrayList(listaDeFundos);
@@ -180,7 +167,6 @@ public class MaNotesController {
         colunaFundosValores.setCellValueFactory(new PropertyValueFactory<>("valorRecebido"));
         colunaFundosDataModificacao.setCellValueFactory(new PropertyValueFactory<>("dataModificacao"));
     }
-
     private void carregarDadosDespesas() throws Exception {
         List<Despesa> listaDeDespesas = despesasApiClient.buscarDespesas();
         ObservableList<Despesa> dadosDespesas = FXCollections.observableArrayList(listaDeDespesas);
@@ -192,14 +178,17 @@ public class MaNotesController {
         colunaStatusDespesas.setCellValueFactory(new PropertyValueFactory<>("statusDaConta"));
     }
 
-    private <T> void configurarCliqueDuplo(TableView<T> tableView) {
+    private <T> void configurarClique(TableView<T> tableView) {
         tableView.setRowFactory(tv -> {
             TableRow<T> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getClickCount() == 2) { // Clique duplo
                     T objetoSelecionado = row.getItem();
-                    System.out.println("Selecionado: " + objetoSelecionado);
                     editarObjeto(objetoSelecionado);
+                }
+                if (!row.isEmpty() && event.getClickCount() == 1){
+                    this.objetoSelecionado = row.getItem();
+                    System.out.println("selecionado");
                 }
             });
             return row;
@@ -207,7 +196,6 @@ public class MaNotesController {
     }
 
     private <T> void editarObjeto(T objeto) {
-        System.out.println("Processando: " + objeto.toString());
 
         if (objeto instanceof Fundos fundos) {
             Long idFundo = fundos.getId();
@@ -314,6 +302,54 @@ public class MaNotesController {
         }
     }
 
+    public void removerDespesa(ActionEvent event) throws Exception {
+        if(objetoSelecionado.getClass().equals(Despesa.class)){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmação de Exclusão");
+            alert.setHeaderText("Deseja realmente excluir esta despesa?");
+            alert.setContentText("Esta ação não poderá ser desfeita.");
+
+            // Obtendo a resposta do usuário
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                removerObjeto(objetoSelecionado);
+            }
+        }else {
+            System.out.println("nenhuma Despesa selecionada");
+
+        }
+    }
+    public void removerFundos(ActionEvent event) throws Exception {
+        if(objetoSelecionado.getClass().equals(Fundos.class)){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmação de Exclusão");
+            alert.setHeaderText("Deseja realmente excluir esta despesa?");
+            alert.setContentText("Esta ação não poderá ser desfeita.");
+
+            // Obtendo a resposta do usuário
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                removerObjeto(objetoSelecionado);
+            }
+        }else {
+            System.out.println("nenhum Fundo selecionada");
+
+        }
+    }
+
+
+    private <T> void removerObjeto(T objeto) throws Exception {
+        if (objeto instanceof Fundos fundos) {
+            Long id = fundos.getId();
+           financiasApiClient.removerFundos(id);
+        }
+        if (objeto instanceof Despesa despesa) {
+            Long id = despesa.getId();
+           despesasApiClient.removerDespesas(id);
+        }
+    }
 
     public void mostrarCampoDeTexto(javafx.event.ActionEvent event) {
         try {
@@ -331,7 +367,6 @@ public class MaNotesController {
             e.printStackTrace();
         }
     }
-
     public void mostrarCampoDeFundos(javafx.event.ActionEvent event) {
         try {
             abrirConfirmarFundos();
@@ -341,7 +376,6 @@ public class MaNotesController {
             e.printStackTrace();
         }
     }
-
     public void mostrarCampoDeDespesa(javafx.event.ActionEvent event) {
         try {
             abrirConfirmarDespesa();
@@ -351,6 +385,7 @@ public class MaNotesController {
             e.printStackTrace();
         }
     }
+
     public void confirmarAdicao(ActionEvent event) {
         try {
             String mensagem = campoAnotacao.getText().replace("\n","\\n");
