@@ -20,7 +20,7 @@ public class FundosService {
     }
 
     @Transactional
-    public Fundos updateValor(Long id,String origemDoFundo,Float valorRecebido){
+    public Fundos updateValor(Long id,String origemDoFundo,Double valorRecebido){
         Fundos fundosAtualizados = fundosRepository.findById(id)
                 .orElseThrow(
                 () -> new FundosNotFoundException("Fundo não encontrado"));

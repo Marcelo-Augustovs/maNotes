@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class FundosValoresDto {
     private String origemDoFundo;
-    private Float valorRecebido;
+    private Double valorRecebido;
 }

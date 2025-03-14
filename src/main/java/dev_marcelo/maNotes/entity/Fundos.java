@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
@@ -23,13 +23,13 @@ public class Fundos implements Serializable {
     @Column(name = "fundos_arecadado")
     private String origemDoFundo;
     @Column(name = "valor_recebido")
-    private float valorRecebido;
+    private Double valorRecebido;
 
     @ManyToOne()
     @JoinColumn(name = "id_usuario",referencedColumnName = "id")
     private Usuario usuario;
 
-    @LastModifiedDate
+    @CreatedDate
     @Column(name = "data_modificacao")
     private LocalDate dataModificacao;
 
