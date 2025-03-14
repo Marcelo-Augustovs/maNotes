@@ -12,40 +12,26 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "fundos_despesas")
+@Table(name = "fundo_despesa_mesal")
 @EntityListeners(AuditingEntityListener.class)
 @Getter @Setter @NoArgsConstructor
-public class FundosEDespesas  {
+public class FundosEDespesaMensal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column
-    private String mes;
-
-    @ManyToOne
-    @JoinColumn(name = "id_usuario",nullable = false)
-    private Usuario usuario;
-    @ManyToOne
-    @JoinColumn(name = "id_despesa",nullable = false)
-    private Despesa despesas;
-    @ManyToOne
-    @JoinColumn(name = "id_fundos",nullable = false)
-    private Fundos fundos;
-
-    public FundosEDespesas(String mes,Usuario usuario,Despesa despesa,Fundos fundos){
-        this.mes = mes;
-        this.usuario = usuario;
-        this.despesas = despesa;
-        this.fundos = fundos;
-    }
+    private int mes;
+    @Column
+    private Double fundos;
+    @Column
+    private Double Despesa;
+    @Column
+    private Double total;
 
     @CreatedDate
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
-    @LastModifiedDate
-    @Column(name = "data_modificacao")
-    private LocalDateTime dataModificacao;
     @Column(name = "criado_por")
     @LastModifiedBy
     private String criadoPor;

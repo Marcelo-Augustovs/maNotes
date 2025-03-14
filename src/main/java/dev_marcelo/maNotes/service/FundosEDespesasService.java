@@ -1,22 +1,17 @@
 package dev_marcelo.maNotes.service;
 
 import dev_marcelo.maNotes.dto.BalancoMensal;
-import dev_marcelo.maNotes.dto.FundosEDespesasDto;
 import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.entity.Fundos;
-import dev_marcelo.maNotes.entity.FundosEDespesas;
-import dev_marcelo.maNotes.entity.Usuario;
-import dev_marcelo.maNotes.infra.security.exceptions.UsuarioNotFoundException;
+import dev_marcelo.maNotes.entity.FundosEDespesaMensal;
 import dev_marcelo.maNotes.repository.DespesaRepository;
-import dev_marcelo.maNotes.repository.FundosEDespesasRepository;
+import dev_marcelo.maNotes.repository.FundosEDespesaMensalRepository;
 import dev_marcelo.maNotes.repository.FundosRepository;
-import dev_marcelo.maNotes.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,53 +21,74 @@ public class FundosEDespesasService {
 
     private final FundosRepository fundosRepository;
     private final DespesaRepository despesaRepository;
-    private final UsuarioRepository usuarioRepository;
-    private final FundosEDespesasRepository repository;
+    private final FundosEDespesaMensalRepository repository;
 
     @Transactional
-    public FundosEDespesasDto criar(int mes){
-        // Obter o usuário autenticado pelo Spring Security
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        // Certifique-se de que o principal seja do tipo esperado (por exemplo, sua classe Usuario)
-        Usuario usuarioLogado = (Usuario) auth.getPrincipal();
+    public FundosEDespesaMensal criar(int mes, Integer ano){
 
-        List<Fundos> fundosDoMes = fundosRepository.findAll().stream()
-                .filter(item -> item.getDataModificacao().getMonthValue() == mes
-                        && item.getUsuario().getId().equals(usuarioLogado.getId()))
-                .collect(Collectors.toList());
+        if (ano == null){
+            ano = LocalDate.now().getYear();
+        }
 
-        List<Despesa> despesaDoMes = despesaRepository.findAll().stream()
-                .filter(item -> item.getDataModificacao().getMonthValue() == mes
-                        && item.getUsuario().getId().equals(usuarioLogado.getId()))
-                .collect(Collectors.toList());
+        BalancoMensal balancoMensal = calcularTotal(mes,ano);
+        FundosEDespesaMensal fundosEDespesaMensal = new FundosEDespesaMensal();
 
-        return new FundosEDespesasDto(mes, usuarioLogado,despesaDoMes,fundosDoMes);
+        fundosEDespesaMensal.setMes(balancoMensal.mes());
+        fundosEDespesaMensal.setFundos(balancoMensal.totalFundos());
+        fundosEDespesaMensal.setDespesa(balancoMensal.totalDespesas());
+        fundosEDespesaMensal.setTotal(balancoMensal.ganhoDoMes());
+        return repository.save(fundosEDespesaMensal);
     }
     @Transactional
-    public BalancoMensal calcularTotal(int mes) {
-
-        List<FundosEDespesas> lista = repository.findAll();
+    public BalancoMensal calcularTotal(int mes, int ano) {
+        List<Fundos> listaFundos =  fundosRepository.findAll();
+        List<Despesa> listaDespesa = despesaRepository.findAll();
 
         // Filtra os registros pelo mês especificado
-        List<FundosEDespesas> filtrados = lista.stream()
-                .filter(item -> item.getDataCriacao().getMonthValue() == mes)
+        List<Fundos> fundosDoMes = listaFundos.stream()
+                .filter(item -> item.getDataModificacao().getMonthValue() == mes && item.getDataModificacao().getYear() == ano)
+                .collect(Collectors.toList());
+
+        List<Despesa> despesasDoMes = listaDespesa.stream()
+                .filter(item -> item.getDataModificacao().getMonthValue() == mes && item.getDataModificacao().getYear() == ano)
                 .collect(Collectors.toList());
 
         // Soma os valores recebidos dos fundos
-        float totalFundos = filtrados.stream()
-                .map(item -> item.getFundos().getValorRecebido()) // Extrai os valores
-                .reduce(0f, Float::sum); // Soma os valores
+        double totalFundos = fundosDoMes.stream()
+                .map(fundos -> fundos.getValorRecebido())// Extrai os valores
+                .reduce(0.00,Double::sum); // Soma os valores
 
         // Soma os valores das despesas
-        float totalDespesas = filtrados.stream()
-                .map(item -> item.getDespesas().getValorDaConta()) // Extrai os valores
-                .reduce(0f, Float::sum); // Soma os valores
+        double totalDespesas = despesasDoMes.stream()
+                .map(despesa -> despesa.getValorDaConta()) // Extrai os valores
+                .reduce(0.00, Double::sum); // Soma os valores
 
         // Exibe os totais calculados
         System.out.println("Total de Fundos no mês " + mes + ": " + totalFundos);
         System.out.println("Total de Despesas no mês " + mes + ": " + totalDespesas);
 
-        double media = totalFundos - totalDespesas;
-        return new BalancoMensal(mes,totalFundos,totalDespesas,media);
+        double ganhoDoMes = totalFundos - totalDespesas;
+        return new BalancoMensal(mes,totalFundos,totalDespesas, ganhoDoMes);
+    }
+
+    @Transactional(readOnly = true)
+    public List<FundosEDespesaMensal> findAll() {
+       return repository.findAll();
+    }
+
+    @Transactional
+    public FundosEDespesaMensal atualizarMes(int mes, int ano) {
+        BalancoMensal saldoAtualizado = calcularTotal(mes, ano);
+
+        FundosEDespesaMensal saldo = repository.findAll().stream()
+                .filter(saldoMensal -> saldoMensal.getMes() == mes && saldoMensal.getDataCriacao().getYear() == ano)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Nenhum registro encontrado para o mês " + mes + " e ano " + ano));
+
+        saldo.setFundos(saldoAtualizado.totalFundos());
+        saldo.setDespesa(saldoAtualizado.totalDespesas());
+        saldo.setTotal(saldoAtualizado.ganhoDoMes());
+
+        return repository.save(saldo);
     }
 }

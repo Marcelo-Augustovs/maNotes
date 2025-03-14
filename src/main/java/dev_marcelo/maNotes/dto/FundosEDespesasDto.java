@@ -6,6 +6,6 @@ import dev_marcelo.maNotes.entity.Usuario;
 
 import java.util.List;
 
-public record FundosEDespesasDto(int mes, Usuario usuarioLogado, List<Despesa> despesaDoMes, List<Fundos> fundosDoMes) {
+public record FundosEDespesasDto(int mes,int ano) {
 
 }
