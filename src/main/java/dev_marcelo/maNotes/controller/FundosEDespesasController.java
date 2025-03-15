@@ -1,6 +1,5 @@
 package dev_marcelo.maNotes.controller;
 
-import dev_marcelo.maNotes.dto.BalancoMensal;
 import dev_marcelo.maNotes.dto.FundosEDespesasDto;
 import dev_marcelo.maNotes.entity.FundosEDespesaMensal;
 import dev_marcelo.maNotes.service.FundosEDespesasService;
@@ -34,6 +33,9 @@ public class FundosEDespesasController {
         return ResponseEntity.ok().body(fundosEDespesaMensalAtualizado);
     }
 
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFundosEDesepesasMensal(@PathVariable Long id){
+        fundosEDespesasService.deletarFundosEDespesasMensal(id);
+        return ResponseEntity.noContent().build();
+    }
 }

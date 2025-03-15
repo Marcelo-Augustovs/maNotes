@@ -26,7 +26,7 @@ public class FundosEDespesasService {
     @Transactional
     public FundosEDespesaMensal criar(int mes, Integer ano){
 
-        if (ano == null){
+        if (ano == null || ano == 0){
             ano = LocalDate.now().getYear();
         }
 
@@ -90,5 +90,14 @@ public class FundosEDespesasService {
         saldo.setTotal(saldoAtualizado.ganhoDoMes());
 
         return repository.save(saldo);
+    }
+
+    @Transactional
+    public void deletarFundosEDespesasMensal(Long id) {
+        FundosEDespesaMensal fundosEDespesaMensal = repository.findById(id).orElseThrow(
+                () -> new RuntimeException(String.format("id:%s não encontrado",id))
+        );
+        System.out.println(fundosEDespesaMensal);
+        repository.delete(fundosEDespesaMensal);
     }
 }
