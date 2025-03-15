@@ -40,8 +40,9 @@ public class DespesaService {
     }
 
     @Transactional
-    public void pagarContar(String nomeDaConta) {
-       Despesa despesa = despesaRepository.findByNomeDaConta(nomeDaConta);
+    public void pagarContar(Long id) {
+       Despesa despesa = despesaRepository.findById(id)
+               .orElseThrow(() -> new RuntimeException());
        despesa.setStatusDaConta(Despesa.StatusDaConta.PAGO);
     }
 

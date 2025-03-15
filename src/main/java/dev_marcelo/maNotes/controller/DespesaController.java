@@ -41,15 +41,14 @@ public class DespesaController {
         return ResponseEntity.ok(listaDeDespesa);
     }
 
-    @PatchMapping()
-    public ResponseEntity<Void> updateStatusConta(@RequestBody DespesaDto dto){
-        despesaService.findByNomeDaConta(dto.getNomeDaConta());
-        despesaService.pagarContar(dto.getNomeDaConta());
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> updateStatusConta(@PathVariable Long id){
+        despesaService.pagarContar(id);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> updateStatusConta(@PathVariable Long id){
+    public ResponseEntity<Void> deleteConta(@PathVariable Long id){
         despesaService.delete(despesaService.findAcountById(id));
         return ResponseEntity.noContent().build();
     }
