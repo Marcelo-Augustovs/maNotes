@@ -1,6 +1,7 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
 import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
+import dev_marcelo.maNotes.entity.Anotacoes;
 import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.entity.Fundos;
 import javafx.collections.FXCollections;
@@ -109,7 +110,10 @@ public class MaNotesController {
 
     @FXML
     private TextArea txtValor;
-
+    @FXML
+    private Button btnRemoverAnotacao;
+    @FXML
+    private Button btnQuitarDespesa;
     @FXML
     private Button btnFundos;
     @FXML
@@ -147,6 +151,7 @@ public class MaNotesController {
 
         configurarClique(fundosTable);
         configurarClique(despesaTable);
+        configurarClique(anotacaoTable);
     }
 
     private void carregarDadosAnotacoes() throws Exception {
@@ -300,6 +305,51 @@ public class MaNotesController {
                 }
             });
         }
+
+        if (objeto instanceof AnotacoesResponseDto anotacao) {
+            Long idAnotacao = anotacao.getId();
+            String textoAtual = anotacao.getAnotacao();
+
+            Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("Editar Anotação");
+            dialog.setHeaderText("Modifique a anotação abaixo:");
+
+            // Botão para salvar a edição
+            ButtonType confirmarButton = new ButtonType("Salvar", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(confirmarButton, ButtonType.CANCEL);
+
+            // Campo de edição
+            TextArea campoEdicao = new TextArea(textoAtual);
+            campoEdicao.setWrapText(true);
+            campoEdicao.setPrefRowCount(5);
+            campoEdicao.setPrefColumnCount(30);
+
+            dialog.getDialogPane().setContent(campoEdicao);
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == confirmarButton) {
+                    return campoEdicao.getText();
+                }
+                return null;
+            });
+
+            Optional<String> resultado = dialog.showAndWait();
+            resultado.ifPresent(novoTexto -> {
+                try {
+                    String mensagem = novoTexto.replace("\n","\\n");
+                    if (mensagem == null || mensagem.trim().isEmpty()) {
+                        mensagem = "Anotação vazia";
+                    }
+
+                    apiClient.editarAnotacao(idAnotacao, mensagem);
+                    carregarDadosAnotacoes(); // Atualiza a tabela após edição
+                } catch (URISyntaxException | IOException | InterruptedException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
     }
 
     public void removerDespesa(ActionEvent event) throws Exception {
@@ -338,7 +388,25 @@ public class MaNotesController {
 
         }
     }
+    public void removerAnotacao(ActionEvent event) throws Exception {
+        if(objetoSelecionado.getClass().equals(AnotacoesResponseDto.class)){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmação de Exclusão");
+            alert.setHeaderText("Deseja realmente excluir esta despesa?");
+            alert.setContentText("Esta ação não poderá ser desfeita.");
 
+            // Obtendo a resposta do usuário
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                removerObjeto(objetoSelecionado);
+                carregarDadosAnotacoes();
+            }
+        }else {
+            System.out.println("nenhum anotacao selecionada");
+
+        }
+    }
 
     private <T> void removerObjeto(T objeto) throws Exception {
         if (objeto instanceof Fundos fundos) {
@@ -348,6 +416,10 @@ public class MaNotesController {
         if (objeto instanceof Despesa despesa) {
             Long id = despesa.getId();
            despesasApiClient.removerDespesas(id);
+        }
+        if (objeto instanceof AnotacoesResponseDto anotacoesResponseDto) {
+            Long id = anotacoesResponseDto.getId();
+            apiClient.removerAnotacao(id);
         }
     }
 

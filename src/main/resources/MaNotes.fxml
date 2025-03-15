@@ -55,10 +55,8 @@
                                         <TableColumn fx:id="colunaDataModificacao" prefWidth="160.0" text="Data Modificação" />
                                     </columns>
                                 </TableView>
-                                <Button fx:id="btnNotes" onAction="#mostrarCampoDeTexto" text="Adicionar anotação" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-                                <Button text="Remover anotação" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="132.0" />
-                                <Button text="Criar Lembrete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="254.0" />
-                                <Button text="Excluir Lembrete" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="356.0" />
+                                <Button fx:id="btnNotes" layoutX="137.0" layoutY="295.0" onAction="#mostrarCampoDeTexto" text="Adicionar anotação" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="137.0" />
+                                <Button fx:id="btnRemoverAnotacao" layoutX="269.0" layoutY="295.0" onAction="#removerAnotacao" text="Remover anotação" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="269.0" />
                                 <Pane fx:id="painelAdicionarTexto" prefHeight="236.0" prefWidth="519.0" visible="false" AnchorPane.leftAnchor="9.0" AnchorPane.topAnchor="30.0">
                                     <children>
                                         <Button fx:id="btnConfirmar" layoutX="331.0" layoutY="202.0" onAction="#confirmarAdicao" text="Confirmar" />

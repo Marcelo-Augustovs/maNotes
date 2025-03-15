@@ -117,7 +117,7 @@ public class FinanciasApiClient {
                 throw new RuntimeException("Falha ao de " + response.statusCode() + " - " + response.body());
             }
         }catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 }
