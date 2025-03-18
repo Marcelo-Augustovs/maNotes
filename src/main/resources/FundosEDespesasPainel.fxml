@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="10" stylesheets="@finance_styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.ResumoMensalController">
+
+    <Label fx:id="labelMesAno" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Mês/Ano: " />
+    <Label fx:id="labelFundos" text="Fundos: " />
+    <Label fx:id="labelDespesa" text="Despesa: " />
+    <Label fx:id="labelTotal" text="Total: " />
+
+    <BarChart fx:id="barChart" barGap="10">
+        <xAxis>
+            <NumberAxis label="Valor (R$)" fx:id="xAxis" />
+        </xAxis>
+        <yAxis>
+            <CategoryAxis fx:id="yAxis" />
+        </yAxis>
+    </BarChart>
+</VBox>

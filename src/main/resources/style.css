@@ -1,0 +1,71 @@
+/* Define o estilo do fundo geral */
+.root {
+    -fx-background-color: #f4f4f4;
+}
+
+/* Estiliza a barra de menu */
+.menu-bar {
+    -fx-background-color: #3b3b3b;
+
+}
+
+.menu {
+    -fx-text-fill: white;
+}
+
+.menu-item {
+    -fx-background-color: #4a4a4a;
+    -fx-text-fill: white;
+}
+
+.menu-item:hover {
+    -fx-background-color: #6a6a6a;
+}
+
+/* Estiliza os botões */
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px 10px;
+}
+
+.button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Estiliza as abas */
+.tab-pane {
+    -fx-background-color: #f4f4f4;
+}
+
+.tab {
+    -fx-background-color: #dcdcdc;
+    -fx-border-color: #b3b3b3;
+}
+
+.tab:selected {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #4CAF50;
+}
+
+/* Estiliza as tabelas */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #b3b3b3;
+}
+
+.table-column {
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+}
+
+/* Estiliza os TextArea */
+.text-area {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #b3b3b3;
+    -fx-padding: 5px;
+}
+
+

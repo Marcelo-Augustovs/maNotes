@@ -1,5 +1,6 @@
 package dev_marcelo.maNotes.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "fundo_despesa_mesal")
+@Table(name = "fundo_despesa_mensal")
 @EntityListeners(AuditingEntityListener.class)
 @Getter @Setter @NoArgsConstructor
 public class FundosEDespesaMensal {
@@ -35,4 +36,9 @@ public class FundosEDespesaMensal {
     @Column(name = "criado_por")
     @LastModifiedBy
     private String criadoPor;
+
+    @JsonIgnore
+    public String getMesReferente() {
+        return String.format("%02d/%d", mes, LocalDateTime.now().getYear()); // Exemplo: "02/2025"
+    }
 }

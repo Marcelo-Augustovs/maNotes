@@ -130,13 +130,15 @@ public class MaNotesController {
 
     @FXML
     private void abrirConfirmarFundos() {
-        // Abre a janela de configurações sem fechar a tela principal
         AppManager.abrirJanelaAuxiliar("/confirmarFundos.fxml", "Adicionar Fundos", 500, 400, false);
     }
     @FXML
     private void abrirConfirmarDespesa() {
-        // Abre a janela de relatórios sem fechar a tela principal
         AppManager.abrirJanelaAuxiliar("/confirmarDespesa.fxml", "Relatórios", 600, 450, false);
+    }
+    @FXML
+    private void abrirFundosEDespesasPainel() {
+        AppManager.abrirJanelaAuxiliar("/fundosEDespesasPainel.fxml", "Resumo Financeiro do Mês", 600, 450, false);
     }
     @FXML
     private void abrirCalendario(){
@@ -152,6 +154,12 @@ public class MaNotesController {
         configurarClique(fundosTable);
         configurarClique(despesaTable);
         configurarClique(anotacaoTable);
+
+        aplicarEstilo();
+    }
+
+    private void aplicarEstilo() {
+        MaNotesInterfaceGrafica.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
     }
 
     private void carregarDadosAnotacoes() throws Exception {

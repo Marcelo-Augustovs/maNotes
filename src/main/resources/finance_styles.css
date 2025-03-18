@@ -1,0 +1,25 @@
+/* Estilização geral */
+.root {
+    -fx-background-color: #f4f4f4;
+}
+
+/* Labels estilizados */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+.bar-chart .chart-legend {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ddd;
+}
+
+.bar-chart .axis {
+    -fx-tick-label-fill: #555;
+    -fx-font-size: 12px;
+}
+
+/* Ajustando orientação do gráfico */
+.bar-chart {
+    -fx-bar-gap: 5px;
+}
