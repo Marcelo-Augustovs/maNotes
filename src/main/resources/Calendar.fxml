@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="642.0" prefWidth="744.0" style="-fx-background-color: #f2fafc;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.CalendarController">
+<AnchorPane prefHeight="642.0" prefWidth="768.0" style="-fx-background-color: #f2fafc;" stylesheets="@calendar.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.CalendarController">
    <FlowPane fx:id="calendar" hgap="10.0" layoutX="14.0" layoutY="116.0" prefHeight="498.0" prefWidth="716.0" vgap="5.0" />
    <HBox alignment="CENTER" layoutX="163.0" layoutY="14.0" prefHeight="44.0" prefWidth="419.0" spacing="5.0">
       <children>
@@ -26,19 +26,25 @@
          <Button mnemonicParsing="false" onAction="#avancarMes" text="&gt;" />
       </children>
    </HBox>
-   <HBox alignment="CENTER" layoutX="14.0" layoutY="78.0" prefHeight="44.0" prefWidth="716.0" spacing="88.75">
+   <HBox alignment="CENTER" layoutX="7.0" layoutY="80.0" prefHeight="44.0" prefWidth="691.0" spacing="70.75">
       <children>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dom" textAlignment="CENTER" />
-         <Text layoutX="213.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seg" textAlignment="CENTER" />
-         <Text layoutX="222.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ter" textAlignment="CENTER" />
-         <Text layoutX="232.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Qua" textAlignment="CENTER" />
-         <Text layoutX="241.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Qui" textAlignment="CENTER" />
-         <Text layoutX="251.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sex" textAlignment="CENTER" />
-         <Text layoutX="266.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sab" textAlignment="CENTER" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="      Seg" textAlignment="CENTER">
+            <HBox.margin>
+               <Insets left="6.0" />
+            </HBox.margin></Text>
+         <Text layoutX="213.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Ter" textAlignment="CENTER" />
+         <Text layoutX="222.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Qua" textAlignment="CENTER" />
+         <Text layoutX="232.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Qui" textAlignment="CENTER" />
+         <Text layoutX="241.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sex" textAlignment="CENTER" />
+         <Text layoutX="251.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sab" textAlignment="CENTER">
+            <HBox.margin>
+               <Insets left="2.0" />
+            </HBox.margin></Text>
+         <Text layoutX="266.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dom" textAlignment="CENTER">
+            <HBox.margin>
+               <Insets left="2.0" />
+            </HBox.margin></Text>
       </children>
-      <padding>
-         <Insets right="9.0" />
-      </padding>
    </HBox>
 
 </AnchorPane>

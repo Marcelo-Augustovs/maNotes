@@ -1,0 +1,54 @@
+/* Fundo da janela */
+Pane {
+    -fx-background-color: #f4f4f4;
+}
+
+/* Estilo dos Labels */
+Label {
+    -fx-font-size: 12px;  /* Reduzido para melhorar a legibilidade */
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+}
+
+/* TextField estilizado */
+TextField {
+    -fx-border-color: #888;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 4px;
+    -fx-font-size: 12px;
+}
+
+/* Efeito de foco nos TextFields */
+TextField:focused {
+    -fx-border-color: #0078d7;
+    -fx-border-width: 1.5px;
+}
+
+/* Botão estilizado */
+Button {
+    -fx-background-color: #0078d7;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;  /* Tamanho reduzido */
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+}
+
+/* Efeito de hover no botão */
+Button:hover {
+    -fx-background-color: #005a9e;
+}
+
+/* Título */
+Text {
+    -fx-font-size: 14px;  /* Menor para caber melhor */
+    -fx-font-weight: bold;
+    -fx-fill: #444;
+}
+
+/* Imagem com transparência ajustada */
+ImageView {
+    -fx-opacity: 0.4;  /* Maior visibilidade */
+}

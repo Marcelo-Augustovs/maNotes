@@ -104,6 +104,8 @@ public class CalendarController implements Initializable {
             grid.getColumnConstraints().add(new ColumnConstraints(100));
         }
 
+        LocalDate hoje = LocalDate.now(); // Obtém a data atual
+
         for (int i = 0; i < totalCells; i++) {
             VBox cell = new VBox();
             cell.setPrefSize(100, 80);
@@ -113,8 +115,18 @@ public class CalendarController implements Initializable {
 
             if (i >= firstDayOfWeek && dayCounter <= daysInMonth) {
                 Text dayText = new Text(String.valueOf(dayCounter));
+
+                // Verifica se é o dia atual e aplica destaque
+                LocalDate dataCelula = LocalDate.of(mesAtual.getYear(), mesAtual.getMonthValue(), dayCounter);
+                if (dataCelula.equals(hoje)) {
+                    cell.setStyle("-fx-background-color: #FF5722; -fx-border-color: #ccc;");
+                    dayText.setFill(javafx.scene.paint.Color.WHITE); // Define a cor do texto para branco
+                    dayText.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+                }
+
                 cell.getChildren().add(dayText);
 
+                // Adiciona eventos ao dia
                 String dataChave = String.format("%04d-%02d-%02d", mesAtual.getYear(), mesAtual.getMonthValue(), dayCounter);
                 List<CalendarActivity> activities = eventos.getOrDefault(dataChave, new ArrayList<>());
 

@@ -1,7 +1,6 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
 import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
-import dev_marcelo.maNotes.entity.Anotacoes;
 import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.entity.Fundos;
 import javafx.collections.FXCollections;
@@ -31,6 +30,7 @@ public class MaNotesController {
     private static final AnotacaoApiClient apiClient = new AnotacaoApiClient();
     private static final FinanciasApiClient financiasApiClient = new FinanciasApiClient();
     private static final DespesasApiClient despesasApiClient = new DespesasApiClient();
+    private static final ResumoMensalApiClient resumoMensalApiClient = new ResumoMensalApiClient();
     private Object objetoSelecionado;
 
     @FXML
@@ -498,6 +498,19 @@ public class MaNotesController {
         btnNotes.setDisable(false);
     }
 
+    public void criarRelatorioMensal(){
+        Optional<Pair<Integer, Integer>> resultado = RelatorioDialog.show();
+        resultado.ifPresent(par -> {
+            int mes = par.getKey();
+            int ano = par.getValue();
+            try {
+                resumoMensalApiClient.criarFundosEDespesaMensal(Integer.toString(mes), Integer.toString(ano));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     public void atualizarTabelaFundos() throws Exception {
         List<Fundos> listaDeFundos = financiasApiClient.buscarFundos();
         ObservableList<Fundos> dadosFundos = FXCollections.observableArrayList(listaDeFundos);
@@ -508,5 +521,8 @@ public class MaNotesController {
         List<Despesa> listaDeDespesa = despesasApiClient.buscarDespesas();
         ObservableList<Despesa> dadosDespesa = FXCollections.observableArrayList(listaDeDespesa);
         despesaTable.setItems(dadosDespesa);
+    }
+
+    public void AtualizarRelatorioMensal(ActionEvent event) {
     }
 }

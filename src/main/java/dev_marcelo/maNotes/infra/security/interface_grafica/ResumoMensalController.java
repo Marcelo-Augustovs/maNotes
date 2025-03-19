@@ -40,10 +40,8 @@ public class ResumoMensalController {
     private static final ResumoMensalApiClient apiClient = new ResumoMensalApiClient();
 
     public void initialize() throws Exception {
-        // Simulação da requisição ao endpoint (substitua por uma chamada real)
         List<String> opcoes = obterListaDoEndpoint();
 
-        // Exibe o diálogo de escolha
         ChoiceDialog<String> dialog = new ChoiceDialog<>(opcoes.get(0), opcoes);
         dialog.setTitle("Seleção de Período");
         dialog.setHeaderText("Escolha um mês para visualizar:");
@@ -81,7 +79,6 @@ public class ResumoMensalController {
                 labelDespesa.setText("Despesa: R$ " + despesa);
                 labelTotal.setText("Total: R$ " + total);
 
-                // Configura o gráfico de barras horizontal
                 XYChart.Series<Number, String> series = new XYChart.Series<>();
                 series.setName("Resumo Financeiro");
 
@@ -92,7 +89,6 @@ public class ResumoMensalController {
                 barChart.getData().clear();
                 barChart.getData().add(series);
 
-                // Definir cores para cada barra
                 series.getData().forEach(data -> {
                     if (data.getYValue().equals("Fundos")) {
                         data.getNode().setStyle("-fx-bar-fill: #4CAF50;");
@@ -103,7 +99,6 @@ public class ResumoMensalController {
                     }
                 });
 
-                // Define a ordem do eixo Y
                 yAxis.setCategories(FXCollections.observableArrayList("Total", "Despesa", "Fundos"));
             });
 

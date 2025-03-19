@@ -41,4 +41,49 @@ public class ResumoMensalApiClient {
             throw e;
         }
     }
+    public String criarFundosEDespesaMensal(String mes, String ano) throws Exception{
+        HttpClient client = HttpClient.newHttpClient();
+        String jsonBody = String.format("{\n" +
+                "  \"mes\": \"%s\",\n" +
+                "  \"ano\": \"%s\"\n" +
+                "}", mes, ano);
+
+        System.out.println(jsonBody);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(BASE_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 201) {
+            return response.body(); // Retorna a resposta JSON
+        } else {
+            throw new RuntimeException("Falha ao adicionar fundos: Código " + response.statusCode() + " - " + response.body());
+        }
+    }
+
+    public String updateFundosEDespesaMensal(String mes, String ano) throws Exception{
+        HttpClient client = HttpClient.newHttpClient();
+        String jsonBody = String.format("{\n" +
+                "  \"mes\": \"%s\",\n" +
+                "  \"ano\": \"%s\"\n" +
+                "}", mes, ano);
+
+        System.out.println(jsonBody);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(BASE_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 201) {
+            return response.body(); // Retorna a resposta JSON
+        } else {
+            throw new RuntimeException("Falha ao adicionar fundos: Código " + response.statusCode() + " - " + response.body());
+        }
+    }
 }
