@@ -42,6 +42,11 @@ public class ResumoMensalController {
     public void initialize() throws Exception {
         List<String> opcoes = obterListaDoEndpoint();
 
+        if (opcoes.isEmpty()) {
+            System.out.println("Nenhuma opção disponível.");
+            return;
+        }
+
         ChoiceDialog<String> dialog = new ChoiceDialog<>(opcoes.get(0), opcoes);
         dialog.setTitle("Seleção de Período");
         dialog.setHeaderText("Escolha um mês para visualizar:");
@@ -49,11 +54,14 @@ public class ResumoMensalController {
 
         Optional<String> resultado = dialog.showAndWait();
 
-        resultado.ifPresentOrElse(this::carregarDados, () -> System.out.println("Nenhuma opção selecionada."));
+        if (resultado.isPresent()) {
+            carregarDados(resultado.get());
+        } else {
+            System.out.println("Nenhuma opção selecionada.");
+        }
     }
 
     private void carregarDados(String mesSelecionado) {
-        System.out.println("Carregando dados para: " + mesSelecionado);
 
         try {
             List<FundosEDespesaMensal> dados = apiClient.buscarFundosEDespesaMensal();
@@ -91,11 +99,11 @@ public class ResumoMensalController {
 
                 series.getData().forEach(data -> {
                     if (data.getYValue().equals("Fundos")) {
-                        data.getNode().setStyle("-fx-bar-fill: #4CAF50;");
+                        data.getNode().setStyle("-fx-bar-fill: #009688;");
                     } else if (data.getYValue().equals("Despesa")) {
-                        data.getNode().setStyle("-fx-bar-fill: #FFC107;");
+                        data.getNode().setStyle("-fx-bar-fill: #FBC02D;");
                     } else if (data.getYValue().equals("Total")) {
-                        data.getNode().setStyle("-fx-bar-fill: #000000;");
+                        data.getNode().setStyle("-fx-bar-fill: #673AB7;");
                     }
                 });
 

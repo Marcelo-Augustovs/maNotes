@@ -10,11 +10,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="MaNotesInterfaceGrafica" prefHeight="450.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.MaNotesController">
 
@@ -64,7 +66,7 @@
                                     </columns>
                                 </TableView>
 
-                                <HBox alignment="CENTER" spacing="10" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                <HBox alignment="CENTER" layoutX="-113.0" layoutY="340.0" prefHeight="25.0" prefWidth="693.0" spacing="10" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="-113.0" AnchorPane.rightAnchor="0.0">
                                     <Button fx:id="btnNotes" onAction="#mostrarCampoDeTexto" text="Adicionar" />
                                     <Button fx:id="btnRemoverAnotacao" onAction="#removerAnotacao" text="Remover" />
                                 </HBox>
@@ -104,7 +106,7 @@
                                     </columns>
                                 </TableView>
 
-                                <HBox alignment="CENTER" spacing="10" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                <HBox alignment="CENTER" layoutX="-114.0" prefHeight="25.0" prefWidth="694.0" spacing="10" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="-114.0" AnchorPane.rightAnchor="0.0">
                                     <Button fx:id="btnFundos" onAction="#mostrarCampoDeFundos" text="Adicionar" />
                                     <Button fx:id="btnRemoverFundos" onAction="#removerFundos" text="Remover" />
                                     <Button fx:id="btnAtualizarFundos" onAction="#atualizarTabelaFundos" text="Atualizar" />
@@ -128,7 +130,7 @@
                                     </columns>
                                 </TableView>
 
-                                <HBox alignment="CENTER" spacing="10" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                <HBox alignment="CENTER" layoutX="-120.0" prefHeight="25.0" prefWidth="700.0" spacing="10" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="-120.0" AnchorPane.rightAnchor="0.0">
                                     <Button fx:id="btnDespesa" onAction="#mostrarCampoDeDespesa" text="Adicionar" />
                                     <Button fx:id="btnRemoverDespesas" onAction="#removerDespesa" text="Remover" />
                                     <Button fx:id="btnQuitarDespesa" text="Quitar" />
@@ -142,9 +144,15 @@
             </tabs>
         </TabPane>
     </center>
-    
+
     <left>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MaNotes" BorderPane.alignment="CENTER" />
+        <VBox alignment="CENTER">
+            <ImageView fitHeight="80.0" fitWidth="120.0" opacity="0.9" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@Logo.png" />
+                </image>
+            </ImageView>
+        </VBox>
     </left>
 
     <!-- Rodapé -->

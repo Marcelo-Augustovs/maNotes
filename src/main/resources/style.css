@@ -6,16 +6,25 @@
 /* Estiliza a barra de menu */
 .menu-bar {
     -fx-background-color: #3b3b3b;
-
 }
 
+/* Ajusta a cor do texto dos menus */
 .menu {
     -fx-text-fill: white;
 }
 
+.menu .label {
+    -fx-text-fill: white; /* Corrige a cor do texto dos menus */
+}
+
+/* Estiliza os itens do menu */
 .menu-item {
     -fx-background-color: #4a4a4a;
     -fx-text-fill: white;
+}
+
+.menu-item .label {
+    -fx-text-fill: white; /* Garante que os itens também fiquem visíveis */
 }
 
 .menu-item:hover {
@@ -67,5 +76,3 @@
     -fx-border-color: #b3b3b3;
     -fx-padding: 5px;
 }
-
-

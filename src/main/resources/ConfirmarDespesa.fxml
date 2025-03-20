@@ -6,17 +6,19 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.ConfirmarDespesaController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="350.0" stylesheets="@despesa.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.ConfirmarDespesaController">
+
    <children>
-      <Label layoutX="38.0" layoutY="67.0" prefHeight="17.0" prefWidth="92.0" text="Nome Da Conta" />
+      <Label fx:id="lblNomeConta" layoutX="38.0" layoutY="67.0" prefHeight="17.0" prefWidth="92.0" text="Nome Da Conta" />
       <TextField fx:id="txtNomeDaConta" layoutX="133.0" layoutY="63.0" prefHeight="25.0" prefWidth="150.0" />
-      <Label layoutX="38.0" layoutY="119.0" prefHeight="17.0" prefWidth="92.0" text="Valor Da Conta" />
-      <Text layoutX="133.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MaNotes - Despesa" wrappingWidth="110.9999952018261" />
-      <Button fx:id="btnConfirmar" layoutX="249.0" layoutY="175.0" mnemonicParsing="false" onAction="#adicionarDespesa" text="Confirmar" />
+
+      <Label fx:id="lblValorConta" layoutX="38.0" layoutY="119.0" prefHeight="17.0" prefWidth="92.0" text="Valor Da Conta" />
       <TextField fx:id="txtValorDaConta" layoutX="133.0" layoutY="115.0" prefHeight="25.0" prefWidth="150.0" />
-      <ImageView fitHeight="138.0" fitWidth="162.0" layoutX="139.0" layoutY="46.0" mouseTransparent="true" opacity="0.37" pickOnBounds="true" preserveRatio="true">
+
+      <Button fx:id="btnConfirmar" layoutX="137.0" layoutY="184.0" mnemonicParsing="false" onAction="#adicionarDespesa" text="Confirmar" />
+
+      <ImageView fx:id="imgDivida" fitHeight="138.0" fitWidth="162.0" layoutX="117.0" layoutY="25.0" mouseTransparent="true" opacity="0.37" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@divida.png" />
          </image>

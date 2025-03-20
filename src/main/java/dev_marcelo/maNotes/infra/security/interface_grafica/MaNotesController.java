@@ -134,7 +134,7 @@ public class MaNotesController {
     }
     @FXML
     private void abrirConfirmarDespesa() {
-        AppManager.abrirJanelaAuxiliar("/confirmarDespesa.fxml", "Relatórios", 600, 450, false);
+        AppManager.abrirJanelaAuxiliar("/confirmarDespesa.fxml", "Adicionar Despesa", 600, 450, false);
     }
     @FXML
     private void abrirFundosEDespesasPainel() {
@@ -524,5 +524,15 @@ public class MaNotesController {
     }
 
     public void AtualizarRelatorioMensal(ActionEvent event) {
+        Optional<Pair<Integer, Integer>> resultado = AtualizarRelatorioDialog.show();
+        resultado.ifPresent(par -> {
+            int mes = par.getKey();
+            int ano = par.getValue();
+            try {
+                resumoMensalApiClient.updateFundosEDespesaMensal(Integer.toString(mes),Integer.toString(ano));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
