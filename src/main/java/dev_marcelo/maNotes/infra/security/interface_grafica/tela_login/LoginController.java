@@ -1,6 +1,8 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
 import dev_marcelo.maNotes.entity.Fundos;
+import dev_marcelo.maNotes.infra.security.exceptions.UsernameUniqueViolationException;
+import dev_marcelo.maNotes.infra.security.interface_grafica.fundos.FinanciasApiClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -64,8 +66,8 @@ public class LoginController {
             } else {
                 errorMessage.setText("Credenciais inválidas.");
             }
-        } catch (Exception e) {
-            errorMessage.setText("Erro ao conectar-se ao servidor: " + e.getMessage());
+        } catch (Exception e) { // adicionar tratamento de exceção correto, trocar o generico
+            errorMessage.setText(e.getMessage());
         }
     }
 
@@ -83,7 +85,7 @@ public class LoginController {
             // Chamada ao cliente HTTP para autenticação
             String jwtToken = loginApiClient.registrar(username, password);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            errorMessage.setText("Usuario já cadastrado");
         }
     }
 }

@@ -3,6 +3,7 @@ package dev_marcelo.maNotes.infra.security.interface_grafica;
 import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
 import dev_marcelo.maNotes.dto.AuthenticationDto;
 import dev_marcelo.maNotes.entity.Usuario;
+import dev_marcelo.maNotes.infra.security.exceptions.UsernameUniqueViolationException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -32,7 +33,7 @@ public class LoginApiClient {
 
         if (response.statusCode() == 200) {
             return response.body(); // Retorna a resposta JSON
-        } else {
+        } else { // não pega o bad request, quando digita a senha errada
             throw new RuntimeException("usuario não encontrado ou não cadastrado: " + response.body());
         }
     }
@@ -56,7 +57,7 @@ public class LoginApiClient {
         if (response.statusCode() == 201) {
             return response.body(); // Retorna a resposta JSON
         } else {
-            throw new RuntimeException("Erro ao cadastrar o usuario. usuario ja existente ou caracteres nao validos " + response.body());
+            throw new UsernameUniqueViolationException("Erro ao cadastrar o usuario. usuario ja existente ou caracteres nao validos " + response.body());
         }
     }
 }
