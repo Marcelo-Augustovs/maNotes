@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.infra.security.interface_grafica;
+package dev_marcelo.maNotes.infra.security.interface_grafica.calendario;
 
 import dev_marcelo.maNotes.entity.Lembrete;
 import javafx.event.ActionEvent;

@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.infra.security.interface_grafica;
+package dev_marcelo.maNotes.infra.security.interface_grafica.despesa;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

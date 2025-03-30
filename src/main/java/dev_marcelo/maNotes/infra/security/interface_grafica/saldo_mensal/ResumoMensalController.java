@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.infra.security.interface_grafica;
+package dev_marcelo.maNotes.infra.security.interface_grafica.saldo_mensal;
 
 import dev_marcelo.maNotes.entity.FundosEDespesaMensal;
 import javafx.application.Platform;

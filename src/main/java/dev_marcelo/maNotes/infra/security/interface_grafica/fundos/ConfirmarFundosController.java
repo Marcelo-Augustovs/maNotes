@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.infra.security.interface_grafica;
+package dev_marcelo.maNotes.infra.security.interface_grafica.fundos;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;

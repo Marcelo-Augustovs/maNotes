@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="364.0" stylesheets="@fundos.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.ConfirmarFundosController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="364.0" stylesheets="@fundos.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.fundos.ConfirmarFundosController">
    <children>
       <Label layoutX="28.0" layoutY="67.0" prefHeight="17.0" prefWidth="92.0" text="Nome do Fundo" />
       <TextField fx:id="txtNomeFundo" layoutX="133.0" layoutY="63.0" prefHeight="25.0" prefWidth="162.0" />

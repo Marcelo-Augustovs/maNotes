@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="300.0" prefWidth="350.0" style="-fx-background-color: linear-gradient(to bottom, #4A90E2, #357ABD);"
             xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.LoginController">
+            fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.tela_login.LoginController">
 
     <VBox layoutX="50.0" layoutY="30.0" spacing="10" alignment="CENTER" prefWidth="250.0">
 

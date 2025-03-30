@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.infra.security.interface_grafica;
+package dev_marcelo.maNotes.infra.security.interface_grafica.tela_login;
 
 import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
 import dev_marcelo.maNotes.dto.AuthenticationDto;

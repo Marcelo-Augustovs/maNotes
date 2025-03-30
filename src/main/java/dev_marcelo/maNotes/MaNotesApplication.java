@@ -1,6 +1,6 @@
 package dev_marcelo.maNotes;
 
-import dev_marcelo.maNotes.infra.security.interface_grafica.AppManager;
+import dev_marcelo.maNotes.infra.security.interface_grafica.util.AppManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

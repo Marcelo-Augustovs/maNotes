@@ -1,7 +1,7 @@
-package dev_marcelo.maNotes.infra.security.interface_grafica;
+package dev_marcelo.maNotes.infra.security.interface_grafica.tela_login;
 
 import dev_marcelo.maNotes.entity.Fundos;
-import dev_marcelo.maNotes.infra.security.exceptions.UsernameUniqueViolationException;
+import dev_marcelo.maNotes.infra.security.interface_grafica.util.AppManager;
 import dev_marcelo.maNotes.infra.security.interface_grafica.fundos.FinanciasApiClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
