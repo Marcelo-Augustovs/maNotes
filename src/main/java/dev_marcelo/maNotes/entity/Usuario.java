@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@Table(name = "usuarios")
 @Getter @Setter @NoArgsConstructor
 public class Usuario implements UserDetails {
     @Id

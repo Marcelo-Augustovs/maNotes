@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.infra.security;
+package dev_marcelo.maNotes.infra.security.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

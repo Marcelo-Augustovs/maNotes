@@ -6,6 +6,7 @@ import dev_marcelo.maNotes.entity.Fundos;
 import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
 import dev_marcelo.maNotes.service.FundosService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,6 +41,12 @@ public class FundosController {
         return ResponseEntity.status(201).body(fundos);
     }
 
+    @Operation(summary = "Atualizar fundos",description = "Requisição exige um Bearer Token.Acesso Restrito a ADMIN|USER",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "204",description = "fundo atualizado com sucesso",
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = Fundos.class)))
+            })
     @PatchMapping("/{id}")
     public ResponseEntity<Fundos> updateValores(@PathVariable Long id, @RequestBody FundosValoresDto dto){
         Fundos fundos = fundosService.updateValor(id,dto.getOrigemDoFundo(),dto.getValorRecebido());
@@ -51,11 +58,29 @@ public class FundosController {
         return ResponseEntity.ok().body(fundosService.findById(id));
     }
 
+    @Operation(summary = "Listar todos fundos",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200",description = "Lista com todos os fundos cadatrados",
+                            content = @Content(mediaType = "application/json",array = @ArraySchema(schema = @Schema(implementation = Fundos.class)))),
+                    @ApiResponse(responseCode = "401", description = "É necessario esta logado para continuar com a operação",
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @GetMapping()
     public ResponseEntity<List<Fundos>> findAllFundos(){
         return ResponseEntity.ok().body(fundosService.findAllFundos());
     }
 
+    @Operation(summary = "deletar fundos",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "204",description = "deleta o fundos utilizando o id",
+                            content = @Content(mediaType = "application/json",array = @ArraySchema(schema = @Schema(implementation = Fundos.class)))),
+                    @ApiResponse(responseCode = "401", description = "É necessario esta logado para continuar com a operação",
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFundos(@PathVariable Long id){
         fundosService.delete(id);

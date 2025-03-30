@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.infra.security;
+package dev_marcelo.maNotes.infra.security.config;
 
 import dev_marcelo.maNotes.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;

@@ -33,7 +33,7 @@ public class AnotacoesController {
         @ApiResponse(responseCode = "201",description = "Recurso criado com sucesso",
             content = @Content(mediaType = "application/json",schema = @Schema(implementation = AnotacoesResponseDto.class))),
         @ApiResponse(responseCode = "401",description = "É necessario esta logado para continuar com a operação",
-        content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
+            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
     })
     @PostMapping
     public ResponseEntity<AnotacoesResponseDto> create(@RequestBody AnotacoesCreateDto dto){
@@ -84,10 +84,10 @@ public class AnotacoesController {
         return ResponseEntity.ok().body(AnotacoesMapper.toDto(anotacao));
     }
 
-    @Operation(summary = "Listar todas anotações cadastradas",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
+    @Operation(summary = "deleta anotação",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "200",description = "Lista com todas anotações cadatrados",
+                    @ApiResponse(responseCode = "204",description = "deleta anotação por id",
                             content = @Content(mediaType = "application/json",array = @ArraySchema(schema = @Schema(implementation = AnotacoesResponseDto.class)))),
                     @ApiResponse(responseCode = "401", description = "É necessario esta logado para continuar com a operação",
                             content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),

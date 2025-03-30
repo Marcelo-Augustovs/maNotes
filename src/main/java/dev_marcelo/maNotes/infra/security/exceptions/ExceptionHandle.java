@@ -7,6 +7,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -17,39 +19,42 @@ public class ExceptionHandle {
 
     private final MessageSource messageSource;
 
-    @ExceptionHandler(AnotacaoNotFoundException.class)
-    public ResponseEntity<ErrorMessage> anotacaoNotFoundException(AnotacaoNotFoundException ex, HttpServletRequest request){
-        log.error("Api Error - ");
+    @ExceptionHandler(ApiNotFoundException.class)
+    public ResponseEntity<ErrorMessage> apiNotFoundException(ApiNotFoundException ex, HttpServletRequest request){
+        log.error("Api Error - ",ex);
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request,HttpStatus.NOT_FOUND,ex.getMessage()));
+    }
+    @ExceptionHandler(PasswordInvalidException.class)
+    public ResponseEntity<ErrorMessage> passwordInvalidException(RuntimeException ex,HttpServletRequest request){
+        log.error("Api Error - ",ex);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request ,HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+    @ExceptionHandler(UsernameUniqueViolationException.class)
+    public ResponseEntity<ErrorMessage> usernameUniqueViolationException(RuntimeException ex,HttpServletRequest request){
+        log.error("Api Error - ",ex);
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request ,HttpStatus.CONFLICT, ex.getMessage()));
     }
 
-    @ExceptionHandler(DespesaNotFoundException.class)
-    public ResponseEntity<ErrorMessage> despesaNotFoundException(DespesaNotFoundException ex, HttpServletRequest request){
-        log.error("Api Error - ");
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> methodArgumentNotValidException(MethodArgumentNotValidException ex,
+                                                                       HttpServletRequest request,
+                                                                       BindingResult result){
+        log.error("Api Error - ",ex);
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErrorMessage(request,HttpStatus.NOT_FOUND,ex.getMessage()));
+                .body(new ErrorMessage(
+                        request ,HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage()
+                ));
     }
 
-    @ExceptionHandler(FundosNotFoundException.class)
-    public ResponseEntity<ErrorMessage> fundosNotFoundException(FundosNotFoundException ex, HttpServletRequest request){
-        log.error("Api Error - ");
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErrorMessage(request,HttpStatus.NOT_FOUND,ex.getMessage()));
-    }
-
-    @ExceptionHandler(UsuarioNotFoundException.class)
-    public ResponseEntity<ErrorMessage> usuarioNotFoundException(UsuarioNotFoundException ex, HttpServletRequest request){
-        log.error("Api Error - ");
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErrorMessage(request,HttpStatus.NOT_FOUND,ex.getMessage()));
-    }
 }

@@ -2,6 +2,7 @@ package dev_marcelo.maNotes.service;
 
 
 import dev_marcelo.maNotes.entity.Usuario;
+import dev_marcelo.maNotes.infra.security.exceptions.PasswordInvalidException;
 import dev_marcelo.maNotes.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +26,7 @@ public class UsuarioService {
        if(usuario.getSenha().equals(senhaAntiga)) {
            usuario.setSenha(passwordEncoder.encode(novaSenha));
        } else {
-           throw new RuntimeException("a Senha anterior esta incorreta");
+           throw new PasswordInvalidException("a Senha anterior esta incorreta");
        }
        return usuario;
     }
