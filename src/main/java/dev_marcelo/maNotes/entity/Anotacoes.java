@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -26,7 +25,7 @@ public class Anotacoes implements Serializable {
     private String anotacao;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario",referencedColumnName = "id")
+    @JoinColumn(name = "usuarios_id",referencedColumnName = "id")
     private Usuario usuario;
 
     @LastModifiedDate

@@ -25,8 +25,8 @@ public class Fundos implements Serializable {
     @Column(name = "valor_recebido")
     private Double valorRecebido;
 
-    @OneToOne()
-    @JoinColumn(name = "id_usuario")
+    @ManyToOne
+    @JoinColumn(name = "usuarios_id")
     private Usuario usuario;
 
     @CreatedDate
