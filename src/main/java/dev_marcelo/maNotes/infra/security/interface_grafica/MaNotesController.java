@@ -148,7 +148,12 @@ public class MaNotesController {
     }
     @FXML
     private void abrirCalendario(){
-        AppManager.abrirJanelaAuxiliar("/Calendar.fxml","Calendario",600, 450, false);
+        AppManager.abrirJanelaAuxiliar("/java_fx/Calendar.fxml","Calendario",600, 450, false);
+    }
+
+    @FXML
+    private void abrirNotificacao(){
+        AppManager.abrirJanelaAuxiliar("/java_fx/NotificacionPainel.fxml","Notificação",600, 450, false);
     }
 
     @FXML
@@ -165,7 +170,7 @@ public class MaNotesController {
     }
 
     private void aplicarEstilo() {
-        MaNotesInterfaceGrafica.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        MaNotesInterfaceGrafica.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
     }
 
     private void carregarDadosAnotacoes() throws Exception {

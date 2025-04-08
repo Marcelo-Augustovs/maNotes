@@ -23,7 +23,7 @@ public class MaNotesApplication extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		AppManager.setPrimaryStage(primaryStage);
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml")); // Caminho para o FXML da tela de login
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/java_fx/Login.fxml")); // Caminho para o FXML da tela de login
 		Scene scene = new Scene(loader.load());
 
 		primaryStage.setScene(scene);

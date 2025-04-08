@@ -27,7 +27,7 @@ public class AppManager {
 
     public static void showMainScreen() {
         try {
-            FXMLLoader loader = new FXMLLoader(AppManager.class.getResource("/MaNotes.fxml")); // Tela principal
+            FXMLLoader loader = new FXMLLoader(AppManager.class.getResource("/java_fx/MaNotes.fxml")); // Tela principal
             Scene scene = new Scene(loader.load());
             primaryStage.setScene(scene);
             primaryStage.setTitle("MaNotes - Tela Principal");
