@@ -41,7 +41,7 @@
                 </Menu>
                 <Menu text="Calendário">
                     <items>
-                        <MenuItem text="Criar Notifiicação" />
+                        <MenuItem text="Criar Notificação" onAction="#abrirNotificacao" />
                         <MenuItem fx:id="menuCalendario" onAction="#abrirCalendario" text="Abrir Calendario" />
                     </items>
                 </Menu>
@@ -149,7 +149,7 @@
         <VBox alignment="CENTER">
             <ImageView fitHeight="80.0" fitWidth="120.0" opacity="0.9" pickOnBounds="true" preserveRatio="true">
                 <image>
-                    <Image url="@Logo.png" />
+                    <Image url="@../imagens/Logo.png" />
                 </image>
             </ImageView>
         </VBox>

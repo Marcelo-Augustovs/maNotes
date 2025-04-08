@@ -6,7 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="10" stylesheets="@finance_styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.saldo_mensal.ResumoMensalController">
+<VBox alignment="CENTER" spacing="10" stylesheets="@../css/finance_styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.saldo_mensal.ResumoMensalController">
 
     <Label fx:id="labelMesAno" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Mês/Ano: " />
     <Label fx:id="labelFundos" text="Fundos: " />

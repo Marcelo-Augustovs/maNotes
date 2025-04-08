@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox spacing="15" alignment="CENTER" style="-fx-padding: 20px; -fx-background-color: linear-gradient(to bottom, #e3f2fd, #bbdefb); -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-border-color: #64b5f6; -fx-border-width: 2px;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="dev_marcelo.maNotes.infra.security.interface_grafica.notificacao.NotificationController">
+   <Label text="Criar Notificação" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1565c0; -fx-padding: 5px;" />
+
+   <GridPane hgap="10" vgap="10" style="-fx-padding: 10px;">
+      <Label text="Título:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-text-fill: #0d47a1;" />
+      <TextField fx:id="tituloField" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-pref-width: 200px; -fx-background-color: #ffffff; -fx-border-color: #64b5f6; -fx-border-radius: 5px;" />
+
+      <Label text="Descrição:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-text-fill: #0d47a1;" />
+      <TextField fx:id="descricaoField" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-pref-width: 200px; -fx-background-color: #ffffff; -fx-border-color: #64b5f6; -fx-border-radius: 5px;" />
+
+      <Label text="Data:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-text-fill: #0d47a1;" />
+      <DatePicker fx:id="dataPicker" GridPane.rowIndex="2" GridPane.columnIndex="1" style="-fx-background-color: #ffffff; -fx-border-color: #64b5f6; -fx-border-radius: 5px;" />
+
+      <Label text="Hora:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-size: 14px; -fx-text-fill: #0d47a1;" />
+      <TextField fx:id="horaField" promptText="HH:mm" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-pref-width: 80px; -fx-background-color: #ffffff; -fx-border-color: #64b5f6; -fx-border-radius: 5px;" />
+   </GridPane>
+
+   <Button fx:id="salvarButton" text="Salvar Notificação" style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-cursor: hand;" />
+
+   <Label text="Notificações Agendadas" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1565c0; -fx-padding: 10px;" />
+   <ListView fx:id="notificacoesList" style="-fx-pref-height: 150px; -fx-pref-width: 300px; -fx-background-color: #ffffff; -fx-border-color: #64b5f6; -fx-border-radius: 5px;" />
+</VBox>
