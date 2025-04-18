@@ -1,6 +1,6 @@
 package dev_marcelo.maNotes.service;
 
-import dev_marcelo.maNotes.dto.BalancoMensal;
+import dev_marcelo.maNotes.dto.fundos_despesa.BalancoMensal;
 import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.entity.Fundos;
 import dev_marcelo.maNotes.entity.FundosEDespesaMensal;

@@ -1,18 +1,11 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica.tela_login;
 
-import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
-import dev_marcelo.maNotes.dto.AuthenticationDto;
-import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.infra.security.exceptions.UsernameUniqueViolationException;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class LoginApiClient {
     private static final String BASE_URL = "http://localhost:8080/api/v1/auth";

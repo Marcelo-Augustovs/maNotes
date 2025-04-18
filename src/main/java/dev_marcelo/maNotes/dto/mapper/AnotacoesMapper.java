@@ -1,7 +1,7 @@
 package dev_marcelo.maNotes.dto.mapper;
 
-import dev_marcelo.maNotes.dto.AnotacoesCreateDto;
-import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
+import dev_marcelo.maNotes.dto.anotacoes.AnotacoesCreateDto;
+import dev_marcelo.maNotes.dto.anotacoes.AnotacoesResponseDto;
 import dev_marcelo.maNotes.entity.Anotacoes;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.dto;
+package dev_marcelo.maNotes.dto.autenticacao;
 
 import dev_marcelo.maNotes.entity.Usuario;
 import jakarta.validation.constraints.NotBlank;

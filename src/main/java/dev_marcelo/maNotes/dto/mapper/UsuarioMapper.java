@@ -1,7 +1,7 @@
 package dev_marcelo.maNotes.dto.mapper;
 
 import dev_marcelo.maNotes.dto.UsuarioLoginDto;
-import dev_marcelo.maNotes.dto.UsuarioSenhaDto;
+import dev_marcelo.maNotes.dto.autenticacao.UsuarioSenhaDto;
 import dev_marcelo.maNotes.entity.Usuario;
 import org.modelmapper.ModelMapper;
 

@@ -1,9 +1,9 @@
 package dev_marcelo.maNotes.controller;
 
 import dev_marcelo.maNotes.infra.security.config.TokenService;
-import dev_marcelo.maNotes.dto.AuthenticationDto;
-import dev_marcelo.maNotes.dto.LoginResponseDto;
-import dev_marcelo.maNotes.dto.RegisterDto;
+import dev_marcelo.maNotes.dto.autenticacao.AuthenticationDto;
+import dev_marcelo.maNotes.dto.autenticacao.LoginResponseDto;
+import dev_marcelo.maNotes.dto.autenticacao.RegisterDto;
 import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
 import dev_marcelo.maNotes.infra.security.exceptions.PasswordInvalidException;

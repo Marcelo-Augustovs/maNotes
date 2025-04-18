@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.dto;
+package dev_marcelo.maNotes.dto.anotacoes;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;

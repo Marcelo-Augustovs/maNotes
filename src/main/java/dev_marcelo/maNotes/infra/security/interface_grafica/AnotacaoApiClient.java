@@ -1,6 +1,6 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
-import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
+import dev_marcelo.maNotes.dto.anotacoes.AnotacoesResponseDto;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;

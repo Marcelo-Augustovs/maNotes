@@ -54,6 +54,16 @@ public class DespesaController {
         return ResponseEntity.status(200).body(DespesaMapper.toDto(forUpdate));
     }
 
+    @Operation(summary = "Listar todas despesas",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200",description = "Lista com todas despesas cadatrados",
+                            content = @Content(mediaType = "application/json",array = @ArraySchema(schema = @Schema(implementation = Despesa.class)))),
+                    @ApiResponse(responseCode = "401", description = "É necessario esta logado para continuar com a operação",
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @GetMapping("/{id}")
     public ResponseEntity<Despesa> findById(@PathVariable Long id){
         Despesa despesa = despesaService.findAcountById(id);
@@ -74,6 +84,16 @@ public class DespesaController {
         return ResponseEntity.ok(listaDeDespesa);
     }
 
+    @Operation(summary = "Atualizar o status da conta para pago",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+                    @ApiResponse(responseCode = "200",description = "modifica o status pendente da conta para pago",
+                            content = @Content(mediaType = "application/json",array = @ArraySchema(schema = @Schema()))),
+                    @ApiResponse(responseCode = "401", description = "É necessario esta logado para continuar com a operação",
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @PatchMapping("/{id}/status")
     public ResponseEntity<Void> updateStatusConta(@PathVariable Long id){
         despesaService.pagarContar(id);

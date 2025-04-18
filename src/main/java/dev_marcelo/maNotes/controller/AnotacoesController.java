@@ -1,7 +1,7 @@
 package dev_marcelo.maNotes.controller;
 
-import dev_marcelo.maNotes.dto.AnotacoesCreateDto;
-import dev_marcelo.maNotes.dto.AnotacoesResponseDto;
+import dev_marcelo.maNotes.dto.anotacoes.AnotacoesCreateDto;
+import dev_marcelo.maNotes.dto.anotacoes.AnotacoesResponseDto;
 import dev_marcelo.maNotes.dto.mapper.AnotacoesMapper;
 import dev_marcelo.maNotes.entity.Anotacoes;
 import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;

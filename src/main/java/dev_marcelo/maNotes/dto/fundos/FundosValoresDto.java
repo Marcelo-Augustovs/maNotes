@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.dto;
+package dev_marcelo.maNotes.dto.fundos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
