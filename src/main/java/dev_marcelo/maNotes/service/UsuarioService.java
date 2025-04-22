@@ -23,7 +23,7 @@ public class UsuarioService {
        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(
                () -> new RuntimeException(String.format("Usuario id=%s não encontrado",idUsuario))
        );
-       if(usuario.getSenha().equals(senhaAntiga)) {
+       if(passwordEncoder.matches(senhaAntiga, usuario.getSenha())) {
            usuario.setSenha(passwordEncoder.encode(novaSenha));
        } else {
            throw new PasswordInvalidException("a Senha anterior esta incorreta");

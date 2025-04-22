@@ -46,11 +46,11 @@ public class AuthenticationController {
             })
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDto data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(),data.password());
        try {
+           var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(),data.password());
            var auth = this.authenticationManager.authenticate(usernamePassword);
-           System.out.println("Auth:" + auth);
            var token = tokenService.generateToken( (Usuario) auth.getPrincipal());
+
            return ResponseEntity.ok(new LoginResponseDto(token));
        } catch (AuthenticationException e) {
            throw new PasswordInvalidException(e.getMessage());
