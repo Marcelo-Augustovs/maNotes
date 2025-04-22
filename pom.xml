@@ -95,12 +95,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.2.0</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
@@ -126,12 +120,12 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>17.0.2</version>
+			<version>21.0.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>17.0.2</version>
+			<version>21.0.7</version>
 		</dependency>
 
 
@@ -176,7 +170,7 @@
 						<!-- Default configuration for running with: mvn clean javafx:run -->
 						<id>default-cli</id>
 						<configuration>
-							<mainClass>dev_marcelo\maNotes\MaNotesApplication.java</mainClass>
+							<mainClass>dev_marcelo.maNotes.MaNotesApplication</mainClass>
 							<launcher>app</launcher>
 							<jlinkZipName>app</jlinkZipName>
 							<jlinkImageName>app</jlinkImageName>
