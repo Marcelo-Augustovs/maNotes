@@ -27,7 +27,6 @@ public class Usuario implements UserDetails {
     @Column(name = "role",length = 25)
     private Role role;
 
-    // construtor para criacao de usuario via DTO
     public Usuario(String login,String senha, Role role){
         this.login = login;
         this.senha = senha;
@@ -35,7 +34,6 @@ public class Usuario implements UserDetails {
 
     }
 
-    // UserDetails - metodos obrigatorios de implementacao.
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.role == Role.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
@@ -72,7 +70,6 @@ public class Usuario implements UserDetails {
         return UserDetails.super.isEnabled();
     }
 
-    // controle de acesso, via role na aplicacao.
     public enum Role{
         USER , ADMIN
     }

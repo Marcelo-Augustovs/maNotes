@@ -1,7 +1,9 @@
 package dev_marcelo.maNotes.service;
 
 
+import dev_marcelo.maNotes.dto.usuario.UsuarioResponseDto;
 import dev_marcelo.maNotes.entity.Usuario;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
 import dev_marcelo.maNotes.infra.security.exceptions.PasswordInvalidException;
 import dev_marcelo.maNotes.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,7 @@ public class UsuarioService {
     @Transactional
     public Usuario updateSenha(Long idUsuario,String senhaAntiga, String novaSenha){
        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(
-               () -> new RuntimeException(String.format("Usuario id=%s não encontrado",idUsuario))
+               () -> new ApiNotFoundException(String.format("Usuario id=%s não encontrado",idUsuario))
        );
        if(passwordEncoder.matches(senhaAntiga, usuario.getSenha())) {
            usuario.setSenha(passwordEncoder.encode(novaSenha));
@@ -37,7 +39,11 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public List<Usuario> getAllUsers() {
-        return usuarioRepository.findAll();
+    public List<UsuarioResponseDto> getAllUsers() {
+        List<Usuario> usuarioList = usuarioRepository.findAll();
+        List<UsuarioResponseDto> dtoList = usuarioList.stream()
+                .map(u -> new UsuarioResponseDto(u.getId(),u.getLogin(),u.getRole()))
+                .toList();
+        return dtoList;
     }
 }

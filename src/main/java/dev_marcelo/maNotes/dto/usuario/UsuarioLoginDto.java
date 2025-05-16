@@ -1,4 +1,4 @@
-package dev_marcelo.maNotes.dto;
+package dev_marcelo.maNotes.dto.usuario;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

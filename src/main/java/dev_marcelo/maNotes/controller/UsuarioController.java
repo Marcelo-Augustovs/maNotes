@@ -2,6 +2,7 @@ package dev_marcelo.maNotes.controller;
 
 import dev_marcelo.maNotes.dto.anotacoes.AnotacoesResponseDto;
 import dev_marcelo.maNotes.dto.autenticacao.UsuarioSenhaDto;
+import dev_marcelo.maNotes.dto.usuario.UsuarioResponseDto;
 import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
 import dev_marcelo.maNotes.service.UsuarioService;
@@ -45,8 +46,8 @@ public class UsuarioController {
                             content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping
-    public ResponseEntity<List<Usuario>> getAll(){
-        List<Usuario> lista = usuarioService.getAllUsers();
+    public ResponseEntity<List<UsuarioResponseDto>> getAll(){
+        List<UsuarioResponseDto> lista = usuarioService.getAllUsers();
         return ResponseEntity.status(200).body(lista);
     }
 }
