@@ -136,15 +136,15 @@ public class MaNotesController {
 
     @FXML
     private void abrirConfirmarFundos() {
-        AppManager.abrirJanelaAuxiliar("/confirmarFundos.fxml", "Adicionar Fundos", 500, 400, false);
+        AppManager.abrirJanelaAuxiliar("/java_fx/confirmarFundos.fxml", "Adicionar Fundos", 500, 400, false);
     }
     @FXML
     private void abrirConfirmarDespesa() {
-        AppManager.abrirJanelaAuxiliar("/confirmarDespesa.fxml", "Adicionar Despesa", 600, 450, false);
+        AppManager.abrirJanelaAuxiliar("/java_fx/confirmarDespesa.fxml", "Adicionar Despesa", 600, 450, false);
     }
     @FXML
     private void abrirFundosEDespesasPainel() {
-        AppManager.abrirJanelaAuxiliar("/fundosEDespesasPainel.fxml", "Resumo Financeiro do Mês", 600, 450, false);
+        AppManager.abrirJanelaAuxiliar("/java_fx/fundosEDespesasPainel.fxml", "Resumo Financeiro do Mês", 600, 450, false);
     }
     @FXML
     private void abrirCalendario(){

@@ -1,9 +1,6 @@
 package dev_marcelo.maNotes.controller;
 
-import dev_marcelo.maNotes.dto.DespesaDto;
 import dev_marcelo.maNotes.dto.LembreteDto;
-import dev_marcelo.maNotes.entity.Despesa;
-import dev_marcelo.maNotes.entity.Fundos;
 import dev_marcelo.maNotes.entity.Lembrete;
 import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
 import dev_marcelo.maNotes.service.LembreteService;

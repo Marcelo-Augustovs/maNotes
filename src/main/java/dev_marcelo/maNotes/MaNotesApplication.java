@@ -10,7 +10,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
-public class MaNotesApplication extends Application {
+public class  MaNotesApplication extends Application {
 	private static ConfigurableApplicationContext springContext;
 
 	@Override

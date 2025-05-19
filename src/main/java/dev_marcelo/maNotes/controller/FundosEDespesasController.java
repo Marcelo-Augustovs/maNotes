@@ -1,6 +1,5 @@
 package dev_marcelo.maNotes.controller;
 
-import dev_marcelo.maNotes.dto.anotacoes.AnotacoesResponseDto;
 import dev_marcelo.maNotes.dto.fundos_despesa.FundosEDespesasDto;
 import dev_marcelo.maNotes.entity.FundosEDespesaMensal;
 import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
