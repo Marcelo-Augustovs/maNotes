@@ -1,8 +1,7 @@
 package dev_marcelo.maNotes;
 
 import dev_marcelo.maNotes.dto.LembreteDto;
-import dev_marcelo.maNotes.dto.fundos.FundosValoresDto;
-import dev_marcelo.maNotes.entity.Fundos;
+import dev_marcelo.maNotes.entity.Lembrete;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,10 +41,10 @@ public class LembretesIT {
                 .patch()
                 .uri("/api/v1/calendario/100")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue( new FundosValoresDto("modificando",20.00))
+                .bodyValue( new LembreteDto(100L,"modificado",LocalDate.of(2025, 5, 12)))
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Fundos.class)
+                .expectBody(Lembrete.class)
                 .returnResult().getResponseBody();
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
@@ -54,12 +53,12 @@ public class LembretesIT {
 
     @Test
     public void buscarTodosLembretes_Authenticado_RetornarListaDeDespesaComStatus200(){
-        List<Fundos> responseBody = testClient
+        List<Lembrete> responseBody = testClient
                 .get()
                 .uri("/api/v1/calendario")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBodyList(Fundos.class)
+                .expectBodyList(Lembrete.class)
                 .returnResult().getResponseBody();
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
