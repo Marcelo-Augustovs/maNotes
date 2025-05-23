@@ -21,7 +21,7 @@ public class LembretesIT {
     WebTestClient testClient;
 
     @Test
-    public void criarLembretes_ComUsuarioLogado_RetornarAnotacaoComStatus201(){
+    public void criarLembretes_ComUsuarioLogado_RetornarLembreteComStatus201(){
         var responseBody = testClient
                 .post()
                 .uri("/api/v1/calendario")
@@ -36,7 +36,7 @@ public class LembretesIT {
     }
 
     @Test
-    public void atualizarLembretes_ComUsuarioAutenticado_RetornarStatus204(){
+    public void atualizarLembretes_ComUsuarioAutenticado_RetornarStatus200(){
         var responseBody = testClient
                 .patch()
                 .uri("/api/v1/calendario/100")
@@ -52,7 +52,7 @@ public class LembretesIT {
     }
 
     @Test
-    public void buscarTodosLembretes_Authenticado_RetornarListaDeDespesaComStatus200(){
+    public void buscarTodosLembretes_Authenticado_RetornarListaDeLembretesComStatus200(){
         List<Lembrete> responseBody = testClient
                 .get()
                 .uri("/api/v1/calendario")
