@@ -3,6 +3,10 @@ package dev_marcelo.maNotes.infra.security.interface_grafica.calendario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev_marcelo.maNotes.entity.Lembrete;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiChangeValorException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiCreateException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
+import dev_marcelo.maNotes.infra.security.interface_grafica.tela_login.LoginApiClient;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -39,6 +43,7 @@ public class CalendarApiClient {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
@@ -48,7 +53,7 @@ public class CalendarApiClient {
         if (response.statusCode() == 201) {
             return response.body();
         } else {
-            throw new RuntimeException("Falha ao marcar o evento: Código " + response.statusCode() + " - " + response.body());
+            throw new ApiCreateException("Falha ao marcar o evento: Código " + response.statusCode() + " - " + response.body());
         }
     }
 
@@ -57,6 +62,7 @@ public class CalendarApiClient {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(BASE_URL))
+                    .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                     .header("Accept", "application/json")
                     .GET()
                     .build();
@@ -65,12 +71,11 @@ public class CalendarApiClient {
 
             if (response.statusCode() == 200) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.registerModule(new JavaTimeModule()); // Adiciona suporte a LocalDate
+                objectMapper.registerModule(new JavaTimeModule());
 
-                System.out.println("Resposta JSON: " + response.body());
                 return Arrays.asList(objectMapper.readValue(response.body(), Lembrete[].class));
             } else {
-                throw new RuntimeException("Erro ao buscar lembretes: " + response.body());
+                throw new ApiNotFoundException("Erro ao buscar lembretes: " + response.body());
             }
         } catch (Exception e) {
             System.err.println("Erro ao conectar à API: " + e.getMessage());
@@ -80,7 +85,7 @@ public class CalendarApiClient {
     }
 
     public String editarLembrete(String nomeDoEvento, String novoNomeDoEvento, String diaMarcado) throws Exception {
-        Long id = buscarIdPorNomeEDia(nomeDoEvento, diaMarcado); // Busca o evento pelo nome e pelo dia
+        Long id = buscarIdPorNomeEDia(nomeDoEvento, diaMarcado);
         System.out.println("id recuperado:" + id);
 
         if (id == null) {
@@ -101,6 +106,7 @@ public class CalendarApiClient {
         System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(PATCH_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                 .header("Content-Type", "application/json")
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody)) // Usa PATCH corretamente
                 .build();
@@ -108,22 +114,21 @@ public class CalendarApiClient {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
-            System.out.println("teste:" + jsonBody);
             return response.body();
         } else {
-            throw new RuntimeException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
+            throw new ApiChangeValorException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
         }
     }
 
     private Long buscarIdPorNomeEDia(String nomeDoEvento, String diaMarcado) throws Exception {
-        List<Lembrete> lembretes = buscarLembretes(); // Usa a API para obter todos os lembretes
+        List<Lembrete> lembretes = buscarLembretes();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // ou o formato correto da data
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dataFormatada = LocalDate.parse(diaMarcado, formatter);
 
         return lembretes.stream()
                 .filter(lembrete -> lembrete.getNomeDoEvento().trim().equalsIgnoreCase(nomeDoEvento.trim()) &&
-                        lembrete.getDiaMarcado().isEqual(dataFormatada)) // Agora ambos são LocalDate
+                        lembrete.getDiaMarcado().isEqual(dataFormatada))
                 .map(Lembrete::getId)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado: " + nomeDoEvento + " no dia " + diaMarcado));

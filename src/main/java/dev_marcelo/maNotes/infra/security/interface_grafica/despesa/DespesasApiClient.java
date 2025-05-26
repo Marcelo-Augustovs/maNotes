@@ -3,6 +3,11 @@ package dev_marcelo.maNotes.infra.security.interface_grafica.despesa;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev_marcelo.maNotes.entity.Despesa;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiChangeValorException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiCreateException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiDeleteException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
+import dev_marcelo.maNotes.infra.security.interface_grafica.tela_login.LoginApiClient;
 
 import java.io.IOException;
 import java.net.URI;
@@ -28,6 +33,7 @@ public class DespesasApiClient {
         System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
@@ -35,9 +41,9 @@ public class DespesasApiClient {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 201) {
-            return response.body(); // Retorna a resposta JSON
+            return response.body();
         } else {
-            throw new RuntimeException("Falha ao adicionar fundos: Código " + response.statusCode() + " - " + response.body());
+            throw new ApiCreateException("Falha ao adicionar fundos: Código " + response.statusCode() + " - " + response.body());
         }
     }
 
@@ -47,6 +53,7 @@ public class DespesasApiClient {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(BASE_URL))
+                    .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                     .header("Accept", "application/json")
                     .GET()
                     .build();
@@ -60,7 +67,7 @@ public class DespesasApiClient {
                 System.out.println("Resposta JSON: " + response.body());
                 return Arrays.asList(objectMapper.readValue(response.body(), Despesa[].class));
             } else {
-                throw new RuntimeException("Erro ao buscar Despesa: " + response.body());
+                throw new ApiNotFoundException("Erro ao buscar Despesa: " + response.body());
             }
         } catch (Exception e) {
             System.err.println("Erro ao conectar à API: " + e.getMessage());
@@ -84,6 +91,7 @@ public class DespesasApiClient {
         System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(PATCH_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                 .header("Content-Type", "application/json")
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody)) // Usa PATCH corretamente
                 .build();
@@ -94,11 +102,11 @@ public class DespesasApiClient {
             System.out.println("teste:" + jsonBody);
             return response.body();
         } else {
-            throw new RuntimeException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
+            throw new ApiChangeValorException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
         }
     }
 
-    public void removerDespesas(Long id) throws Exception {
+    public void removerDespesas(Long id) {
         String DELETE_URL = BASE_URL + "/" + id;
         System.out.println("Url:" + DELETE_URL);
         System.out.println("removendo o objeto");
@@ -106,6 +114,7 @@ public class DespesasApiClient {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(DELETE_URL))
+                    .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                     .header("Accept", "application/json")
                     .DELETE()
                     .build();
@@ -114,7 +123,7 @@ public class DespesasApiClient {
             if (response.statusCode() == 204) {
                 System.out.println("funcionou deletado despesa");
             } else {
-                throw new RuntimeException("Falha ao de " + response.statusCode() + " - " + response.body());
+                throw new ApiDeleteException("Falha ao de " + response.statusCode() + " - " + response.body());
             }
         }catch (Exception e){
             e.printStackTrace();

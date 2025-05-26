@@ -3,6 +3,9 @@ package dev_marcelo.maNotes.infra.security.interface_grafica.fundos;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev_marcelo.maNotes.entity.Fundos;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiChangeValorException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
+import dev_marcelo.maNotes.infra.security.interface_grafica.tela_login.LoginApiClient;
 
 import java.io.IOException;
 import java.net.URI;
@@ -27,6 +30,7 @@ public class FinanciasApiClient {
         System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
@@ -34,7 +38,7 @@ public class FinanciasApiClient {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 201) {
-            return response.body(); // Retorna a resposta JSON
+            return response.body();
         } else {
             throw new RuntimeException("Falha ao adicionar fundos: Código " + response.statusCode() + " - " + response.body());
         }
@@ -46,6 +50,7 @@ public class FinanciasApiClient {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(BASE_URL))
+                    .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                     .header("Accept", "application/json")
                     .GET()
                     .build();
@@ -56,10 +61,9 @@ public class FinanciasApiClient {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.registerModule(new JavaTimeModule()); // Adiciona suporte a LocalDate
 
-                System.out.println("Resposta JSON: " + response.body());
                 return Arrays.asList(objectMapper.readValue(response.body(), Fundos[].class));
             } else {
-                throw new RuntimeException("Erro ao buscar fundos: " + response.body());
+                throw new ApiNotFoundException("Erro ao buscar fundos: " + response.body());
             }
         } catch (Exception e) {
             System.err.println("Erro ao conectar à API: " + e.getMessage());
@@ -70,7 +74,6 @@ public class FinanciasApiClient {
 
     public String editarFundos(Long id,String nomeFundo, String valorRecebido) throws URISyntaxException, IOException, InterruptedException {
         String PATCH_URL = BASE_URL + "/" + id;
-        System.out.println("Url:" + PATCH_URL);
 
         HttpClient client = HttpClient.newHttpClient();
         String jsonBody = String.format("""
@@ -83,37 +86,34 @@ public class FinanciasApiClient {
         System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(PATCH_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                 .header("Content-Type", "application/json")
-                .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody)) // Usa PATCH corretamente
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
-            System.out.println("teste:" + jsonBody);
             return response.body();
         } else {
-            throw new RuntimeException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
+            throw new ApiChangeValorException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
         }
     }
 
     public void removerFundos(Long id) {
         String DELETE_URL = BASE_URL + "/" + id;
-        System.out.println("Url:" + DELETE_URL);
-        System.out.println("removendo o objeto fundos");
 
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(DELETE_URL))
+                    .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                     .header("Accept", "application/json")
                     .DELETE()
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 204) {
-                System.out.println("funcionou deletado fundos");
-            } else {
+            if (response.statusCode() != 204) {
                 throw new RuntimeException("Falha ao de " + response.statusCode() + " - " + response.body());
             }
         }catch (Exception e){

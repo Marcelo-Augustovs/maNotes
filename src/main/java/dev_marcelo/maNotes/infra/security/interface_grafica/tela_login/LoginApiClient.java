@@ -1,6 +1,7 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica.tela_login;
 
 import dev_marcelo.maNotes.infra.security.exceptions.UsernameUniqueViolationException;
+import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -9,6 +10,7 @@ import java.net.http.HttpResponse;
 
 public class LoginApiClient {
     private static final String BASE_URL = "http://localhost:8080/api/v1/auth";
+    private static String jwtToken;
 
     public String logar(String login, String password) throws Exception {
         String Login_URL = BASE_URL + "/login";
@@ -25,8 +27,12 @@ public class LoginApiClient {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
-            return response.body(); // Retorna a resposta JSON
-        } else { // não pega o bad request, quando digita a senha errada
+            String responseBody = response.body();
+            JSONObject json = new JSONObject(responseBody);
+            jwtToken = json.getString("token");
+
+            return response.body();
+        } else {
             throw new RuntimeException("usuario não encontrado ou não cadastrado: " + response.body());
         }
     }
@@ -52,6 +58,10 @@ public class LoginApiClient {
         } else {
             throw new UsernameUniqueViolationException("Erro ao cadastrar o usuario. usuario ja existente ou caracteres nao validos " + response.body());
         }
+    }
+
+    public static String getJwtToken() {
+        return jwtToken;
     }
 }
 

@@ -1,7 +1,10 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev_marcelo.maNotes.dto.anotacoes.AnotacoesResponseDto;
-import org.springframework.web.client.RestTemplate;
+import dev_marcelo.maNotes.infra.security.interface_grafica.tela_login.LoginApiClient;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,6 +25,7 @@ public class AnotacaoApiClient {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
@@ -35,15 +39,30 @@ public class AnotacaoApiClient {
         }
     }
 
-    public List<AnotacoesResponseDto> buscarAnotacoes() {
-        RestTemplate restTemplate = new RestTemplate();
+    public List<AnotacoesResponseDto> buscarAnotacoes() throws URISyntaxException, IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(BASE_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
+                .header("Accept", "application/json")
+                .GET()
+                .build();
 
-        AnotacoesResponseDto[] responseArray = restTemplate.getForObject(BASE_URL, AnotacoesResponseDto[].class);
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (responseArray != null) {
-            return Arrays.asList(responseArray);  // Converte o array para lista
+        if (response.statusCode() == 200) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+            AnotacoesResponseDto[] responseArray = mapper.readValue(response.body(), AnotacoesResponseDto[].class);
+            if (responseArray != null) {
+                return Arrays.asList(responseArray);
+            } else {
+                return Collections.emptyList();
+            }
         } else {
-            return Collections.emptyList();  // Retorna uma lista vazia se não houver dados
+            throw new RuntimeException("Falha ao buscar anotações: " + response.body());
         }
     }
 
@@ -61,6 +80,7 @@ public class AnotacaoApiClient {
         System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(PATCH_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                 .header("Content-Type", "application/json")
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody)) // Usa PATCH corretamente
                 .build();
@@ -85,6 +105,7 @@ public class AnotacaoApiClient {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(DELETE_URL))
                     .header("Accept", "application/json")
+                    .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                     .DELETE()
                     .build();
 

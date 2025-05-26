@@ -3,7 +3,11 @@ package dev_marcelo.maNotes.infra.security.interface_grafica.notificacao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev_marcelo.maNotes.entity.Notificacao;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiChangeValorException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiCreateException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiDeleteException;
 import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
+import dev_marcelo.maNotes.infra.security.interface_grafica.tela_login.LoginApiClient;
 
 import java.io.IOException;
 import java.net.URI;
@@ -30,6 +34,7 @@ public class NotificacaoApiClient {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
@@ -41,7 +46,7 @@ public class NotificacaoApiClient {
             mapper.registerModule(new JavaTimeModule()); // para LocalDateTime
             return mapper.readValue(response.body(), Notificacao.class);
         } else {
-            throw new RuntimeException("Falha na criação da notificação: Código " + response.statusCode() + " - " + response.body());
+            throw new ApiCreateException("Falha na criação da notificação: Código " + response.statusCode() + " - " + response.body());
         }
     }
 
@@ -51,6 +56,7 @@ public class NotificacaoApiClient {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(BASE_URL))
+                    .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                     .header("Accept", "application/json")
                     .GET()
                     .build();
@@ -59,7 +65,7 @@ public class NotificacaoApiClient {
 
             if (response.statusCode() == 200) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.registerModule(new JavaTimeModule()); // Adiciona suporte a LocalDate
+                objectMapper.registerModule(new JavaTimeModule());
 
                 System.out.println("Resposta JSON: " + response.body());
                 return Arrays.asList(objectMapper.readValue(response.body(), Notificacao[].class));
@@ -75,7 +81,6 @@ public class NotificacaoApiClient {
 
     public String editarNotificacao(Long id,String titulo,String descricao,String dataHora) throws URISyntaxException, IOException, InterruptedException {
         String PATCH_URL = BASE_URL + "/" + id;
-        System.out.println("Url:" + PATCH_URL);
 
         HttpClient client = HttpClient.newHttpClient();
         String jsonBody = String.format("""
@@ -89,6 +94,7 @@ public class NotificacaoApiClient {
         System.out.println(jsonBody);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(PATCH_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                 .header("Content-Type", "application/json")
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody)) // Usa PATCH corretamente
                 .build();
@@ -99,28 +105,25 @@ public class NotificacaoApiClient {
             System.out.println("teste:" + jsonBody);
             return response.body();
         } else {
-            throw new RuntimeException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
+            throw new ApiChangeValorException("Falha ao editar o evento: Código " + response.statusCode() + " - " + response.body());
         }
     }
 
     public void removerNotificacao(Long id) {
         String DELETE_URL = BASE_URL + "/" + id;
-        System.out.println("Url:" + DELETE_URL);
-        System.out.println("removendo o objeto fundos");
 
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(DELETE_URL))
+                    .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
                     .header("Accept", "application/json")
                     .DELETE()
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 204) {
-                System.out.println("funcionou deletado notificacao");
-            } else {
-                throw new RuntimeException("Falha ao de " + response.statusCode() + " - " + response.body());
+            if (response.statusCode() != 204) {
+                throw new ApiDeleteException("Falha ao de " + response.statusCode() + " - " + response.body());
             }
         }catch (Exception e){
             e.printStackTrace();
