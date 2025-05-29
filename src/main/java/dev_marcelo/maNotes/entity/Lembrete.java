@@ -27,7 +27,7 @@ public class Lembrete {
     private LocalDate diaMarcado;
 
     @ManyToOne
-    @JoinColumn(name = "usuarios_id", referencedColumnName = "id")
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private Usuario usuario;
 
     @Column(name = "criado_por")

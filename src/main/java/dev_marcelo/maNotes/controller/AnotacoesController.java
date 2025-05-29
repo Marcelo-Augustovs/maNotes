@@ -4,8 +4,10 @@ import dev_marcelo.maNotes.dto.anotacoes.AnotacoesCreateDto;
 import dev_marcelo.maNotes.dto.anotacoes.AnotacoesResponseDto;
 import dev_marcelo.maNotes.dto.mapper.AnotacoesMapper;
 import dev_marcelo.maNotes.entity.Anotacoes;
+import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
 import dev_marcelo.maNotes.service.AnotacoesService;
+import dev_marcelo.maNotes.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +27,7 @@ import java.util.Map;
 @RequestMapping("api/v1/anotacoes")
 public class AnotacoesController {
     private final AnotacoesService anotacoesService;
+    private final UsuarioService usuarioService;
 
     @Operation(summary = "Criar uma nova anotação",
     description = "Recurso para criar uma nova anotação. Requer um usuario cadastrado. "
@@ -36,8 +40,10 @@ public class AnotacoesController {
             content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
     })
     @PostMapping
-    public ResponseEntity<AnotacoesResponseDto> create(@RequestBody AnotacoesCreateDto dto){
+    public ResponseEntity<AnotacoesResponseDto> create(@RequestBody AnotacoesCreateDto dto,
+                                                       @AuthenticationPrincipal Usuario usuario){
         Anotacoes anotacoes = AnotacoesMapper.toAnotacoes(dto);
+        anotacoes.setUsuario(usuarioService.buscarPorId(usuario.getId()));
         anotacoesService.save(anotacoes);
         return ResponseEntity.status(201).body(AnotacoesMapper.toDto(anotacoes));
     }

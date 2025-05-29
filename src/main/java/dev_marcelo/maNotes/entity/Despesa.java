@@ -26,7 +26,7 @@ public class Despesa implements Serializable {
     private Double valorDaConta;
 
     @ManyToOne
-    @JoinColumn(name = "usuarios_id")
+    @JoinColumn(name = "usuario_id",referencedColumnName = "id")
     private Usuario usuario;
 
     @CreatedDate

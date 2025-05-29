@@ -25,7 +25,7 @@ public class Anotacoes implements Serializable {
     private String anotacao;
 
     @ManyToOne
-    @JoinColumn(name = "usuarios_id",referencedColumnName = "id")
+    @JoinColumn(name = "usuario_id",referencedColumnName = "id")
     private Usuario usuario;
 
     @LastModifiedDate

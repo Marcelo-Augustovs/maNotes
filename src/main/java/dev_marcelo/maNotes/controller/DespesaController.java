@@ -3,8 +3,10 @@ package dev_marcelo.maNotes.controller;
 import dev_marcelo.maNotes.dto.DespesaDto;
 import dev_marcelo.maNotes.dto.mapper.DespesaMapper;
 import dev_marcelo.maNotes.entity.Despesa;
+import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
 import dev_marcelo.maNotes.service.DespesaService;
+import dev_marcelo.maNotes.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +26,7 @@ import java.util.List;
 public class DespesaController {
 
     private final DespesaService despesaService;
+    private final UsuarioService usuarioService;
 
     @Operation(summary = "Criar uma despesa",
             description = "Recurso para criar uma nova despesa. Requer um usuario cadastrado. "
@@ -37,8 +41,11 @@ public class DespesaController {
                             content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
             })
     @PostMapping
-    public ResponseEntity<Despesa> create(@RequestBody DespesaDto dto){
-        Despesa despesa = despesaService.salvar(DespesaMapper.toDespesa(dto));
+    public ResponseEntity<Despesa> create(@RequestBody DespesaDto dto,
+                                          @AuthenticationPrincipal Usuario usuario){
+        Despesa despesa = DespesaMapper.toDespesa(dto);
+        despesa.setUsuario(usuarioService.buscarPorId(usuario.getId()));
+        despesaService.salvar(despesa);
         return ResponseEntity.status(201).body(despesa);
     }
 

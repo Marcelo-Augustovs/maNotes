@@ -3,8 +3,10 @@ package dev_marcelo.maNotes.controller;
 
 import dev_marcelo.maNotes.dto.fundos.FundosValoresDto;
 import dev_marcelo.maNotes.entity.Fundos;
+import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
 import dev_marcelo.maNotes.service.FundosService;
+import dev_marcelo.maNotes.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.List;
 @RequestMapping("api/v1/fundos")
 public class FundosController {
     private final FundosService fundosService;
+    private final UsuarioService usuarioService;
 
     @Operation(summary = "Criar um novo fundo",
             description = "Recurso para criar uma nova entrada de renda(fundos). Requer um usuario cadastrado. "
@@ -36,7 +40,9 @@ public class FundosController {
                     content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
     })
     @PostMapping
-    public ResponseEntity<Fundos> create(@RequestBody Fundos fundos){
+    public ResponseEntity<Fundos> create(@RequestBody Fundos fundos,
+                                         @AuthenticationPrincipal Usuario usuario){
+        fundos.setUsuario(usuarioService.buscarPorId(usuario.getId()));
         fundosService.save(fundos);
         return ResponseEntity.status(201).body(fundos);
     }
