@@ -23,11 +23,12 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("ma-notes-api")
                     .withSubject(usuario.getLogin())
+                    .withClaim("id",usuario.getId())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
             return token;
         }catch (JWTCreationException exception){
-            throw new RuntimeException("Erro while generation token",exception);
+            throw new RuntimeException("Erro ao gerar o  token",exception);
         }
     }
 
