@@ -39,6 +39,12 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
+    public Usuario buscarPorId(Long id){
+        return usuarioRepository.findById(id).orElseThrow(
+                () -> new ApiNotFoundException(String.format("Usuario id=%s não encontrado",id))
+        );
+    }
+    @Transactional(readOnly = true)
     public List<UsuarioResponseDto> getAllUsers() {
         List<Usuario> usuarioList = usuarioRepository.findAll();
         List<UsuarioResponseDto> dtoList = usuarioList.stream()
