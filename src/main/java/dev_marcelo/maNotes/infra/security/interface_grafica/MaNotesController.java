@@ -11,6 +11,7 @@ import dev_marcelo.maNotes.infra.security.interface_grafica.saldo_mensal.ResumoM
 import dev_marcelo.maNotes.infra.security.interface_grafica.util.AppManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -158,9 +159,9 @@ public class MaNotesController {
 
     @FXML
     public void initialize() throws Exception {
-        carregarDadosAnotacoes();
-        carregarDadosFundos();
-        carregarDadosDespesas();
+        carregarDadosAnotacoesAsync();
+        carregarDadosFundosAsync();
+        carregarDadosDespesasAsync();
 
         configurarClique(fundosTable);
         configurarClique(despesaTable);
@@ -200,6 +201,54 @@ public class MaNotesController {
         colunaDespesasValor.setCellValueFactory(new PropertyValueFactory<>("valorDaConta"));
         colunaMes.setCellValueFactory(new PropertyValueFactory<>("dataModificacao"));
         colunaStatusDespesas.setCellValueFactory(new PropertyValueFactory<>("statusDaConta"));
+    }
+
+    private void carregarDadosAnotacoesAsync() {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                carregarDadosAnotacoes();
+                return null;
+            }
+        };
+
+        task.setOnFailed(e -> {
+            System.err.println("Erro async ao carregar anotações: " + task.getException().getMessage());
+        });
+
+        new Thread(task).start();
+    }
+
+    private void carregarDadosFundosAsync() {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                carregarDadosFundos();
+                return null;
+            }
+        };
+
+        task.setOnFailed(e -> {
+            System.err.println("Erro async ao carregar fundos: " + task.getException().getMessage());
+        });
+
+        new Thread(task).start();
+    }
+
+    private void carregarDadosDespesasAsync() {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                carregarDadosDespesas();
+                return null;
+            }
+        };
+
+        task.setOnFailed(e -> {
+            System.err.println("Erro async ao carregar despesas: " + task.getException().getMessage());
+        });
+
+        new Thread(task).start();
     }
 
     private <T> void configurarClique(TableView<T> tableView) {
