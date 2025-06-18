@@ -9,6 +9,7 @@ import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
 import dev_marcelo.maNotes.infra.security.interface_grafica.tela_login.LoginApiClient;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -120,7 +121,7 @@ public class CalendarApiClient {
         }
     }
 
-    private Long buscarIdPorNomeEDia(String nomeDoEvento, String diaMarcado) throws Exception {
+    protected Long buscarIdPorNomeEDia(String nomeDoEvento, String diaMarcado) throws Exception {
         List<Lembrete> lembretes = buscarLembretes();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -133,6 +134,29 @@ public class CalendarApiClient {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado: " + nomeDoEvento + " no dia " + diaMarcado));
     }
+
+    public void removerLembrete(Long id) throws Exception {
+        String DELETE_URL = BASE_URL + "/" + id;
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(DELETE_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
+                .header("Content-Type", "application/json")
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200 || response.statusCode() == 204) {
+            System.out.println("Lembrete removido com sucesso!");
+        } else if (response.statusCode() == 404) {
+            throw new ApiNotFoundException("Lembrete não encontrado para remoção: Código " + response.statusCode() + " - " + response.body());
+        } else {
+            throw new ApiChangeValorException("Erro ao remover o lembrete: Código " + response.statusCode() + " - " + response.body());
+        }
+    }
+
 }
 
 

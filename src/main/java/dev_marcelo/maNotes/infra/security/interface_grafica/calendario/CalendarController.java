@@ -1,11 +1,17 @@
 package dev_marcelo.maNotes.infra.security.interface_grafica.calendario;
 
 import dev_marcelo.maNotes.entity.Lembrete;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiChangeValorException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiCreateException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.*;
@@ -64,24 +70,18 @@ public class CalendarController implements Initializable {
 
     private void drawCalendar() {
         try {
-            // Buscar os lembretes da API e preencher o mapa 'eventos'
             List<Lembrete> lembretes = apiClient.buscarLembretes();
 
-            eventos.clear(); // Limpa eventos anteriores antes de recarregar
+            eventos.clear();
 
             for (Lembrete lembrete : lembretes) {
                 String dataChave = lembrete.getDiaMarcado().toString(); // Garante formato YYYY-MM-DD
                 eventos.computeIfAbsent(dataChave, k -> new ArrayList<>()).add(new CalendarActivity(lembrete.getNomeDoEvento()));
             }
-
-            // Debug: Verificar se os eventos foram carregados corretamente
-            System.out.println("Eventos carregados: " + eventos);
-
         } catch (Exception e) {
-            System.err.println("Erro ao buscar eventos do calendário: " + e.getMessage());
+            throw new ApiNotFoundException("Erro ao buscar eventos do calendário: ");
         }
 
-        // Agora, continua o código original para desenhar o calendário
         calendar.getChildren().clear();
         ano.setText(String.valueOf(mesAtual.getYear()));
         mes.setText(String.valueOf(mesAtual.getMonth()));
@@ -104,7 +104,7 @@ public class CalendarController implements Initializable {
             grid.getColumnConstraints().add(new ColumnConstraints(100));
         }
 
-        LocalDate hoje = LocalDate.now(); // Obtém a data atual
+        LocalDate hoje = LocalDate.now();
 
         for (int i = 0; i < totalCells; i++) {
             VBox cell = new VBox();
@@ -162,7 +162,7 @@ public class CalendarController implements Initializable {
                 try {
                     apiClient.criarLembrete(dialog.getResult(),dataChave);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new ApiCreateException("nao foi possivel criar o lembrete");
                 }
                 eventos.computeIfAbsent(dataChave, k -> new ArrayList<>())
                         .add(new CalendarActivity(ZonedDateTime.now(), evento, eventos.get(dataChave).size() + 1));
@@ -174,22 +174,14 @@ public class CalendarController implements Initializable {
     private void abrirMenuDeOpcoes(int day) {
         String dataChave = String.format("%04d-%02d-%02d", mesAtual.getYear(), mesAtual.getMonthValue(), day);
 
-        // Adiciona sempre a opção de adicionar evento
         List<String> options = new ArrayList<>();
         options.add("Adicionar Evento");
-
-        // Obtém a lista de eventos do dia, se houver
         List<CalendarActivity> activities = eventos.getOrDefault(dataChave, new ArrayList<>());
 
-        System.out.println("Eventos do dia " + dataChave + ": " + activities); // Debug
-
-        // Se houver eventos, adiciona opções de edição e remoção
         if (!activities.isEmpty()) {
             options.add("Editar Evento");
             options.add("Remover Evento");
         }
-
-        // Exibe o menu com as opções disponíveis
         ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
         dialog.setTitle("Gerenciar Evento");
         dialog.setHeaderText("Escolha uma ação para o dia " + day);
@@ -240,10 +232,9 @@ public class CalendarController implements Initializable {
                 try {
                     apiClient.editarLembrete(dialog.getResult(),editDialog.getResult(),dataChave);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new ApiChangeValorException("nao foi possivel editar o evento");
                 }
 
-                // Atualiza o mapa explicitamente
                 eventos.put(dataChave, new ArrayList<>(activities));
 
                 // Atualiza o calendário
@@ -252,23 +243,20 @@ public class CalendarController implements Initializable {
         });
     }
     private void removerEvento(int dia) {
-        String dataChave = mesAtual.getYear() + "-" + mesAtual.getMonthValue() + "-" + dia;
-
-        // Verifica se há eventos no dia
+        String dataChave = String.format("%04d-%02d-%02d", mesAtual.getYear(), mesAtual.getMonthValue(), dia);
         if (!eventos.containsKey(dataChave) || eventos.get(dataChave).isEmpty()) {
             return;
         }
 
         List<CalendarActivity> activities = eventos.get(dataChave);
 
-        // Cria uma lista com os nomes dos eventos disponíveis
         List<String> eventNames = activities.stream()
                 .map(CalendarActivity::getClientName)
                 .collect(Collectors.toList());
 
-        if (eventNames.isEmpty()) return; // Caso não haja eventos, não faz nada
+        if (eventNames.isEmpty()) return;
 
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, eventNames);
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(eventNames.get(0), eventNames);
         dialog.setTitle("Remover Evento");
         dialog.setHeaderText("Escolha um evento para remover:");
         dialog.setContentText("Evento:");
@@ -276,16 +264,32 @@ public class CalendarController implements Initializable {
         Optional<String> eventToRemove = dialog.showAndWait();
 
         eventToRemove.ifPresent(selectedEvent -> {
-            // Remove o evento da lista
-            activities.removeIf(e -> e.getClientName().equals(selectedEvent));
+            Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmDialog.setTitle("Confirmação de Remoção");
+            confirmDialog.setHeaderText(null);
+            confirmDialog.setContentText("Tem certeza que deseja remover o evento: " + selectedEvent + "?");
 
-            // Remove o dia do mapa se não houver mais eventos
-            if (activities.isEmpty()) {
-                eventos.remove(dataChave);
+            Optional<ButtonType> confirmation = confirmDialog.showAndWait();
+
+            if (confirmation.isPresent() && confirmation.get() == ButtonType.OK) {
+                try {
+                    Long id = apiClient.buscarIdPorNomeEDia(selectedEvent, dataChave);
+                    apiClient.removerLembrete(id);
+                } catch (IllegalArgumentException e) {
+                    throw new ApiNotFoundException("Evento não encontrado:");
+                } catch (Exception e) {
+                    System.err.println("Erro ao remover o lembrete da API: " + e.getMessage());
+                }
+
+                activities.removeIf(e -> e.getClientName().equals(selectedEvent));
+
+                if (activities.isEmpty()) {
+                    eventos.remove(dataChave);
+                }
+
+                // Atualiza o calendário
+                drawCalendar();
             }
-
-            // Atualiza o calendário para refletir a remoção
-            drawCalendar();
         });
     }
 }
