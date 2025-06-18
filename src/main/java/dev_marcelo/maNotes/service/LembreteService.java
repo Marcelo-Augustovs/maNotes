@@ -2,7 +2,6 @@ package dev_marcelo.maNotes.service;
 
 import dev_marcelo.maNotes.dto.LembreteDto;
 import dev_marcelo.maNotes.entity.Lembrete;
-import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
 import dev_marcelo.maNotes.repository.LembreteRepository;
 import lombok.RequiredArgsConstructor;

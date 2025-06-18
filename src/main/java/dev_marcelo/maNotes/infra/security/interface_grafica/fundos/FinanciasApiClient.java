@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev_marcelo.maNotes.entity.Fundos;
 import dev_marcelo.maNotes.infra.security.exceptions.ApiChangeValorException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiCreateException;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiDeleteException;
 import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
 import dev_marcelo.maNotes.infra.security.interface_grafica.tela_login.LoginApiClient;
 
@@ -40,37 +42,31 @@ public class FinanciasApiClient {
         if (response.statusCode() == 201) {
             return response.body();
         } else {
-            throw new RuntimeException("Falha ao adicionar fundos: Código " + response.statusCode() + " - " + response.body());
+            throw new ApiCreateException("Falha ao adicionar fundos: Código " + response.statusCode() + " - " + response.body());
         }
     }
 
 
     public List<Fundos> buscarFundos() throws Exception {
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(BASE_URL))
-                    .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
-                    .header("Accept", "application/json")
-                    .GET()
-                    .build();
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(BASE_URL))
+                .header("Authorization", "Bearer " + LoginApiClient.getJwtToken())
+                .header("Accept", "application/json")
+                .GET()
+                .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.registerModule(new JavaTimeModule()); // Adiciona suporte a LocalDate
-
-                return Arrays.asList(objectMapper.readValue(response.body(), Fundos[].class));
-            } else {
-                throw new ApiNotFoundException("Erro ao buscar fundos: " + response.body());
-            }
-        } catch (Exception e) {
-            System.err.println("Erro ao conectar à API: " + e.getMessage());
-            e.printStackTrace();
-            throw e;
+        if (response.statusCode() == 200) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            return Arrays.asList(objectMapper.readValue(response.body(), Fundos[].class));
+        } else {
+            throw new ApiNotFoundException("Erro ao buscar fundos: Código " + response.statusCode() + " - " + response.body());
         }
     }
+
 
     public String editarFundos(Long id,String nomeFundo, String valorRecebido) throws URISyntaxException, IOException, InterruptedException {
         String PATCH_URL = BASE_URL + "/" + id;
@@ -114,7 +110,7 @@ public class FinanciasApiClient {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 204) {
-                throw new RuntimeException("Falha ao de " + response.statusCode() + " - " + response.body());
+                throw new ApiDeleteException("Falha ao de " + response.statusCode() + " - " + response.body());
             }
         }catch (Exception e){
             e.printStackTrace();
