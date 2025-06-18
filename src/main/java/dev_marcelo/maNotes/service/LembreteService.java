@@ -2,6 +2,7 @@ package dev_marcelo.maNotes.service;
 
 import dev_marcelo.maNotes.dto.LembreteDto;
 import dev_marcelo.maNotes.entity.Lembrete;
+import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
 import dev_marcelo.maNotes.repository.LembreteRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LembreteService {
     private final LembreteRepository repository;
+    private final UsuarioService usuarioService;
 
     @Transactional
-    public LembreteDto create(LembreteDto dto){
+    public LembreteDto create(LembreteDto dto, long usuarioId){
         Lembrete lembretes = new Lembrete();
         lembretes.setNomeDoEvento(dto.nomeDoEvento());
         lembretes.setDiaMarcado(dto.diaMarcado());
+        lembretes.setUsuario(usuarioService.buscarPorId(usuarioId));
         repository.save(lembretes);
         return dto;
     }
@@ -44,6 +47,7 @@ public class LembreteService {
         return repository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Long getIdByName(String nomeDoEvento) {
         Lembrete evento = repository.findByNomeDoEvento(nomeDoEvento);
         return evento.getId();
