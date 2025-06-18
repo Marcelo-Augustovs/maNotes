@@ -2,6 +2,7 @@ package dev_marcelo.maNotes.controller;
 
 import dev_marcelo.maNotes.dto.LembreteDto;
 import dev_marcelo.maNotes.entity.Lembrete;
+import dev_marcelo.maNotes.entity.Usuario;
 import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
 import dev_marcelo.maNotes.service.LembreteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +37,9 @@ public class LembreteController {
                             content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class))),
             })
     @PostMapping
-    public ResponseEntity<LembreteDto> criar(@RequestBody LembreteDto dto){
-       lembreteService.create(dto);
+    public ResponseEntity<LembreteDto> criar(@RequestBody LembreteDto dto,
+                                             @AuthenticationPrincipal Usuario usuario){
+       lembreteService.create(dto,usuario.getId());
        return ResponseEntity.status(201).body(dto);
     }
 
