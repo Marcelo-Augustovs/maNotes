@@ -2,6 +2,7 @@ package dev_marcelo.maNotes;
 
 import dev_marcelo.maNotes.dto.anotacoes.AnotacoesCreateDto;
 import dev_marcelo.maNotes.dto.anotacoes.AnotacoesResponseDto;
+import dev_marcelo.maNotes.infra.security.exceptions.ErrorMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +13,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(scripts = "/sql/anotacao/anotacao-insert.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(scripts = "/sql/anotacao/anotacao-insert.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "/sql/anotacao/anotacao-delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class AnotacaoIT {
 
@@ -25,6 +26,7 @@ public class AnotacaoIT {
                 .post()
                 .uri("/api/v1/anotacoes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana", "123"))
                 .bodyValue(new AnotacoesCreateDto("anotação criada com sucesso"))
                 .exchange()
                 .expectStatus().isCreated()
@@ -33,13 +35,26 @@ public class AnotacaoIT {
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
     }
+    @Test
+    public void criarAnotacao_SemUsuario_RetornarErrorMessage401(){
+        ErrorMessage responseBody = testClient
+                .post()
+                .uri("/api/v1/anotacoes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new AnotacoesCreateDto("anotação criada com sucesso"))
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+    }
 
     @Test
-    public void atualizarTexto_ComUsuarioAutenticado_RetornarStatus204(){
+    public void atualizarTexto_ComUsuarioAutenticado_RetornarAnotacaoStatus200(){
        var responseBody = testClient
                 .patch()
                 .uri("/api/v1/anotacoes/100")
                 .contentType(MediaType.APPLICATION_JSON)
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana", "123"))
                 .bodyValue( new AnotacoesCreateDto("novo texto"))
                 .exchange()
                 .expectStatus().isOk()
@@ -47,6 +62,18 @@ public class AnotacaoIT {
                 .returnResult().getResponseBody();
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+    }
+    @Test
+    public void atualizarTexto_SemUsuario_RetornarStatus401(){
+        ErrorMessage responseBody = testClient
+                .patch()
+                .uri("/api/v1/anotacoes/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue( new AnotacoesCreateDto("novo texto"))
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
 
     }
 
@@ -55,12 +82,45 @@ public class AnotacaoIT {
         List<AnotacoesResponseDto> responseBody = testClient
                 .get()
                 .uri("/api/v1/anotacoes")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana", "123"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(AnotacoesResponseDto.class)
                 .returnResult().getResponseBody();
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+    }
+    @Test
+    public void buscarTodosUsuarios_SemAuthenticacao_RetornarErrorMessage401(){
+        ErrorMessage responseBody = testClient
+                .get()
+                .uri("/api/v1/anotacoes")
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+    }
+
+    @Test
+    public void deletarAnotacao_ComUsuarioLogado_RetornarAnotacaoComStatus204(){
+        var responseBody = testClient
+                .delete()
+                .uri("/api/v1/anotacoes/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana", "123"))
+                .exchange()
+                .expectStatus().isNoContent();
+
+        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+    }
+    @Test
+    public void deletarAnotacao_SemUsuario_RetornarErrorMessage401(){
+        var responseBody = testClient
+                .delete()
+                .uri("/api/v1/anotacoes/100")
+                .exchange()
+                .expectStatus().isForbidden();
+
     }
 
 }
