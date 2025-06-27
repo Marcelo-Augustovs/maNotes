@@ -13,7 +13,7 @@ public class JwtAuthentication{
     public static Consumer<HttpHeaders> getHeaderAuthorization(WebTestClient client, String username, String password){
         String token = client
                 .post()
-                .uri("/api/v1/auth")
+                .uri("/api/v1/auth/login")
                 .bodyValue(new AuthenticationDto(username,password))
                 .exchange()
                 .expectStatus().isOk()
