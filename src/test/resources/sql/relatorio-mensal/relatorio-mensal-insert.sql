@@ -1,3 +1,7 @@
+insert IGNORE into usuarios (id, login, senha, role) values (100, 'ana', '$2a$10$OoiEq8GQEsNsgqNP7l/axuTbwiaxDm4ZfPRLNGgHLoFZJutSckNPS', 'ADMIN');
+insert IGNORE into usuarios (id, login, senha, role) values (101, 'bia', '$2a$10$OoiEq8GQEsNsgqNP7l/axuTbwiaxDm4ZfPRLNGgHLoFZJutSckNPS', 'USER');
+insert IGNORE into usuarios (id, login, senha, role) values (102, 'bob', '$2a$10$OoiEq8GQEsNsgqNP7l/axuTbwiaxDm4ZfPRLNGgHLoFZJutSckNPS', 'USER');
+
 INSERT INTO fundo_despesa_mensal(id, mes, fundos, despesa, total) VALUES (100,1,500,350,150);
 INSERT INTO fundo_despesa_mensal(id, mes, fundos, despesa, total, data_criacao) VALUES (101,3,700,450,250,'2025-03-17');
 INSERT INTO fundo_despesa_mensal(id, mes, fundos, despesa, total) VALUES (102,5,850,350,500);
