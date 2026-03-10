@@ -18,37 +18,41 @@ public class AnotacoesService {
 
     @Transactional
     public Anotacoes save(Anotacoes anotacoes){
+        validateText(anotacoes.getAnotacao());
         return anotacoesRepository.save(anotacoes);
     }
 
     @Transactional
-    public Anotacoes updateText(Long id, String novoTexto){
-        Anotacoes notes = anotacoesRepository.findById(id).orElseThrow(
-                () -> new ApiNotFoundException("Anotação não encontrada")
-        );
-        notes.setAnotacao(novoTexto);
+    public Anotacoes updateText(Long id, String newText){
+        validateText(newText);
+        Anotacoes notes = this.findNotesById(id);
+        notes.setAnotacao(newText);
+
         return notes;
     }
 
     @Transactional
     public Anotacoes delete(Long id){
-        Anotacoes notes = anotacoesRepository.findById(id).orElseThrow(
-                () -> new ApiNotFoundException("Anotação não encontrada")
-        );
-        anotacoesRepository.deleteById(notes.getId());
+        Anotacoes notes = this.findNotesById(id);
+        anotacoesRepository.deleteById(id);
         return notes;
     }
 
     @Transactional(readOnly = true)
     public List<Anotacoes> findAllAnotacoes() {
-        List<Anotacoes> notes = new ArrayList<>();
-        notes = anotacoesRepository.findAll();
-        return notes;
+        return anotacoesRepository.findAll();
     }
+
     @Transactional(readOnly = true)
-    public Anotacoes findAnotacao(Long id) {
+    public Anotacoes findNotesById(Long id) {
         return anotacoesRepository.findById(id).orElseThrow(
                 () -> new ApiNotFoundException("Anotação não encontrada")
         );
     }
+    private void validateText(String text){
+        if(text == null || text.isBlank()) {
+            throw new IllegalArgumentException("Texto inválido");
+        }
+    }
+
 }

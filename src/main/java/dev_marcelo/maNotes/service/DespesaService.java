@@ -5,6 +5,8 @@ import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
 import dev_marcelo.maNotes.repository.DespesaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,21 +36,20 @@ public class DespesaService {
 
 
     @Transactional(readOnly = true)
-    public Despesa findAcountById(Long id) {
+    public Despesa findExpenseById(Long id) {
         return despesaRepository.findById(id)
                 .orElseThrow( () -> new ApiNotFoundException("despensa não encontrada"));
     }
 
     @Transactional
-    public void pagarContar(Long id) {
-       Despesa despesa = despesaRepository.findById(id)
-               .orElseThrow(() -> new RuntimeException());
+    public void payExpense(Long id) {
+       Despesa despesa = findExpenseById(id);
        despesa.setStatusDaConta(Despesa.StatusDaConta.PAGO);
     }
 
     @Transactional(readOnly = true)
-    public List<Despesa> findAllDespesas(){
-       return despesaRepository.findAll();
+    public Page<Despesa> findAllDespesas(Pageable pageable){
+       return despesaRepository.findAll(pageable);
     }
 
     @Transactional
@@ -57,20 +58,38 @@ public class DespesaService {
     }
 
     @Transactional
-    public Despesa updateDespesa(Long id, DespesaDto dto) {
-      Despesa despesa = despesaRepository.findById(id).orElseThrow(
-              () -> new RuntimeException("despesa não encontrada")
-      );
+    public Despesa updateDespesa(Long id, DespesaDto updatedExpense) {
+        Despesa despesa =  findExpenseById(id);
 
-      despesa.setNomeDaConta(
-        (dto.getNomeDaConta() == null || dto.getNomeDaConta().isEmpty())
-            ? despesa.getNomeDaConta()
-            : dto.getNomeDaConta() );
+        applyPatchUpdate(updatedExpense,despesa);
 
-        despesa.setValorDaConta(
-                (dto.getValorDaConta() == null || dto.getValorDaConta() < 0)
-                        ? despesa.getValorDaConta()
-                        : dto.getValorDaConta() );
         return despesa;
+    }
+
+    private void validateExpenseName(String nome) {
+        if (nome.isBlank()) {
+            throw new IllegalArgumentException("Nome inválido");
+        }
+    }
+
+    private void validateExpenseValor(Double valor) {
+        if (valor < 0) {
+            throw new IllegalArgumentException("Valor inválido");
+        }
+    }
+
+    private void applyPatchUpdate(DespesaDto updatedExpense, Despesa despesa){
+       String updateExpenseName = updatedExpense.getNomeDaConta();
+       Double updatedExpenseValor = updatedExpense.getValorDaConta();
+
+        if (updateExpenseName != null) {
+            validateExpenseName(updateExpenseName);
+            despesa.setNomeDaConta(updateExpenseName);
+        }
+
+        if (updatedExpenseValor != null) {
+            validateExpenseValor(updatedExpenseValor);
+            despesa.setValorDaConta(updatedExpenseValor);
+        }
     }
 }
