@@ -84,6 +84,7 @@ public class DespesaIT {
         List<Despesa> responseBody = testClient
                 .get()
                 .uri("/api/v1/despesa")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana", "123"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(Despesa.class)
@@ -92,7 +93,7 @@ public class DespesaIT {
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
     }
     @Test
-    public void buscarTodasDespesa_SemAuthenticacao_ErroMessageStatus401(){
+    public void buscarTodasDespesa_SemAuthenticacao_ErroMessageStatus403(){
         ErrorMessage responseBody = testClient
                 .get()
                 .uri("/api/v1/despesa")

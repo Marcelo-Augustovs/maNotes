@@ -74,7 +74,8 @@ public class AnotacoesController {
         return ResponseEntity.ok().body(AnotacoesMapper.toListDto(listaDeAnotacao));
     }
 
-    @Operation(summary = "Listar todas anotações cadastradas",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
+    @Operation(summary = "Listar todas anotações cadastradas",
+            description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
             security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200",description = "Lista com todas anotações cadatrados",
@@ -86,9 +87,12 @@ public class AnotacoesController {
             })
     @GetMapping("/{id}")
     public ResponseEntity<AnotacoesResponseDto> findAnotacoes(@PathVariable Long id){
-        Anotacoes anotacao = anotacoesService.findAnotacao(id);
-        return ResponseEntity.ok().body(AnotacoesMapper.toDto(anotacao));
-    }
+        return ResponseEntity.ok()
+                .body(
+                    AnotacoesMapper.toDto(
+                            anotacoesService.findNotesById(id) )
+                    );
+}
 
     @Operation(summary = "deleta anotação",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
             security = @SecurityRequirement(name = "security"),
