@@ -14,6 +14,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -55,13 +58,13 @@ public class FundosController {
             })
     @PatchMapping("/{id}")
     public ResponseEntity<Fundos> updateValores(@PathVariable Long id, @RequestBody FundosValoresDto dto){
-        Fundos fundos = fundosService.updateValor(id,dto.getOrigemDoFundo(),dto.getValorRecebido());
+        Fundos fundos = fundosService.updatePatchIncome(id,dto.getOrigemDoFundo(),dto.getValorRecebido());
         return ResponseEntity.ok().body(fundos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Fundos> findFundos(@PathVariable Long id){
-        return ResponseEntity.ok().body(fundosService.findById(id));
+        return ResponseEntity.ok().body(fundosService.findIncomeById(id));
     }
 
     @Operation(summary = "Listar todos fundos",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
@@ -73,8 +76,10 @@ public class FundosController {
                             content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping()
-    public ResponseEntity<List<Fundos>> findAllFundos(){
-        return ResponseEntity.ok().body(fundosService.findAllFundos());
+    public ResponseEntity<Page<Fundos>> findAllFundos(
+            @PageableDefault(size = 10, sort = "id") Pageable pageable
+    ){
+        return ResponseEntity.ok().body(fundosService.findAllFundos(pageable));
     }
 
     @Operation(summary = "deletar fundos",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",

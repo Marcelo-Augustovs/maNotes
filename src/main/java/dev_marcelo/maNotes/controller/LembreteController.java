@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -64,8 +66,8 @@ public class LembreteController {
                             content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping
-    public ResponseEntity<List<Lembrete>> getAll(){
-        List<Lembrete> lista = lembreteService.findAll();
+    public ResponseEntity<Page<Lembrete>> getAll(Pageable pageable){
+        Page<Lembrete> lista = lembreteService.findAll(pageable);
         return ResponseEntity.ok().body(lista);
     }
 

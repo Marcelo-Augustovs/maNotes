@@ -14,6 +14,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -73,7 +76,7 @@ public class DespesaController {
             })
     @GetMapping("/{id}")
     public ResponseEntity<Despesa> findById(@PathVariable Long id){
-        Despesa despesa = despesaService.findAcountById(id);
+        Despesa despesa = despesaService.findExpenseById(id);
         return ResponseEntity.ok(despesa);
     }
 
@@ -86,8 +89,10 @@ public class DespesaController {
                             content = @Content(mediaType = "application/json",schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping()
-    public ResponseEntity<List<Despesa>> findAll(){
-        List<Despesa> listaDeDespesa = despesaService.findAllDespesas();
+    public ResponseEntity<Page<Despesa>> findAll(
+            @PageableDefault(size = 10, sort = "id") Pageable pageable
+        ){
+        Page<Despesa> listaDeDespesa = despesaService.findAllDespesas(pageable);
         return ResponseEntity.ok(listaDeDespesa);
     }
 
@@ -103,7 +108,7 @@ public class DespesaController {
             })
     @PatchMapping("/{id}/status")
     public ResponseEntity<Void> updateStatusConta(@PathVariable Long id){
-        despesaService.pagarContar(id);
+        despesaService.payExpense(id);
         return ResponseEntity.ok().build();
     }
 
@@ -119,7 +124,7 @@ public class DespesaController {
             })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteConta(@PathVariable Long id){
-        despesaService.delete(despesaService.findAcountById(id));
+        despesaService.delete(despesaService.findExpenseById(id));
         return ResponseEntity.noContent().build();
     }
 
