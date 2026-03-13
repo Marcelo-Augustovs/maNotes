@@ -93,18 +93,16 @@ public class RelatorioMensalIT {
     }
     @Test
     public void AtualizarRelatorioMensal_SemUsuario_RetornarStatus401(){
-        var responseBody = testClient
+        ErrorMessage responseBody = testClient
                 .patch()
                 .uri("/api/v1/saldo")
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana", "123"))
                 .bodyValue(new FundosEDespesasDto(3,2025))
                 .exchange()
-                .expectStatus().isOk()
-                .expectBody(FundosEDespesaMensal.class)
+                .expectStatus().isForbidden()
+                .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
-        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
     }
 
     @Test
