@@ -1,9 +1,10 @@
 package dev_marcelo.maNotes.service;
 
-import dev_marcelo.maNotes.dto.fundos_despesa.BalancoMensal;
+import dev_marcelo.maNotes.dto.fundos_despesa.BalancoMensalDto;
 import dev_marcelo.maNotes.entity.Despesa;
 import dev_marcelo.maNotes.entity.Fundos;
 import dev_marcelo.maNotes.entity.FundosEDespesaMensal;
+import dev_marcelo.maNotes.infra.security.exceptions.ApiNotFoundException;
 import dev_marcelo.maNotes.repository.DespesaRepository;
 import dev_marcelo.maNotes.repository.FundosEDespesaMensalRepository;
 import dev_marcelo.maNotes.repository.FundosRepository;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,51 +24,27 @@ public class FundosEDespesasService {
     private final FundosEDespesaMensalRepository repository;
 
     @Transactional
-    public FundosEDespesaMensal criar(int mes, Integer ano){
+    public FundosEDespesaMensal criar(int mes, Integer year){
+        //if year is null, return localDate.now
+        year = validateYear(year);
 
-        if (ano == null || ano == 0){
-            ano = LocalDate.now().getYear();
-        }
+        BalancoMensalDto balancoMensalDto = calculateMonthlyBalance(mes,year);
 
-        BalancoMensal balancoMensal = calcularTotal(mes,ano);
-        FundosEDespesaMensal fundosEDespesaMensal = new FundosEDespesaMensal();
+        FundosEDespesaMensal fundosEDespesaMensal = createRelatorioMensal(balancoMensalDto);
 
-        fundosEDespesaMensal.setMes(balancoMensal.mes());
-        fundosEDespesaMensal.setFundos(balancoMensal.totalFundos());
-        fundosEDespesaMensal.setDespesa(balancoMensal.totalDespesas());
-        fundosEDespesaMensal.setTotal(balancoMensal.ganhoDoMes());
         return repository.save(fundosEDespesaMensal);
     }
+
     @Transactional
-    public BalancoMensal calcularTotal(int mes, int ano) {
-        List<Fundos> listaFundos =  fundosRepository.findAll();
-        List<Despesa> listaDespesa = despesaRepository.findAll();
+    public BalancoMensalDto calculateMonthlyBalance(int mes, int ano) {
+        List<Fundos> MonthIncomes = findMonthlyIcomes(mes,ano);
+        List<Despesa> MonthExpenses = findMonthlyExpenses(mes,ano);
 
-        // Filtra os registros pelo mês especificado
-        List<Fundos> fundosDoMes = listaFundos.stream()
-                .filter(item -> item.getDataModificacao().getMonthValue() == mes && item.getDataModificacao().getYear() == ano)
-                .collect(Collectors.toList());
+        double totalIncomes = calculateMonthlyIncomesTotal(MonthIncomes);
+        double totalExpenses = calculateMonthlyExpensesTotal(MonthExpenses);
+        double totalBalance = totalIncomes - totalExpenses;
 
-        List<Despesa> despesasDoMes = listaDespesa.stream()
-                .filter(item -> item.getDataModificacao().getMonthValue() == mes && item.getDataModificacao().getYear() == ano)
-                .collect(Collectors.toList());
-
-        // Soma os valores recebidos dos fundos
-        double totalFundos = fundosDoMes.stream()
-                .map(fundos -> fundos.getValorRecebido())// Extrai os valores
-                .reduce(0.00,Double::sum); // Soma os valores
-
-        // Soma os valores das despesas
-        double totalDespesas = despesasDoMes.stream()
-                .map(despesa -> despesa.getValorDaConta()) // Extrai os valores
-                .reduce(0.00, Double::sum); // Soma os valores
-
-        // Exibe os totais calculados
-        System.out.println("Total de Fundos no mês " + mes + ": " + totalFundos);
-        System.out.println("Total de Despesas no mês " + mes + ": " + totalDespesas);
-
-        double ganhoDoMes = totalFundos - totalDespesas;
-        return new BalancoMensal(mes,totalFundos,totalDespesas, ganhoDoMes);
+        return new BalancoMensalDto(mes,totalIncomes,totalExpenses, totalBalance);
     }
 
     @Transactional(readOnly = true)
@@ -78,16 +54,9 @@ public class FundosEDespesasService {
 
     @Transactional
     public FundosEDespesaMensal atualizarMes(int mes, int ano) {
-        BalancoMensal saldoAtualizado = calcularTotal(mes, ano);
+        BalancoMensalDto newBalance = calculateMonthlyBalance(mes, ano);
 
-        FundosEDespesaMensal saldo = repository.findAll().stream()
-                .filter(saldoMensal -> saldoMensal.getMes() == mes && saldoMensal.getDataCriacao().getYear() == ano)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Nenhum registro encontrado para o mês " + mes + " e ano " + ano));
-
-        saldo.setFundos(saldoAtualizado.totalFundos());
-        saldo.setDespesa(saldoAtualizado.totalDespesas());
-        saldo.setTotal(saldoAtualizado.ganhoDoMes());
+        FundosEDespesaMensal saldo = updateMonthExtract(newBalance,ano);
 
         return repository.save(saldo);
     }
@@ -95,9 +64,81 @@ public class FundosEDespesasService {
     @Transactional
     public void deletarFundosEDespesasMensal(Long id) {
         FundosEDespesaMensal fundosEDespesaMensal = repository.findById(id).orElseThrow(
-                () -> new RuntimeException(String.format("id:%s não encontrado",id))
+                () -> new ApiNotFoundException(String.format("id:%s não encontrado",id))
         );
-        System.out.println(fundosEDespesaMensal);
         repository.delete(fundosEDespesaMensal);
+    }
+
+    private int validateYear(Integer year){
+        if (year == null || year == 0){
+         return year = LocalDate.now().getYear();
+        }
+        return year;
+    }
+
+    private List<Fundos> findMonthlyIcomes(int month, int year){
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+
+        List<Fundos> incomeMonth = fundosRepository.findByDataModificacaoBetween(start, end);
+
+        return incomeMonth;
+    }
+
+    private List<Despesa> findMonthlyExpenses(int month, int year){
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+
+        List<Despesa> expenseMonth = despesaRepository.findByDataModificacaoBetween(start, end);
+
+        return expenseMonth;
+    }
+
+    private Double calculateMonthlyIncomesTotal(List<Fundos> incomeMonth){
+        double sumMonthIncome = incomeMonth.stream()
+                .map(fundos -> fundos.getValorRecebido())
+                .reduce(0.00,Double::sum);
+
+        return sumMonthIncome;
+    }
+
+    private Double calculateMonthlyExpensesTotal(List<Despesa> MonthExpense){
+        double sumMonthExpense = MonthExpense.stream()
+                .map(expenses -> expenses.getValorDaConta())
+                .reduce(0.00,Double::sum);
+
+        return sumMonthExpense;
+    }
+
+    private FundosEDespesaMensal createRelatorioMensal(BalancoMensalDto balancoMensalDto){
+        FundosEDespesaMensal relatorioMensal = new FundosEDespesaMensal();
+
+        relatorioMensal.setMes(balancoMensalDto.mes());
+        relatorioMensal.setFundos(balancoMensalDto.totalFundos());
+        relatorioMensal.setDespesa(balancoMensalDto.totalDespesas());
+        relatorioMensal.setTotal(balancoMensalDto.ganhoDoMes());
+
+        return relatorioMensal;
+    }
+
+    private FundosEDespesaMensal updateMonthExtract(BalancoMensalDto newBalance, int year){
+        int month = newBalance.mes();
+
+        FundosEDespesaMensal monthExtract = monthExtract(month,year);
+
+        monthExtract.setFundos(newBalance.totalFundos());
+        monthExtract.setDespesa(newBalance.totalDespesas());
+        monthExtract.setTotal(newBalance.ganhoDoMes());
+
+        return monthExtract;
+    }
+
+    private FundosEDespesaMensal monthExtract(int month, int year){
+        FundosEDespesaMensal monthExtract = repository.findAll().stream()
+                .filter(saldoMensal -> saldoMensal.getMes() == month && saldoMensal.getDataCriacao().getYear() == year)
+                .findFirst()
+                .orElseThrow(() -> new ApiNotFoundException("Nenhum registro encontrado para o mês " + month + " e ano " + year));
+
+        return monthExtract;
     }
 }
