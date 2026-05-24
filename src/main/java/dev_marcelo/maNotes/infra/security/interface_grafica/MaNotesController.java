@@ -376,7 +376,7 @@ public class MaNotesController {
 
         if (objeto instanceof AnotacoesResponseDto anotacao) {
             Long idAnotacao = anotacao.getId();
-            String textoAtual = anotacao.getAnotacao();
+            String textoAtual = anotacao.getNotes();
 
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("Editar Anotação");
