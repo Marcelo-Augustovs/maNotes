@@ -12,7 +12,8 @@ import java.time.LocalDate;
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
 public class AnotacoesResponseDto {
     private Long id;
-    private String anotacao;
+    private String title;
+    private String notes;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dataModificacao;
 }

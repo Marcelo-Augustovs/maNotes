@@ -24,6 +24,10 @@ public class Fundos implements Serializable {
     private String origemDoFundo;
     @Column(name = "valor_recebido")
     private Double valorRecebido;
+    @Column(name = "categoria")
+    private String categoria;
+    @Column(name = "pagamento")
+    private String pagamento;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id",referencedColumnName = "id")

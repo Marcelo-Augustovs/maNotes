@@ -24,6 +24,11 @@ public class Despesa implements Serializable {
     private String nomeDaConta;
     @Column(name = "valor_conta")
     private Double valorDaConta;
+    @Column(name = "category")
+    private String category;
+    @Column(name = "payment")
+    private String payment;
+
 
     @ManyToOne
     @JoinColumn(name = "usuario_id",referencedColumnName = "id")

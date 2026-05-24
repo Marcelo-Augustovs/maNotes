@@ -7,5 +7,6 @@ import lombok.Setter;
 
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter
 public class AnotacoesCreateDto {
-    private String anotacao;
+    private String notes;
+    private String title;
 }

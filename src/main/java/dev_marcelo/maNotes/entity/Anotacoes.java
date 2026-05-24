@@ -22,7 +22,11 @@ public class Anotacoes implements Serializable {
     @Column(name = "id")
     private Long id;
     @Column(name = "anotacao")
-    private String anotacao;
+    private String notes;
+    @Column(name = "title")
+    private String title;
+    @Column(name = "position")
+    private Integer position;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id",referencedColumnName = "id")
