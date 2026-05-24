@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @Service
@@ -22,10 +22,16 @@ public class FundosService {
     }
 
     @Transactional
-    public Fundos updatePatchIncome(Long id, String newSource, Double newValor){
+    public Fundos updatePatchIncome(
+            Long id,
+            String newSource,
+            Double newValor,
+            String newcategoria,
+            LocalDate newdataModificacao,
+            String newpagamento){
         Fundos updatedIncome = findIncomeById(id);
 
-        applyPatchUpdate(updatedIncome,newSource,newValor);
+        applyPatchUpdate(updatedIncome,newSource,newValor,newcategoria,newdataModificacao,newpagamento);
 
         return updatedIncome;
     }
@@ -47,10 +53,10 @@ public class FundosService {
         fundosRepository.delete(fundos);
     }
 
-    private void applyPatchUpdate(Fundos income, String incomeNewSource,Double incomeNewValor){
+    private void applyPatchUpdate(Fundos income, String incomeNewSource,Double incomeNewValor,String incomeNewCategoria,LocalDate incomeNewDataModificacao, String IncomeNewPagamento){
 
         if(incomeNewSource != null) {
-            validateIncomeSource(incomeNewSource);
+            validateIncomeString(incomeNewSource);
             income.setOrigemDoFundo(incomeNewSource);
         }
 
@@ -58,11 +64,24 @@ public class FundosService {
             validateIncomeValor(incomeNewValor);
             income.setValorRecebido(incomeNewValor);
         }
-    }
 
-    private void validateIncomeSource(String icomeSource){
-        if (icomeSource.isEmpty()){
-            throw new IllegalArgumentException("Adicione a origem da Renda");
+        if(incomeNewCategoria != null){
+            validateIncomeString(incomeNewCategoria);
+            income.setCategoria(incomeNewCategoria);
+        }
+
+        if(IncomeNewPagamento != null){
+            validateIncomeString(IncomeNewPagamento);
+            income.setPagamento(IncomeNewPagamento);
+        }
+
+        if(incomeNewDataModificacao != null){
+            income.setDataModificacao(incomeNewDataModificacao);
+        }
+    }
+    private void validateIncomeString(String icomeString){
+        if (icomeString.isEmpty()){
+            throw new IllegalArgumentException("O(s) campo(s) não podem ser vazio(s)");
         }
     }
 
@@ -70,5 +89,17 @@ public class FundosService {
         if (incomeValor <= 0){
             throw new IllegalArgumentException("o valor da renda tem que ser um número maior que zero");
         }
+    }
+
+    public Page<Fundos> findFundos(String start, String end, Pageable pageable){
+
+        if (start != null && end != null) {
+            LocalDate startDate = LocalDate.parse(start);
+            LocalDate endDate = LocalDate.parse(end);
+
+            return fundosRepository.findByDataModificacaoBetween(startDate, endDate, pageable);
+        }
+
+        return fundosRepository.findAll(pageable);
     }
 }

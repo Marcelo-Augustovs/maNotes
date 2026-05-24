@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -81,15 +82,42 @@ public class DespesaService {
     private void applyPatchUpdate(DespesaDto updatedExpense, Despesa despesa){
        String updateExpenseName = updatedExpense.getNomeDaConta();
        Double updatedExpenseValor = updatedExpense.getValorDaConta();
+       String updatedCategory = updatedExpense.getCategory();
+       String updatedPayment = updatedExpense.getPayment();
+       LocalDate updatedData = updatedExpense.getDataModificacao();
 
         if (updateExpenseName != null) {
             validateExpenseName(updateExpenseName);
             despesa.setNomeDaConta(updateExpenseName);
         }
-
         if (updatedExpenseValor != null) {
             validateExpenseValor(updatedExpenseValor);
             despesa.setValorDaConta(updatedExpenseValor);
+        }
+        if (updatedCategory != null) {
+            validateExpenseName(updatedCategory);
+            despesa.setCategory(updatedCategory);
+        }
+        if (updatedPayment != null) {
+            validateExpenseName(updatedPayment);
+            despesa.setPayment(updatedPayment);
+        }
+        if (updatedData != null) {
+            despesa.setDataModificacao(updatedData);
+        }
+    }
+
+    public Page<Despesa> findDespesas(String start, String end, Pageable pageable) {
+        {
+
+            if (start != null && end != null) {
+                LocalDate startDate = LocalDate.parse(start);
+                LocalDate endDate = LocalDate.parse(end);
+
+                return despesaRepository.findByDataModificacaoBetween(startDate, endDate, pageable);
+            }
+
+            return despesaRepository.findAll(pageable);
         }
     }
 }

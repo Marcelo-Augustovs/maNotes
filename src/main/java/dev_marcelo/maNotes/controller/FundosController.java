@@ -1,6 +1,5 @@
 package dev_marcelo.maNotes.controller;
 
-
 import dev_marcelo.maNotes.dto.fundos.FundosValoresDto;
 import dev_marcelo.maNotes.entity.Fundos;
 import dev_marcelo.maNotes.entity.Usuario;
@@ -20,8 +19,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,7 +42,7 @@ public class FundosController {
     @PostMapping
     public ResponseEntity<Fundos> create(@RequestBody Fundos fundos,
                                          @AuthenticationPrincipal Usuario usuario){
-        fundos.setUsuario(usuarioService.buscarPorId(usuario.getId()));
+        fundos.setUsuario(usuarioService.findUserById(usuario.getId()));
         fundosService.save(fundos);
         return ResponseEntity.status(201).body(fundos);
     }
@@ -58,7 +55,9 @@ public class FundosController {
             })
     @PatchMapping("/{id}")
     public ResponseEntity<Fundos> updateValores(@PathVariable Long id, @RequestBody FundosValoresDto dto){
-        Fundos fundos = fundosService.updatePatchIncome(id,dto.getOrigemDoFundo(),dto.getValorRecebido());
+        Fundos fundos = fundosService.updatePatchIncome(id,dto.getOrigemDoFundo(),dto.getValorRecebido(),dto.getCategoria(),
+                dto.getDataModificacao(),
+                dto.getPagamento());
         return ResponseEntity.ok().body(fundos);
     }
 
@@ -77,9 +76,11 @@ public class FundosController {
             })
     @GetMapping()
     public ResponseEntity<Page<Fundos>> findAllFundos(
+            @RequestParam(required = false) String start,
+            @RequestParam(required = false) String end,
             @PageableDefault(size = 10, sort = "id") Pageable pageable
     ){
-        return ResponseEntity.ok().body(fundosService.findAllFundos(pageable));
+        return ResponseEntity.ok().body(fundosService.findFundos(start, end, pageable));
     }
 
     @Operation(summary = "deletar fundos",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",

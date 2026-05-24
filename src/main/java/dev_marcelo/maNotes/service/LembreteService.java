@@ -23,7 +23,7 @@ public class LembreteService {
     @Transactional
     public LembreteDto create(LembreteDto reminderDto, long userId){
         Lembrete reminder = new Lembrete();
-        Usuario loggedUser = usuarioService.buscarPorId(userId);
+        Usuario loggedUser = usuarioService.findUserById(userId);
 
 
         mapDtoToEntity(reminder, reminderDto,loggedUser);

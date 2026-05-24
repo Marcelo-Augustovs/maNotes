@@ -22,9 +22,7 @@ public class UsuarioService {
 
     @Transactional
     public Usuario updateSenha(Long idUsuario,String senhaAntiga, String novaSenha){
-       Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(
-               () -> new ApiNotFoundException(String.format("Usuario id=%s não encontrado",idUsuario))
-       );
+       Usuario usuario = findUserById(idUsuario);
        if(passwordEncoder.matches(senhaAntiga, usuario.getSenha())) {
            usuario.setSenha(passwordEncoder.encode(novaSenha));
        } else {
@@ -39,7 +37,7 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public Usuario buscarPorId(Long id){
+    public Usuario findUserById(Long id){
         return usuarioRepository.findById(id).orElseThrow(
                 () -> new ApiNotFoundException(String.format("Usuario id=%s não encontrado",id))
         );

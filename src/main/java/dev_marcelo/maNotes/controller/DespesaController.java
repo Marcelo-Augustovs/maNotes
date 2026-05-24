@@ -21,8 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/despesa")
@@ -47,7 +45,7 @@ public class DespesaController {
     public ResponseEntity<Despesa> create(@RequestBody DespesaDto dto,
                                           @AuthenticationPrincipal Usuario usuario){
         Despesa despesa = DespesaMapper.toDespesa(dto);
-        despesa.setUsuario(usuarioService.buscarPorId(usuario.getId()));
+        despesa.setUsuario(usuarioService.findUserById(usuario.getId()));
         despesaService.salvar(despesa);
         return ResponseEntity.status(201).body(despesa);
     }
@@ -90,9 +88,11 @@ public class DespesaController {
             })
     @GetMapping()
     public ResponseEntity<Page<Despesa>> findAll(
+            @RequestParam(required = false) String start,
+            @RequestParam(required = false) String end,
             @PageableDefault(size = 10, sort = "id") Pageable pageable
         ){
-        Page<Despesa> listaDeDespesa = despesaService.findAllDespesas(pageable);
+        Page<Despesa> listaDeDespesa = despesaService.findDespesas(start, end, pageable) ;
         return ResponseEntity.ok(listaDeDespesa);
     }
 

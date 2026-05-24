@@ -20,7 +20,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,8 +42,7 @@ public class AnotacoesController {
     public ResponseEntity<AnotacoesResponseDto> create(@RequestBody AnotacoesCreateDto dto,
                                                        @AuthenticationPrincipal Usuario usuario){
         Anotacoes anotacoes = AnotacoesMapper.toAnotacoes(dto);
-        anotacoes.setUsuario(usuarioService.buscarPorId(usuario.getId()));
-        anotacoesService.save(anotacoes);
+        anotacoesService.save(anotacoes,usuario);
         return ResponseEntity.status(201).body(AnotacoesMapper.toDto(anotacoes));
     }
 
@@ -55,9 +53,12 @@ public class AnotacoesController {
             content = @Content(mediaType = "application/json",schema = @Schema(implementation = AnotacoesResponseDto.class)))
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<AnotacoesResponseDto> updateText(@PathVariable Long id, @RequestBody Map<String,String> novoTexto){
-        Anotacoes notes = anotacoesService.updateText(id,novoTexto.get("anotacao"));
-        return ResponseEntity.status(200).body(AnotacoesMapper.toDto(notes));
+    public ResponseEntity<AnotacoesResponseDto> updateText(
+            @PathVariable Long id,
+            @RequestBody AnotacoesCreateDto dto
+    ){
+        Anotacoes notes = anotacoesService.updateNotes(id, dto.getNotes(),dto.getTitle());
+        return ResponseEntity.ok(AnotacoesMapper.toDto(notes));
     }
 
     @Operation(summary = "Listar todas anotações cadastradas",description = "Requisição exige um Bearer Token. Acesso Restrito a ADMIN/USER",
